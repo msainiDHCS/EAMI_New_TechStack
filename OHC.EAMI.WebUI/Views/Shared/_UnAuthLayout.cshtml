@@ -1,0 +1,89 @@
+﻿@using System.Web.Optimization;
+@using System.Collections.Generic;
+@using System.Runtime.InteropServices;
+@using System.Security.Claims;
+@using System.Security.Principal;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="IE=11.0000" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="~/Images/EAMILogo.gif" rel="shortcut icon">
+    <title>Electronic Modular Accounting Interface</title>
+
+    @Styles.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/css", true))
+    @Styles.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/Content/FontAwesome", true))
+
+    @Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/jquery", true))
+    @Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/jqueryval", true))
+    @*@Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/modernizr", true))*@
+    @Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/bootstrap", true))
+    @Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/custom", true))
+
+
+</head>
+<body class="body-blue">
+    <div id="container">
+        <!--style=" overflow-x:hidden;overflow-y:hidden;"-->
+        <div id="header">
+            <div class="mini-navbar mini-navbar-dark hidden-xs ">
+                <div class="customheader ">
+                    <div class="container-fluid" style="padding-left:5px;">
+                        <div class="row no-gutters">
+                            <div class="col-lg-9 col-sm-6 col-md-8 text-left">
+                                <div class="apptitle"><img src="~/Images/EAMILogo.gif" />  </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-md-4 text-left">
+                                <div class="pull-right" style="width:250px;">
+                                    <div class="row">
+                                        <div class="col-xs-12" style="margin-top:15px;">
+                                            <div style="float:right;">
+                                                <div class="dropdown" style="text-align:right;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="body">
+            <div class="shadow" style="padding-top:0px"><img src="~/Images/null.png" /></div>
+            <div class="wrapper">
+                @RenderBody()
+            </div>
+        </div>
+        <div id="footer">
+            <footer>
+                <div class="row-fluid">
+                    <div class="col-sm-12 footer">
+                        <p class="footercolor">
+                            © DHCS OHC 2017 | Version <span id="spnVersion">1.0.0.0</span>
+                            <span id="spnEnvironment" style="font-weight:bold"></span>
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("input").attr("autocomplete", "off");
+    });
+</script>

@@ -1,0 +1,116 @@
+﻿@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "Manage Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-top:25px;"></div>
+
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+
+@using (Html.BeginForm("ManageUsers", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmManageUsers", autocomplete = "off" }))
+{
+    @*@Html.AntiForgeryToken()*@
+
+
+    <div class="col-lg-offset-0 col-lg-12" id="dvMainArea">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #17315a; color: white;">
+                <h3 class="panel-title"><i class="fa fa-users">&nbsp;</i>Manage Users</h3>
+            </div>
+            <div class="panel-body">
+                <div id="dvErrorHolder"></div>
+                <div style="clear:both"></div>
+                <div class="row" style="margin-bottom:20px;margin-top:20px;">
+                    <div class="col-xs-12">
+                        <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+                        <button type="button" onclick="javascript: return AddNewEamiUser();" class="btn btn-dhcs-secondary btn-md" id="btnAddNewUser" style="float:right;margin-right:10px;">Add New User</button>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+                <hr />
+                <div id="dvgridArea">
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<div id="dvActionArea">
+</div>
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+<script type="text/javascript">
+    // Start Loading... Animation
+    $('#divLoadingAnimation').css("display", "block");
+    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+
+    var currentUserID = 0;
+
+
+    function AddNewEamiUser() {
+        // Start Loading... Animation
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            //EAMIShowAjaxLoadingContent('dvActionArea');
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvActionArea').load(getEAMIAbsoluteUrl('~/Administration/AddNewUser'));
+
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    function EditEamiUser(userid) {
+        // Start Loading... Animation
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        if (userid != null) {
+
+            currentUserID = userid;
+
+            $("#dvMainArea").slideUp(250, function () {
+                // Animation complete.
+                //EAMIShowAjaxLoadingContent('dvActionArea');
+                $('#dvActionArea').slideDown(250, function () {
+                    $('#dvActionArea').load(getEAMIAbsoluteUrl('~/Administration/EditUser?userid=' + userid));
+
+                    // End Loading... Animation
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                });
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        //EAMIShowAjaxLoadingContent('dvgridArea');
+        $('#dvgridArea').load(getEAMIAbsoluteUrl('~/Administration/ManageUsersList'));
+
+        // End Loading... Animation
+        $('#divLoadingAnimation_Inner').empty();
+        $('#divLoadingAnimation').css("display", "none");
+    });
+</script>

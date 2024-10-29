@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+	  <LangVersion>10.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EAMI.Common\EAMI.Common.csproj" />
+    <ProjectReference Include="..\EAMI.DataEngine\EAMI.DataEngine.csproj" />
+    <ProjectReference Include="..\EAMI.Respository\EAMI.Respository.csproj" />
+  </ItemGroup>
+
+</Project>

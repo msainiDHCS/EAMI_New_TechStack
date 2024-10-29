@@ -1,0 +1,287 @@
+﻿@{
+    ViewBag.Title = "Edit Exclusive Payment Type";
+}
+
+
+@using System.Web.Optimization;
+@*@model OHC.EAMI.CommonEntity.ExclusivePmtType*@
+@model OHC.EAMI.WebUI.Models.EAMIExclusivePmtTypeModel
+
+
+@using (Html.BeginForm("EditExclusivePmtType", "ManageSystems", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmEditExclusivePmtType", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<div class="col-lg-offset-0 col-lg-12" id="dvMainArea">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #17315a; color: white;">
+                <h3 class="panel-title"><i class="fa fa-user-plus">&nbsp;</i>Edit Exclusive Payment Type</h3>
+            </div>*@
+    <div class="panel-body">
+        <div id="dvEditErrorHolder"></div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                <input type="hidden" id="hdnSystemId" value="@Model.System_ID" />
+                @Html.HiddenFor(input => input.Fund_ID, new { @class = "form-control input-sm", id = "txtFundID", maxlength = "10" })
+                @Html.HiddenFor(input => input.System_ID, new { @class = "form-control input-sm", id = "hdnSystemID", maxlength = "10" })
+                @Html.HiddenFor(input => input.Exclusive_Payment_Type_ID, new { @class = "form-control input-sm", id = "txtExclusivePmtTypeID", maxlength = "10" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.System_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.TextBoxFor(input => input.System_Code, new { @class = "form-control input-sm", id = "txtSystemCode", maxlength = "200", @disabled = "disabled" })
+            </div>
+        </div>
+        @*<div class="form-group">
+            <div class="col-xs-4">
+                @Html.HiddenFor(input => input.Exclusive_Payment_Type_ID, new { @class = "form-control input-sm", id = "txtExclusivePmtTypeID", maxlength = "10" })
+            </div>
+        </div>*@
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.Exclusive_Payment_Type_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.TextBoxFor(input => input.Exclusive_Payment_Type_Code, new { @class = "form-control input-sm", id = "txtExclusivePmtTypeCode", maxlength = "20", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.Fund_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.TextBoxFor(input => input.Fund_Code, new { @class = "form-control input-sm", id = "txtFundCode", maxlength = "20", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.Exclusive_Payment_Type_Name, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.TextBoxFor(input => input.Exclusive_Payment_Type_Name, new { @class = "form-control input-sm", id = "txtExclusivePmtTypeName", maxlength = "100" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.Exclusive_Payment_Type_Description, new { @class = "control-label" })
+                @Html.TextBoxFor(input => input.Exclusive_Payment_Type_Description, new { @class = "form-control input-sm", id = "txtExclusivePmtTypeDesc", maxlength = "200" })
+            </div>
+        </div>
+        @*<div class="form-group">
+            <div class="col-xs-4">
+                @Html.HiddenFor(input => input.Fund_ID, new { @class = "form-control input-sm", id = "txtExclusivePmtTypeid", maxlength = "10" })                
+            </div>
+        </div>*@
+
+    </div>
+    <input type="checkbox" checked="@Model.IsActive" style="visibility:hidden" id="chkIsFundActive" />
+
+    <div class="modal fade" id="modalExclusivePmtTypeDeleteConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog text-center" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Delete EPT Code : @Model.Exclusive_Payment_Type_Code (@Model.Exclusive_Payment_Type_Name)</h4>
+                </div>
+                <div class="modal-body" style="margin: 10px;">
+                    <p>
+                        <strong>
+                            Are you sure you want to delete this EPT <label id="lblDeleteEPTId"></label>?
+                        </strong>
+                    </p>
+                </div>
+                <div style="clear:both;margin-bottom:20px;"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="ConfirmDeleteExclusivePmtType()">Delete</button>
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="CloseDeleteExclusivePmtType()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="clear:both"></div>
+    <div class="form-group" style="margin-top:20px;" id="dvActive">
+        <div class="col-xs-4">
+            <button type="button" onclick="return EditExclusivePmtType();" class="btn btn-dhcs-secondary btn-sm" id="btnEditExclusivePmtType">Update </button>&nbsp;
+            <button type="button" onclick="return EditExclusivePmtTypeReset();" class="btn btn-dhcs-secondary btn-sm" id="btnEditExclusivePmtTypeReset">Reset</button>&nbsp;
+            <button type="button" onclick="return EditExclusivePmtTypeCancel();" class="btn btn-dhcs-secondary btn-sm" id="btnEditExclusivePmtTypeCancel" style="float:none">Back</button>&nbsp;
+            <button type="button" onclick="return DeleteExclusivePmtType();" class="btn btn-dhcs-secondary btn-sm" id="btnEditExclusivePmtTypeDelete" style="float:none">Delete</button>&nbsp;
+        </div>
+    </div>
+    @*<div>
+                <div class="form-group" id="dvbtnDeactive">
+                    <div class="col-xs-4">
+                        <button type="button" onclick="return DeactivateUser();" class="btn btn-dhcs-secondary btn-sm" id="btnDeactivateUser">Deactivate Fund</button>&nbsp;
+                        <button type="button" onclick="return EditUserCancel();" class="btn btn-dhcs-secondary btn-sm" id="btnDeactivateCancel" style="float:none">Back</button>&nbsp;
+                    </div>
+                </div>
+
+        </div>*@
+    @*</div>
+        </div>*@
+}
+
+<script type="text/javascript">
+
+    function EditExclusivePmtType() {
+        var isActive = document.getElementById('chkIsFundActive').checked;
+        if (!ajaxValidateEditExclusivePmtType()) {
+            return false;
+        }
+        else {
+
+            $('#header').css("display", "block");
+            HideFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder');
+
+            $.ajax({
+                url: getEAMIAbsoluteUrl('~/ManageSystems/UpdateExclusivePmtType?isActive=' + isActive),
+                type: 'POST',
+                datatype: "html",
+                cache: false,
+                data: $("#frmEditExclusivePmtType").serialize(),
+                success: function (data) {
+                    var message = "";
+                    var status = "";
+                    if (data != null) {
+                        //undefined in case of some exception. for ex: Session override error
+                        if (data.message == undefined || data.status == undefined) {
+                            message = "An error occured. Please refresh the screen and try again.";
+                            status = false;
+                        }
+                        else {
+                            message = data.message;
+                            status = data.status;
+                        }
+
+                        wasItAAsuccess = (status == "OK");
+
+                        if (wasItAAsuccess) {
+
+                            setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', true, 'Exclusive payment Type successfully updated', 4);
+                        }
+                        else {
+                            setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', false, message, 5);
+                        }
+                    }
+                    else { setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', false, message, 5); }
+                },
+                error: function () {
+                    setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', false, 'An error occured. Please refresh the screen and try again', 5);
+
+                }
+            });
+            return false;
+        }
+    }
+
+    // Edit validation rules
+    function ajaxValidateEditExclusivePmtType() {
+        return frmValidator.form();
+    }
+
+    var frmValidator = $("#frmEditExclusivePmtType").validate({
+        errorElement: 'span',
+        ignore: ".ignore",
+        rules: {
+            Exclusive_Payment_Type_Code: {
+                required: true,
+            },
+            Exclusive_Payment_Type_Name: {
+                required: true,
+            },
+        },
+
+        // Messages for form validation
+        messages: {
+            Exclusive_Payment_Type_Code: {
+                required: 'Please enter Exclusive Payment Type Code',
+            },
+            Exclusive_Payment_Type_Name: {
+                required: 'Please enter Exclusive Payment Type Name',
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        }
+
+    });
+
+
+    function EditExclusivePmtTypeReset() {
+        //EAMIShowAjaxLoadingContent('dvActionArea');
+        HideFormStatusMessage('frmEditExclusivePmtType', 'dvAddErrorHolder');
+        var systemID = document.getElementById('hdnSystemId').value;
+        $('#dvtab2').load(getEAMIAbsoluteUrl('~/ManageSystems/EditExclusivePmtType?exclusivePmtTypeID=' + currentexclusivePmtTypeID + '&systemID=' + systemID));
+        return false;
+    }
+
+    function EditExclusivePmtTypeCancel() {
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+        var systemID = document.getElementById('hdnSystemId').value;
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab2').load(getEAMIAbsoluteUrl('~/ManageSystems/ViewExclusivePmtType?systemID=' + systemID + '&includeInactive=' + false));
+
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    $(document).ready(function () {
+
+    });
+
+    function DeleteExclusivePmtType() {
+        $('#modalExclusivePmtTypeDeleteConfirm').modal('show');
+    }
+
+    function ConfirmDeleteExclusivePmtType() {
+        $.ajax({
+            url: getEAMIAbsoluteUrl('~/ManageSystems/DeleteExclusivePmtType?isActive=' + false),
+            type: 'POST',
+            datatype: "html",
+            cache: false,
+            data: $("#frmEditExclusivePmtType").serialize(),
+            success: function (data) {
+                $('#modalExclusivePmtTypeDeleteConfirm').modal('hide');
+                var message = "";
+                var status = "";
+                if (data != null) {
+                    //undefined in case of some exception. for ex: Session override error
+                    if (data.message == undefined || data.status == undefined) {
+                        message = "An error occured. Please refresh the screen and try again.";
+                        status = false;
+                    }
+                    else {
+                        message = data.message;
+                        status = data.status;
+                    }
+
+                    document.getElementById('btnEditExclusivePmtType').disabled = true;
+                    document.getElementById('btnEditExclusivePmtTypeReset').disabled = true;
+
+                    wasItAAsuccess = (status == "OK");                    
+                    if (wasItAAsuccess) {
+                        document.getElementById('btnEditExclusivePmtTypeDelete').disabled = true;
+                        setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', true, message, 4);
+                    }
+                    else {
+                        document.getElementById('btnEditExclusivePmtTypeDelete').disabled = false;
+                        setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', false, message, 5);
+                    }
+                }
+                else { setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', false, message, 5); }
+            },
+            error: function () {
+                setFormStatusMessage('frmEditExclusivePmtType', 'dvEditErrorHolder', false, 'An error occured. Please refresh the screen and try again', 5);
+            }
+        });
+    }
+
+    function CloseDeleteExclusivePmtType() {
+        $('#modalExclusivePmtTypeDeleteConfirm').modal('hide');
+        $('.has-error').remove();
+    }
+
+</script>

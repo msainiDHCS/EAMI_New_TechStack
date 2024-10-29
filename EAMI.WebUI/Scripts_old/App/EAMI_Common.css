@@ -1,0 +1,481 @@
+﻿    .no-padding {
+        padding: 0px !important;
+        margin: 0px !important;
+        border: none !important;
+    }
+
+    .no-padding-left-right {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    .rowDetails {
+        background-color: #fcf8e3 !important;
+    }
+
+    #searchMenu .panel {
+        display: inline-block;
+    }
+
+    /*.modal-customSize {
+        width: 90%;
+    }*/
+
+    /*EAMI Colors*****************************************************************************************************/
+    .EAMI_Text_AlertWarning {
+        color: #8a6d3b;     /*alert-warning text color*/
+        font-weight:bold;
+    }
+
+    .EAMI_Text_BlueSteel {
+        color: #3d5475 !important;
+    }
+
+    .EAMI_Text_Purple {
+        color: #4f0c4c !important;
+    }
+
+    .EAMI_Text_White {
+        color: #fff !important;
+    }
+
+    .EAMI_Text_Warning {
+        color: gold !important;
+    }
+
+    .EAMI_Text_Danger {
+        color: red !important;
+    }
+
+    /*.EAMI_Text_Icons {
+        font-weight: bold;
+    }*/
+.EAMI_BgColor_BlueSteel {
+    background-color: #2d6e8d !important;
+}
+
+    .EAMI_BgColor_Purple {
+        background-color: #4f0c4c !important;
+    }
+
+    .EAMI_BgColor_White {
+        background-color: #fff !important;
+    }
+
+    .EAMI_BtnRadius {
+        border-radius: 4px !important;
+    }
+
+    .selectorWidth {
+        width: 1em;
+    }
+
+    .modal-content {
+        overflow: hidden;
+    }
+
+.modal-header {
+    background-color: #17315a !important; /*EAMI_BgColor_Purple*/
+    color: #fff !important; /*EAMI_Text_White*/
+    border-bottom: 0;
+}
+
+    .modal-body {
+        position: relative;
+        padding: 0;
+    }
+    /*.modal-footer {*/
+    /*background-color: #4f0c4c !important;*/ /*EAMI_BgColor_Purple*/
+    /*color: #fff !important;*/ /*EAMI_Text_White*/
+    /*}*/
+    /*****************************************************************************************************************/
+    .wrapperFlagged {
+        color: gold;
+    }
+    .wrapperFlagged:hover {
+        cursor: help;
+    }
+    .wrapperFlagged button:hover {
+        cursor: help;
+        color: gold;
+    }
+
+    .wrapperDefinitions:hover {
+        cursor: help !important;
+    }
+
+    .wrapperOnHold {
+        color: #333;  /* hex gray 20 */
+        cursor: default;
+    }
+    .wrapperOnHold:hover:not(.outtermostFlag) {
+        cursor: help !important;
+    }
+    .holdText {
+        /*color: #F39C12;*/
+        color: #eb9316;  /* This is same color as remittance advice icon. */
+        cursor: help !important;
+        font-weight: bold;
+    }
+    .deniedText {
+        color: #ff0000;  /* red */
+        cursor: help !important;
+        font-weight: bold;
+    }
+
+    .wrapperIHSS > button {
+        border-color:#333;  /* hex gray 20 */
+        width:75px;
+        height:25px;
+        /*vertical-align:text-top;*/
+    }
+    .wrapperIHSS > button > span {
+        color:black;
+        vertical-align:middle;
+        font-size: 15px;
+    }
+    /*.wrapperIHSS button img {
+        width:18px;
+        height:18px;
+    }*/
+    .wrapperIHSS:hover {
+        cursor: default;
+    }
+    .wrapperIHSS:not(.outtermostFlag):not(.secondLevelFlag) button {
+        border-color:#fff;  /* white */
+    }
+    .wrapperIHSS:not(.outtermostFlag):not(.secondLevelFlag) button:hover {
+        cursor: help;
+        background-color: #fff;  /* white */
+    }
+    .wrapperIHSS.EAMI_Legend_Element:hover {
+        cursor: help;
+    }
+    .wrapperIHSS.EAMI_Legend_Element button:disabled {
+        opacity: 1;
+    }
+    .wrapperIHSS.outtermostFlag button:disabled,
+    .wrapperIHSS.secondLevelFlag button:disabled {
+        cursor: default;
+        opacity: 1;
+    }
+    .wrapperIHSS.outtermostFlag button:hover,
+    .wrapperIHSS.secondLevelFlag button:hover {
+        border-color:#333;  /* hex gray 20 */
+        opacity: 1;
+    }
+
+    .wrapperSCHIP {
+        color: black;
+    }
+    .wrapperSCHIP > button {
+        border-color:#333;  /* hex gray 20 */
+        width:75px;
+        height:25px;
+        /*vertical-align:text-top;*/
+    }
+    .wrapperSCHIP > button > span {
+        color:black;
+        vertical-align:middle;
+        font-size: 15px;
+    }
+    .wrapperSCHIP:hover {
+        cursor: default;
+    }
+    .wrapperSCHIP:not(.outtermostFlag):not(.secondLevelFlag) button {
+        border-color:#fff;  /* white */
+    }
+    .wrapperSCHIP:not(.outtermostFlag):not(.secondLevelFlag) button:hover {
+        cursor: help;
+        background-color: #fff;  /* white */
+    }
+    .wrapperSCHIP.EAMI_Legend_Element:hover {
+        cursor: help;
+    }
+    .wrapperSCHIP.EAMI_Legend_Element button:disabled {
+        opacity: 1;
+    }
+    .wrapperSCHIP.outtermostFlag button:disabled,
+    .wrapperSCHIP.secondLevelFlag button:disabled {
+        cursor: default;
+        opacity: 1;
+    }
+    .wrapperSCHIP.outtermostFlag button:hover,
+    .wrapperSCHIP.secondLevelFlag button:hover {
+        border-color:#333;  /* hex gray 20 */
+        opacity: 1;
+    }
+
+    .wrapperHQAF {
+        color: black;
+    }
+    .wrapperHQAF > button {
+        border-color:#333;  /* hex gray 20 */
+        width:75px;
+        height:25px;
+        /*vertical-align:text-top;*/
+    }
+    .wrapperHQAF > button > span {
+        color:black;
+        vertical-align:middle;
+        font-size: 15px;
+    }
+    .wrapperHQAF:hover{
+        cursor: default;
+    }
+    .wrapperHQAF:not(.outtermostFlag):not(.secondLevelFlag) button {
+        border-color:#fff;  /* white */
+    }
+    .wrapperHQAF:not(.outtermostFlag):not(.secondLevelFlag) button:hover {
+        cursor: help;
+        background-color: #fff;  /* white */
+    }
+    .wrapperHQAF.EAMI_Legend_Element:hover {
+        cursor: help;
+    }
+    .wrapperHQAF.EAMI_Legend_Element button:disabled {
+        opacity: 1;
+    }
+    .wrapperHQAF.outtermostFlag button:disabled,
+    .wrapperHQAF.secondLevelFlag button:disabled {
+        cursor: default;
+        opacity: 1;
+    }
+    .wrapperHQAF.outtermostFlag button:hover,
+    .wrapperHQAF.secondLevelFlag button:hover {
+        border-color:#333;  /* hex gray 20 */
+        opacity: 1;
+    }
+
+    .wrapperIconColumnRect {
+        font-weight: bold;
+    }
+    .wrapperIconColumnRect:hover{
+        cursor: default;
+    }
+
+    /* PaymentSuperGroup Table Columns Td formatting */
+    td.iconColumn {
+        width:25px;
+    }
+    td.flagIcon {
+        padding-right:0px !important;
+    }
+    td.iconColumnRect {
+        /*width:80px !important;*/
+        width:56px !important;
+        text-align:center;
+    }
+    td.iconColumnPSG {
+        width:20px !important;
+        cursor: default;
+    }
+
+    /* iconColumn class used in place of commented-out styles below */
+    /*td.onHoldIconSuperGroup {
+        width: 1em;
+    }
+    td.iHSSIconSuperGroup {
+        width: 0.5em;
+    }
+    td.sCHIPIconSuperGroup {
+        width: 1.8em;
+    }
+    td.plusMinusIconSuperGroup {
+        width: 0.5em;
+    }*/
+    td.payeeNameSuperGroup {
+        /* Allow this column to fluctuate accordingly.*/
+    }
+    td.contractNumberSuperGroup {
+        width: 13%;
+    }
+    td.sfySuperGroup {
+        width: 7.5%;
+    }
+    .totalAmountSuperGroup {
+        width: 22%;
+        text-align:right !important;
+        padding-right:200px !important;
+
+    }
+    /*************************************************/
+    /* PayentGroup Table Columns Td formatting *******/
+    td.PaymentGroup_Shift {
+        /*width: 9.775em !important;*/
+        /*width: 13em !important;*/
+        width: 7.3em !important;
+    }
+    td.PaymentGroup_UniqueNumber {
+        /* Allow this column to fluctuate accordingly.*/
+    }
+    td.PayDate {
+        width: 15%;
+    }
+    td.AssignedTo {
+        width: 20%;
+    }
+    .PG_Amount {
+        width: 22%;
+        text-align:right !important;
+        padding-right:200px !important;
+    }
+    /*************************************************/
+    /* PayentRecord Table Columns Td formatting ******/
+    th.PaymentRecord_Shift {
+        /*width: 23.9em;*/
+        /*width: 30em;*/
+        /*width: 20em;*/
+        width: 18.3em;
+    }
+    td.PaymentRecord_UniqueNumber {
+        /* Allow this column to fluctuate accordingly.*/
+    }
+    td.PaymentDate {
+        width: 35%;
+    }
+    .PR_Amount {
+        width: 22%;
+        text-align:right !important;
+        padding-right:200px !important;
+    }
+    /*************************************************/
+
+    .btnInTdPayeePaymentType,
+    .btnInTdPayeePaymentType:hover,
+    .btnInTdPayeePaymentType:active,
+    .btnInTdPayeePaymentType:focus,
+    .btnInTdPayeePaymentType:active:focus
+     {
+        color:#fff;                 /*EAMI White*/
+        background-color:#333;      /* hex gray 20 */
+        border-color:#333;          /* hex gray 20 */
+        width:25px;
+        height:25px;
+        padding:0px;
+    }
+
+    .btnInTdPGPlusMinus,
+    .btnInTdPGPlusMinus:hover,
+    .btnInTdPGPlusMinus:active,
+    .btnInTdPGPlusMinus:focus,
+    .btnInTdPGPlusMinus:active:focus
+     {
+        color:#fff;                 /*EAMI White*/
+        background-color:#8a6d3b;   /*alert-warning text color*/
+        border-color:#8a6d3b;       /*alert-warning text color*/
+        width:25px;
+        height:25px;
+        padding:0px;
+    }
+
+.popover-title {
+    color: #fff; /*EAMI White*/
+    background-color: #17315a; /*EAMI_BgColor_BlueSteel*/
+}
+    .popover-content {
+        color: #000 !important; /*black*/
+    }
+    .popover{
+        max-width: 100%;
+    }
+
+    .calendarEventPayAndDrawDate a {
+        background-image: linear-gradient(40deg, red 50%, greenyellow 50%) !important;
+    }
+
+    .ui-datepicker {
+      width: 230px;
+      height: auto;
+    }
+    .ui-datepicker tbody td {
+      width: 14.28571428571429% !important; /*This is 100%/7days */
+    }
+    .ui-datepicker td.ui-state-disabled.calendarEventPayAndDrawDate>span{background-image: linear-gradient(40deg, red 50%, greenyellow 50%) !important;}
+    .ui-datepicker td.ui-state-disabled.calendarEventPayAndDrawDate{opacity:0.6;}
+
+    .calendarEventPayDate a {
+        background-color: greenyellow !important;
+    }
+    .ui-datepicker td.ui-state-disabled.calendarEventPayDate>span{background-color: greenyellow;}
+    .ui-datepicker td.ui-state-disabled.calendarEventPayDate{opacity:0.6;}
+
+    .calendarEventDrawDate a {
+        background-color: red !important;
+    }
+    .ui-datepicker td.ui-state-disabled.calendarEventDrawDate>span{background-color: red;}
+    .ui-datepicker td.ui-state-disabled.calendarEventDrawDate{opacity:0.6;}
+
+    .ui-datepicker-today {background-color:darkgoldenrod !important;}
+    .ui-datepicker-today span {color:darkgoldenrod !important;}
+    .ui-datepicker-today a {color:darkgoldenrod !important; font-weight:bold !important;}
+
+    /*For YearlyDates Page --------------------------------------------------------------------------------------------------------------------------*/
+    .calendar table td {
+        border: 2.5px solid white;
+    }
+    /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
+
+    /* This section used to replace right justified default datatable arrows with nicer arrows to the right of the column name. */
+    table.dataTable thead .sorting, 
+    table.dataTable thead .sorting_asc, 
+    table.dataTable thead .sorting_desc {
+        background : none !important;
+    }
+
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_desc:before {
+        display: none !important;
+    }
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_desc:after {
+        display: none !important;
+    }
+
+    table.dataTable thead th {
+      padding: 8px !important;
+    }
+
+    table.dataTable thead span.sort-icon {
+      display: inline-block;
+      text-align:center;
+      width: 16px;
+      height: 16px;
+    }
+
+    table.dataTable thead .sorting span { background: url('../../images/sort_both.png') no-repeat center left; }
+    table.dataTable thead .sorting_asc span { background: url('../../images/sort_asc.png') no-repeat center left; }
+    table.dataTable thead .sorting_desc span { background: url('../../images/sort_desc.png') no-repeat center left; }
+    table.dataTable thead .sorting_asc_disabled span { background: url('../../images/sort_asc_disabled.png') no-repeat center left; }
+    table.dataTable thead .sorting_desc_disabled span { background: url('../../images/sort_desc_disabled.png') no-repeat center left; }
+    /****************************************************************************************************************************/
+
+    /* This section used to format container divs that hold the Loading ... Animation. ******************************************/
+    #divLoadingAnimation {
+    display: none;
+    position: fixed;
+    width: 200px;
+    height: 50px;
+    z-index: 1500;
+    top: 50%;
+    left: 50%;
+    margin: -25px 0 0 -100px;
+    background: white;
+    vertical-align: middle;
+    opacity: 0.75;
+    background-color: gray;
+    }
+    #divLoadingAnimation_Inner {
+    }
+    #divLoadingAnimation_Inner > h1 {
+        padding-left:44px !important;
+        text-align: center !important;
+        vertical-align: middle !important;
+        margin:auto;
+        line-height:50px;
+        color: white;
+    }
+    /****************************************************************************************************************************/

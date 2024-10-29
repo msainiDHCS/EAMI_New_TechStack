@@ -1,0 +1,139 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model PaymentProcessingFilters
+
+
+<link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/Approvals/approvals-grid.css" />
+<div id="dvSearchCriteria" style="display:none;">
+    <div>
+        <div class="form-group">
+            <div class="col-xs-1">
+                @Html.Label("System", "System", new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownList("Systems", new SelectList(Model.Systems, "Value", "Text"), new { @class = "form-control input-sm selectpicker", id = "ddlSystems" })
+            </div>
+            <div class="col-xs-2" style="max-width: 270px;">
+                @Html.Label("Payee", "Payee", new { @class = "control-label" })
+                @Html.DropDownList("Payee", new SelectList(Model.PayeeNames, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPayees", multiple = "true", disabled = "disabled" })
+            </div>
+            <div class="col-xs-2">
+                @Html.Label("PaymentTypes", "Payment Types", new { @class = "control-label" })
+                @Html.DropDownList("PaymentTypes", new SelectList(Model.PaymentTypes, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPaymentTypes", multiple = "true", disabled = "disabled" })
+
+            </div>
+            <div class="col-xs-2">
+                @Html.Label("Contract#", "Contract#", new { @class = "control-label" })
+                @Html.DropDownList("Contract#", new SelectList(Model.ContractNumbers, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlContractNumbers", multiple = "true", disabled = "disabled" })
+            </div>
+            <div class="col-xs-5" style="margin-top:25px;">
+                <button type="button" onclick="javascript: return Search();" class="btn btn-dhcs-secondary btn-md" id="btnSearch">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                </button>&nbsp;
+                <button type="button" onclick="javascript: return Reset();" class="btn btn-dhcs-secondary btn-md" id="btnReset">
+                    <span class="glyphicon glyphicon-refresh"></span> Reset
+                </button>
+            </div>
+            <div class="col-xs-12">
+                <hr />
+            </div>
+        </div>                               
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel panel-dhcs-primary" style="margin-left:15px;margin-top:10px;margin-right:15px; border-top:0.1px solid;">
+        <div class="panel-heading">
+            <div class="container-fluid">
+                <div class="row" style="font-weight: bold;">
+                    <div class="col-md-6" style="cursor:default;">Search Results</div>
+                    <div class="col-md-6 text-right">
+                        <span class="wrapperDefinitions" title='<span class="fa fa-book EAMI_Text_White"></span> Definitions'
+                              data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                              data-content='<p><i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>&nbsp;&nbsp;indicates when Payee-PaymentType groupings include Payment Sets with any of the following exclusive payment types:</p>
+                                <p>
+                                    <ul>
+                                        @foreach (var refCode in ViewBag.ExclusivePaymentTypesRefCodeList)
+                                        {
+                                            <li><span class="EAMI_Text_AlertWarning">@Html.Raw(refCode.Code)</span> - @Html.Raw(refCode.Description)</li>
+                                        }
+                                    </ul>
+                                </p>
+                                <p>Additional features:</p>
+                                <p>
+                                    <ul>
+                                        @if (ViewBag.ProcessWarrants == true) 
+                                        { 
+                                            @*<li><img src="../images/MCEFT_Warrant_Indicator_24.png"> - indicates Warrant Payment</li>*@
+                                            <li><img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.6em;vertical-align:top;"> - indicates Warrant Payment <br /><br /></li>
+                                        }
+                                        <li>
+                                            <button type="button" class="btn btn-xs btn-danger">
+                                                <span class="glyphicon glyphicon-list-alt"></span>
+                                            </button>
+                                            - indicates Processor Return Notes for Payment Set.&nbsp;&nbsp;Hovering over this flag shows details of the latest notes applied to this Payment Set.
+                                        </li>
+                                    </ul>
+                                </p>' data-html="true">
+                                <span class="fa fa-book EAMI_Text_White"></span> <span class="EAMI_Text_White">Definitions <span style="font-weight:normal;">(hover over to display)</span></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" id="dvMasterGridHolder" style="visibility:hidden;">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dvNoPaymentSelection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:20px;">
+    <div class="modal-dialog text-center" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Validation Message</h4>
+            </div>
+            <div class="modal-body" style="margin: 10px;">
+                <p>
+                    <strong>
+                        No Payment Set selected.
+                        <br />
+                        Please select a Payment Set.
+                    </strong>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    @if (ViewBag.PendingReturnCount != null)
+    {
+
+        <text>
+    $('#spPendingReturnRecordCount').empty();
+    $('#spPendingReturnRecordCount').append("(" + @ViewBag.PendingReturnCount + ")");
+    </text>
+    }
+    else
+    {
+        <text>
+    $('#spPendingReturnRecordCount').empty();
+    </text>
+    }
+
+    @if(ViewBag.PendingClaimScheduleCount != null)
+     {
+
+         <text>
+    $('#spPendingClaimScheduleCount').empty();
+    $('#spPendingClaimScheduleCount').append("(" + @ViewBag.PendingClaimScheduleCount + ")");
+    </text>
+     }
+     else
+     {
+         <text>
+    $('#spPendingClaimScheduleCount').empty();
+    </text>
+     }
+</script>
+<script type="text/javascript" src="~/Scripts/App/Approvals/PendingReturns/pendingreturns-index.js"></script>

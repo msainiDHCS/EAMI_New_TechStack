@@ -1,0 +1,164 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model PaymentProcessingFilters
+
+
+<link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/Approvals/approvals-grid.css" />
+<div id="dvPCSSearchCriteria" style="display:none;">
+    <div>
+        <div class="form-group">
+            <div class="col-xs-1">
+                @Html.Label("System", "System", new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownList("PCSSystems", new SelectList(Model.Systems, "Value", "Text"), new { @class = "form-control input-sm selectpicker", id = "ddlPCSSystems" })
+            </div>
+            <div class="col-xs-2" style="max-width: 270px;">
+                @Html.Label("Payee", "Payee", new { @class = "control-label" })
+                @Html.DropDownList("PCSPayee", new SelectList(Model.PayeeNames, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPCSPayees", multiple = "true", disabled = "disabled" })
+            </div>
+            <div class="col-xs-2">
+                @Html.Label("PaymentTypes", "Payment Types", new { @class = "control-label" })
+                @Html.DropDownList("PCSPaymentTypes", new SelectList(Model.PaymentTypes, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPCSPaymentTypes", multiple = "true", disabled = "disabled" })
+
+            </div>
+            <div class="col-xs-2">
+                @Html.Label("Contract#", "Contract#", new { @class = "control-label" })
+                @Html.DropDownList("PCSContract#", new SelectList(Model.ContractNumbers, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPCSContractNumbers", multiple = "true", disabled = "disabled" })
+            </div>
+            <div class="col-xs-1 text-left vwrapper" style="min-height:100% !important;width:50px;">
+                <div class="line"></div>
+                <div class="wordwrapper">
+                    <div class="word">or</div>
+                </div>
+            </div>
+            <div class="col-xs-1">
+                @Html.Label("Pay-Date", "Pay Date", new { @class = "control-label" })
+                @Html.DropDownList("PCSPayDates", new SelectList(Model.PayDates, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPCSPayDates" })
+            </div>
+            <div class="col-xs-3" style="margin-top:25px;">
+                <button type="button" onclick="javascript: return PCSSearch();" class="btn btn-dhcs-secondary btn-md" id="btnPCSSearch">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                </button>&nbsp;
+                <button type="button" onclick="javascript: return PCSReset();" class="btn btn-dhcs-secondary btn-md" id="btnPCSReset">
+                    <span class="glyphicon glyphicon-refresh"></span> Reset
+                </button>
+            </div>
+            <div class="col-xs-12">
+                <hr />
+            </div>
+            <div class="col-xs-12" style="min-height:35px;">
+                <div class="col-xs-12" style="text-align:right;">
+                    <span id='PCS_Approve_Popover' data-toggle="popover" data-placement="top" data-trigger="hover" data-content='Search by Pay Date to Approve Claim Schedules' data-html="true">
+                        <button type="button" id="dvPayButtons" disabled="disabled" onclick="approveAll()" class="btn btn-md btn-primary">
+                            Approve&nbsp;<span class="fa fa-check"></span>
+                        </button>
+                    </span>
+                    &nbsp;
+                    <button type="button" onclick="getFundingSummary()" class="btn btn-md btn-primary " id="btnFundingSummary">
+                        Funding Summary&nbsp;<span class="fa fa-list-alt"></span>
+                    </button>&nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel panel-dhcs-primary" style="margin-left:15px;margin-top:10px;margin-right:15px; border-top:0.1px solid;">
+        <div class="panel-heading">
+            <div class="container-fluid">
+                <div class="row" style="font-weight: bold;">
+                    <div class="col-md-6" style="cursor:default;">Search Results</div>
+                    <div class="col-md-6 text-right">
+                        <span class="wrapperDefinitions" title='<span class="fa fa-book EAMI_Text_White"></span> Definitions'
+                              data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                              data-content='<p><i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>&nbsp;&nbsp;indicates when Payee-PaymentType groupings include Payment Sets with any of the following exclusive payment types:</p>
+                                <p>
+                                    <ul>
+                                        @foreach (var refCode in ViewBag.ExclusivePaymentTypesRefCodeList)
+                                        {
+                                            <li><span class="EAMI_Text_AlertWarning">@Html.Raw(refCode.Code)</span> - @Html.Raw(refCode.Description)</li>
+                                        }
+                                    </ul>
+                                </p>
+                                <p>Additional features:</p>
+                                <p>
+                                    <ul>
+                                        @if (ViewBag.ProcessWarrants == true)
+                                        {
+                                            @*<li><img src="../images/MCEFT_Warrant_Indicator_24.png"> - indicates Warrant Payment</li>*@
+                                            <li><img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.6em;vertical-align:top;"> - indicates Warrant Payment <br /><br /></li>
+                                        }
+                                        <li>
+                                            <button type="button" class="btn btn-xs btn-warning">
+                                                <span class="glyphicon glyphicon-list-alt"></span>
+                                            </button>
+                                            - indicates Remittance Advice for Claim Schedule.&nbsp;&nbsp;Click to view.
+                                        </li>
+                                    </ul>
+                                </p>' data-html="true">
+                                <span class="fa fa-book EAMI_Text_White"></span> <span class="EAMI_Text_White">Definitions <span style="font-weight:normal;">(hover over to display)</span></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" id="dvPCSMasterGridHolder" style="visibility:hidden;">
+        </div>
+        <div class="panel-body text-center" id="dvPayDateChanged" style="display:none;">
+            <strong>Pay Date search criteria changed. Please click on "Search" to search claim schedules with new pay date selected.</strong>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dvNoCSSelection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog text-center" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Validation Message</h4>
+            </div>
+            <div class="modal-body" style="margin: 10px;">
+                <p>
+                    <strong>
+                        No Claim Schedule selected.
+                        <br />
+                        Please select a Claim Schedule.
+                    </strong>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    @if (ViewBag.PendingReturnCount != null)
+    {
+
+        <text>
+    $('#spPendingReturnRecordCount').empty();
+    $('#spPendingReturnRecordCount').append("(" + @ViewBag.PendingReturnCount + ")");
+    </text>
+    }
+    else
+    {
+        <text>
+    $('#spPendingReturnRecordCount').empty();
+    </text>
+    }
+
+    @if(ViewBag.PendingClaimScheduleCount != null)
+     {
+
+         <text>
+    $('#spPendingClaimScheduleCount').empty();
+    $('#spPendingClaimScheduleCount').append("(" + @ViewBag.PendingClaimScheduleCount + ")");
+    </text>
+     }
+     else
+     {
+         <text>
+    $('#spPendingClaimScheduleCount').empty();
+    </text>
+     }
+</script>
+<script type="text/javascript" src="~/Scripts/App/Approvals/PendingClaimSchedules/pendingcs-index.js"></script>

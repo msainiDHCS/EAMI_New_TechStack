@@ -1,0 +1,891 @@
+﻿@model IEnumerable<OHC.EAMI.WebUI.ViewModels.AssignInvoicesViewModel>
+
+@{
+    ViewBag.Title = "AssignInvoices";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+
+
+
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+
+
+
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+
+
+
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+
+
+
+@*-----Boiler Plate--------------------------------------------------------------------------------------------*@
+@*<link type="text/css" href="~/Scripts/EAMI_Boilerplate/css/eami.css" rel="stylesheet" />
+<link type="text/css" href="~/Scripts/EAMI_Boilerplate/css/bootstrap.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/EAMI_Boilerplate/js/eami.js"></script>*@
+@*-------------------------------------------------------------------------------------------------------------*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+
+    .no-padding {
+        padding: 0px !important;
+        margin: 0px !important;
+        border: none !important;
+    }
+
+    .no-padding-left-right {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    .rowDetails {
+        background-color: #fcf8e3 !important;
+        /*border-radius: 25px;*/
+    }
+
+    .col1-style {
+        width: 10px;
+    }
+
+    .col2-style {
+        width: 10px;
+    }
+
+    .col3-style {
+        width: 60px;
+    }
+
+    .col4-style {
+        width: 20px;
+    }
+
+    .borderLine {
+        border-top: 3px double #8c8b8b;
+    }
+
+    #searchMenu .panel {
+        display: inline-block;
+    }
+
+    .modal-customSize{
+        width:90%;
+    }
+
+    /*EAMI Colors*****************************************************************************************************/
+    .EAMI_Text_BlueSteel {
+        color: #3d5475 !important;
+    }
+
+    .EAMI_Text_Purple {
+        color: #4f0c4c !important;
+    }
+
+    .EAMI_Text_White {
+        color: #fff !important;
+    }
+
+    .EAMI_BgColor_BlueSteel {
+        background-color: #3d5475 !important;
+    }
+
+    .EAMI_BgColor_Purple {
+        background-color: #4f0c4c !important;
+    }
+
+    .EAMI_BgColor_White {
+        background-color: #fff !important;
+    }
+
+    .EAMI_BtnRadius {
+        border-radius: 4px !important;
+    }
+
+    .selectorWidth {
+        width: 1em;
+    }
+
+    .modal-content {
+        overflow:hidden;
+    }
+    .modal-header {
+        background-color: #4f0c4c !important;   /*EAMI_BgColor_Purple*/
+        color: #fff !important;                 /*EAMI_Text_White*/
+        border-bottom: 0;
+    }
+    .modal-body {
+        position: relative;
+        padding: 0;
+    }
+    /*.modal-footer {*/
+        /*background-color: #4f0c4c !important;*/   /*EAMI_BgColor_Purple*/
+        /*color: #fff !important;*/                 /*EAMI_Text_White*/
+    /*}*/
+
+
+
+    /*****************************************************************************************************************/
+
+
+    /*.ddlSystemSelect option {
+        white-space: pre !important;
+    }*/
+    /*.ddlSystemOption {
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }*/
+
+
+
+    .wrapperFlagged {
+        color:red;
+    }
+    .wrapperFlagged:hover {
+        cursor:help;
+    }
+    .wrapperFlagged button:hover {
+        cursor:help;
+        color:red;
+    }
+    .wrapperOnHold {
+        color:gold;
+    }
+    .wrapperOnHold:hover {
+        cursor:help;
+    }
+    .wrapperSentBackFromProcessor {
+        color:red;
+    }
+    .wrapperSentBackFromProcessor:hover {
+        cursor:help;
+    }
+
+    .popover-title {
+        color:#000 !important;  /*black*/
+    }
+    .popover-content {
+        color:#000 !important;  /*black*/
+    }
+
+</style>
+
+
+
+
+@*<div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            Select icon <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><span class="glyphicon glyphicon-cutlery"></span></li>
+            <li><span class="glyphicon glyphicon-fire"></span></li>
+            <li><span class="glyphicon glyphicon-glass"></span></li>
+            <li><span class="glyphicon glyphicon-heart"></span></li>
+        </ul>
+    </div>
+
+
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Action <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+        </ul>
+    </div>*@
+
+ 
+
+
+    @*</div>*@
+
+
+    @*<form>*@
+    <div class="collapse" id="searchMenu">
+        <div class="panel panel-dhcs-primary" style="margin-bottom:0;border-radius:0 0 4px 0;border-right:none;border-bottom:none;border-left:none;">
+            <div class="panel-heading" style="border-radius:0 0 4px 0;overflow:no-display;">
+
+                <div class="form-inline">
+                    <div class="form-group">
+                        @*<select id="ddlSystem" class="form-control selectpicker">*@
+                        <select id="ddlSystem" class="form-control selectpicker" data-live-search="true" data-width="8em" title="System">
+                            @*<option value="">System</option>*@
+                            <option value="0">CAPMAN</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlInvoiceStatus" class="form-control selectpicker" data-live-search="true" data-width="9em" title="Status">
+                            @*<option value="">Status</option>*@
+                            <option value="0">UnAssigned</option>
+                            <option value="1">Assigned</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlPaymentExchangeEntity" class="form-control selectpicker" data-live-search="true" data-width="25em"
+                                multiple title="Payee" data-selected-text-format="count>1" data-actions-box="true">
+                            @*<option value="">Payee</option>*@     @*aka Vendor*@
+                            @*<option data-divider="true"></option>*@
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlModelType" class="form-control selectpicker" data-live-search="true" data-width="17em"
+                                multiple title="Payment Type" data-selected-text-format="count>1" data-actions-box="true">
+                            @*<option value="">Payment Type</option>*@      @*aka Model Type*@
+                            @*<option data-divider="true"></option>*@
+                        </select>
+                    </div>
+                    @*<input type="text" class="form-control" placeholder="Contract #" id="txtContractNumber" size="22">*@
+                    <div class="form-group">
+                        <select id="ddlContractNumber" class="form-control selectpicker" data-live-search="true" data-width="13em"
+                                multiple title="Contract #" data-selected-text-format="count>1" data-actions-box="true">
+                            <option value="0">07-65851</option>      @*aka Model Type*@
+                        </select>
+                    </div>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span> Search
+                    </button>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnReset">
+                        <span class="glyphicon glyphicon-refresh"></span> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-inline">
+        @*<div class="form-group" style="padding-top: 0.5em;">*@
+        <div class="form-group">
+            <button id="btnSearchMenu" style="border-radius:0 0 4px 4px;" class="btn btn-dhcs-secondary inactive" type="button" data-toggle="collapse" data-target="#searchMenu" aria-expanded="false" aria-controls="searchMenu">
+                Search Options
+            </button>
+        </div>
+        <div class="form-group pull-right">
+            <img class="pull-right" src="~/Scripts/EAMI_Boilerplate/img/dhcs-logo-1.png">
+        </div>
+    </div>
+
+    <br /><br /><br />
+
+
+    @*<div class="panel panel-dhcs-secondary" style="background: green; padding: 0px !important; margin: 0px !important; border: 0px !important">
+        <div class="panel-heading" style="background: red; padding: 0px !important; margin: 0px !important;">*@
+
+    <div class="panel panel-dhcs-secondary">
+        <div class="panel-heading">
+            <label style="font-size: 1.7em; font-weight: normal; display: block; margin-top: 0; margin-bottom: 0; padding-top: 0; padding-bottom: 0;">PAYMENT ASSIGNMENT</label>
+        </div>
+    </div>
+
+    <!-- Modal for Assign -->
+    <div class="modal fade" id="modalWrapperForAssign" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForAssign" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalHeaderForAssign"></h4>
+                </div>
+                <div class="modal-body" id="modalBodyForAssign">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary">Assign</button>
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Hold -->
+    <div class="modal fade" id="modalWrapperForHold" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForHold" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalHeaderForHold"></h4>
+                </div>
+                <div class="modal-body" id="modalBodyForHold">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForHold_HoldBtn">Hold</button>
+                    <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForHold_CancelBtn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for UnHold -->
+    <div class="modal fade" id="modalWrapperForUnHold" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForUnHold" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalHeaderForUnHold"></h4>
+                </div>
+                <div class="modal-body" id="modalBodyForUnHold">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary">UnHold</button>
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Return -->
+    <div class="modal fade" id="modalWrapperForReturn" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForReturn" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalHeaderForReturn"></h4>
+                </div>
+                <div class="modal-body" id="modalBodyForReturn">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForReturn_ReturnBtn">Return</button>
+                    <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForReturn_CancelBtn" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-inline">
+        <div class="form-group pull-right">
+            <button class="btn btn-dhcs-secondary" type="button" id="btnAssignPayDate">
+                <span class="glyphicon glyphicon-calendar"></span>&nbsp;Assign Pay Date
+            </button>
+            <button class="btn btn-dhcs-secondary" type="button" id="btnAssign">
+                <span class="glyphicon glyphicon-user"></span>&nbsp;Assign
+            </button>
+            <button class="btn btn-dhcs-secondary" type="button" id="btnHold">
+                <span class="glyphicon glyphicon-pause"></span>&nbsp;Hold
+            </button>
+            <button class="btn btn-dhcs-secondary" type="button" id="btnReturn">
+                <span class="glyphicon glyphicon-share-alt"></span>&nbsp;Return
+            </button>
+        </div>
+    </div>
+
+    <br /><br />
+
+    <div class="panel panel-dhcs-primary">
+        <div class="panel-heading">
+            <div class="container-fluid">
+                <div class="row" style="font-weight: bold;">
+                    <div class="col-md-6">Search Results</div>
+                    <div class="col-md-6 text-right">
+                        <span class="wrapperFlagged" title="" data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                              data-content="<p>This flag can be in one of the following states:</p>
+                                            <p>
+                                                <button type='button' class='btn btn-default btn-xs wrapperFlagged' style='background-color:gold;border-color:#333;'>
+                                                    <span class='glyphicon glyphicon-flag'></span>
+                                                </button> Payee-PaymentType groupings include Payment Records that are On Hold and Processor Returned.
+                                            </p>
+                                            <p>
+                                                <button type='button' class='btn btn-default btn-xs wrapperOnHold EAMI_BgColor_White' style='background-color:gold;border-color:#333;'>
+                                                    <span class='glyphicon glyphicon-flag'></span>
+                                                </button> Payee-PaymentType groupings include Payment Records that are On Hold.
+                                            </p>
+                                            <p>
+                                                <button type='button' class='btn btn-default btn-xs wrapperSentBackFromProcessor EAMI_BgColor_White' style='background-color:gold;border-color:#333;'>
+                                                    <span class='glyphicon glyphicon-flag'></span>
+                                                </button> Payee-PaymentType groupings include Payment Records that are Processor Returned.
+                                            </p>
+                                            <p>When pressed, Supervisor can choose one of the following options:
+                                                <ul>
+                                                    <li>UnHold selected payment records.</li>
+                                                    <li>Complete or Deny Return of selected payment records.  Denial will send payment record back to processor who initiated the return.</li>
+                                                </ul>
+                                            </p>" data-html="true">
+                            <button type="button" class="btn btn-default btn-xs wrapperFlagged" style="background-color:gold;border-color:#333;">
+                                <span class="glyphicon glyphicon-flag"></span>
+                            </button> <span class="EAMI_Text_White wrapperFlagged">Flagged</span>
+                        </span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="wrapperOnHold" title="" data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                              data-content="<p>Indicates when Payment Record is On Hold.</p><p>(Read-Only Flag)</p>" data-html="true">
+                            <span class="glyphicon glyphicon-flag"></span> On Hold
+                        </span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span class="wrapperSentBackFromProcessor" title="" data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                              data-content="<p>Indicates when Payment Record is Sent back from the Processor to the Supervisor for further action.</p><p>(Read-Only Flag)</p>" data-html="true">
+                            <span class="glyphicon glyphicon-flag"></span> Processor Returned
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table id="tblVenMo" class="table table-hover" cellspacing="0" width="100%">
+                <thead style="display:none;">
+                    <tr class="EAMI_Text_White EAMI_BgColor_BlueSteel" style="border-color:#344864;">
+                        <th></th>
+
+
+                        <th></th>
+
+
+                        <th>Search Results</th>
+                        @*<th>@Html.DisplayNameFor(m => m.EntityName)</th>*@
+                        @*<th>@Html.DisplayNameFor(m => m.ModelName)</th>*@
+                        <th></th>
+                        @*<th>@Html.DisplayNameFor(m => m.TotalAmount)</th>*@
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var assignInvoicesViewModel in Model)
+                    {
+                        <tr id="trVenMo_@Html.DisplayFor(m => assignInvoicesViewModel.VendorDisplayId)" style="font-weight: bold;">
+
+
+                            <td id="tdVenMoFlag_@Html.DisplayFor(m => assignInvoicesViewModel.VendorDisplayId)" style="width: 0.5em;">
+                                <button type="button" class="btn btn-default btn-xs" style="background-color:gold;border-color:#333;" id="btnVenMoFlag_@Html.DisplayFor(m => assignInvoicesViewModel.VendorDisplayId)">
+                                    <span class="glyphicon glyphicon-flag wrapperSentBackFromProcessor"></span>
+                                </button>
+                            </td>
+
+
+                            <td id="tdVenMo_@Html.DisplayFor(m => assignInvoicesViewModel.VendorDisplayId)" style="width: 0.5em;">
+                                <button type="button" class="btn btn-default btn-xs btnInTdVenMo" style="color:#fff;background-color:#333;border-color:#333;">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </td>
+                            <td>
+                                <span class="EAMI_Text_BlueSteel">@Html.DisplayFor(m => assignInvoicesViewModel.EntityName)</span> -
+                                <span class="EAMI_Text_Purple">@Html.DisplayFor(m => assignInvoicesViewModel.ModelName)</span>
+                            </td>
+                            @*<td>@Html.DisplayFor(m => assignInvoicesViewModel.ModelName)</td>*@
+                            <td class="venMoTotalAmount" width="300em">Selected Payment Total: @Html.DisplayFor(m => assignInvoicesViewModel.TotalAmount)</td>
+                        </tr>
+                    }
+
+                    @if (Model.Count() == 0)
+                    {
+                        <tr class="EAMI_BgColor_White">
+                            <td></td>
+                            <td style="width:100%;text-align:center;"><br />Please Select Search Criteria And Then Press Search.</td>
+                            <td></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+
+        // DataTable Initialization ***********************************************************************************
+
+        $(document).ready(function () {
+            var outterMostTableId = "tblVenMo";
+
+            var datatableInvoicesGrouped = $('#' + outterMostTableId).DataTable(
+                {
+                    "filter": false, // this is for disable filter (search box)
+                    "paging": false,
+                    "info": false,
+                    //"order": [[1, "asc"]]
+                    "order": [[2, "asc"]]
+                });
+
+            // Add event listener for opening and closing details *********************************************************
+            $('#' + outterMostTableId + ' tbody tr td').on('click', 'button.btnInTdVenMo', function () {
+
+                $(this).find("span").toggleClass('glyphicon-plus');
+                $(this).find("span").toggleClass('glyphicon-minus');
+
+                var tdVenMo_id = $(this).parent().attr('id');
+                var trVenMo_id = tdVenMo_id.replace("tdVenMo_", "trVenMo_");
+                var vendorDisplayId = tdVenMo_id.replace("tdVenMo_", "");
+                var divChildOfTrVenMo_id = trVenMo_id.replace("trVenMo_", "divChildOfTrVenMo_");
+
+                var tr = $(this).closest('#' + trVenMo_id);
+                var row = datatableInvoicesGrouped.row(tr);
+
+                if (row.child.isShown()) {
+                    // This row is already open - close it
+                    $('#' + divChildOfTrVenMo_id, row.child()).slideUp(250, function () {
+                        row.child.hide();
+                        tr.removeClass('shown');
+                    });
+                }
+                else {
+                    // Open this row
+                    ajaxGetInvoices(row, row.data(), tr, trVenMo_id, vendorDisplayId, divChildOfTrVenMo_id);
+                }
+            });
+            // ************************************************************************************************************
+
+            // Add event listener for Assign ******************************************************************************
+            $('#btnAssign').on('click', function () {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AssignInvoices_GetAssignees")",
+                    //data: invSubTbl_id,
+                    //data: { 'outterMostTableId': outterMostTableId, 'outterMostRowId': trVenMo_id, 'vendorDisplayId': vendorDisplayId },
+                    //contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: ajaxGetAssignees_SuccessCallBack,
+                    failure: function (response) {
+                        //alert(response.responseText);
+                        alert("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                    },
+                    error: function (response) {
+                        alert("dddddddddddddddddddddddddddddddd");
+                        //alert(response.responseText);
+                    }
+                });
+
+                function ajaxGetAssignees_SuccessCallBack(returnAssignees) {
+                    //var retHtmlHeaderString = 'Assign Payment - ' + 'returnAssignees.selected.count' + ' Payments';
+                    var retHtmlHeaderString = 'Assign Payment - ' + 6 + ' Payments';
+                    var retHtmlString = '' +
+                    '<div class="container-fluid">' +
+                        '<div class="row EAMI_BgColor_BlueSteel EAMI_Text_White" style="padding-top:15px;padding-bottom:5px;">' +
+                          '<div class="col-md-1 selectorWidth"></div>' +
+                          '<div class="col-md-5"><strong>Name</strong></div>' +
+                          '<div class="col-md-2"><strong>User</strong></div>' +
+                          '<div class="col-md-4"><strong>Assigned Payments</strong></div>' +
+                        '</div>' +
+                        '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                        '</div>' +
+
+
+
+
+
+                        '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                          '<div class="col-md-1 selectorWidth"><input type="radio" name="radioUser" style="margin-top: 0.22em;"></div>' +
+                          '<div class="col-md-5">Cailin Kardashian</div>' +
+                          '<div class="col-md-2">Processor</div>' +
+                          '<div class="col-md-4">74</div>' +
+                        '</div>' +
+                        '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                          '<div class="col-md-1 selectorWidth"><input type="radio" name="radioUser" style="margin-top: 0.22em;"></div>' +
+                          '<div class="col-md-5">Cailin Kardashian</div>' +
+                          '<div class="col-md-2">Processor</div>' +
+                          '<div class="col-md-4">74</div>' +
+                        '</div>' +
+                        '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                          '<div class="col-md-1 selectorWidth"><input type="radio" name="radioUser" style="margin-top: 0.22em;"></div>' +
+                          '<div class="col-md-5">Cailin Kardashian</div>' +
+                          '<div class="col-md-2">Processor</div>' +
+                          '<div class="col-md-4">74</div>' +
+                        '</div>' +
+                        '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                          '<div class="col-md-1 selectorWidth"><input type="radio" name="radioUser" style="margin-top: 0.22em;"></div>' +
+                          '<div class="col-md-5">Cailin Kardashian</div>' +
+                          '<div class="col-md-2">Processor</div>' +
+                          '<div class="col-md-4">74</div>' +
+                        '</div>' +
+                        '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                          '<div class="col-md-1 selectorWidth"><input type="radio" name="radioUser" style="margin-top: 0.22em;"></div>' +
+                          '<div class="col-md-5">Cailin Kardashian</div>' +
+                          '<div class="col-md-2">Processor</div>' +
+                          '<div class="col-md-4">74</div>' +
+                        '</div>' +
+
+
+
+
+
+                        '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                        '</div>' +
+                    '</div>'; +
+
+
+                    $("#modalHeaderForAssign").html(retHtmlHeaderString);
+                    $("#modalBodyForAssign").html(retHtmlString);
+                    $('#modalWrapperForAssign').modal('show');
+                }
+            });
+            // ************************************************************************************************************
+
+            // Add event listener for Hold ********************************************************************************
+            $('#btnHold').on('click', function () {
+                var retHtmlHeaderString = 'Hold Payment';
+                var retHtmlString = '' +
+                '<div class="container-fluid">' +
+                    '<div class="form-group" style="padding-top:15px;">' +
+                        '<label for="txtareaHoldComment">Comment:</label>' +
+                        '<textarea class="form-control" id="txtareaHoldComment" placeholder="Comment Required" rows="10"></textarea>' +
+                    '</div>' +
+                    '<div class="alert alert-danger" style="display: none; margin-top: 10px;" id="danger_alert"></div>' +
+                '</div>';
+
+                $("#modalHeaderForHold").html(retHtmlHeaderString);
+                $("#modalBodyForHold").html(retHtmlString);
+                $('#modalWrapperForHold').modal('show');
+
+                $("#txtareaHoldComment").on("change keyup paste", function () {
+                    var maxLength = 10;
+                    var currentVal = $(this).val();
+                    var currentLength = $(this).val().length;
+                    if (currentLength > maxLength) {
+                        $("#modalWrapperForHold #danger_alert").html("Your entry of <span style='color:blue;'>" + currentLength + "</span> " +
+                            "characters exceeds the maximum <span style='color:blue;'>" + maxLength + "</span> characters allowed." +
+                            "<br />Please reduce the number of characters entered.");
+                        $("#modalWrapperForHold #danger_alert").slideDown();
+                        $('#modalFooterForHold_HoldBtn').prop("disabled", true);
+                    }
+                    else {
+                        $('#modalFooterForHold_HoldBtn').prop("disabled", false);
+                        $("#modalWrapperForHold #danger_alert").slideUp();
+                    }
+                });
+
+                $("#modalFooterForHold_CancelBtn").on("click", function () {
+                    $('#modalFooterForHold_HoldBtn').prop("disabled", false);
+                });
+
+            });
+            // ************************************************************************************************************
+
+            // Add event listener for UnHold ********************************************************************************
+            @*$('#btnVenMoFlag_@Html.DisplayFor(m => assignInvoicesViewModel.VendorDisplayId)').on('click', function () {
+            var retHtmlHeaderString = 'UnHold Payment';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="form-group" style="padding-top:15px;">' +
+                    '<label for="txtareaUnHoldComment">Comment:</label>' +
+                    '<textarea class="form-control" id="txtareaUnHoldComment" placeholder="Comment Required" rows="10"></textarea>' +
+                '</div>' +
+            '</div>';
+
+            $("#modalHeaderForUnHold").html(retHtmlHeaderString);
+            $("#modalBodyForUnHold").html(retHtmlString);
+            $('#modalWrapperForUnHold').modal('show');
+        });*@
+            // ************************************************************************************************************
+
+            // Add event listener for Return ******************************************************************************
+            $('#btnReturn').on('click', function () {
+                var retHtmlHeaderString = 'Return Payment';
+                var retHtmlString = '' +
+                '<div class="container-fluid">' +
+                    '<div class="form-group" style="padding-top:15px;">' +
+                        '<label for="txtareaReturnComment">Comment:</label>' +
+                        '<textarea class="form-control" id="txtareaReturnComment" placeholder="Comment Required" rows="10"></textarea>' +
+                    '</div>' +
+                    '<div class="alert alert-danger" style="display: none; margin-top: 10px;" id="danger_alert"></div>' +
+                '</div>';
+
+                $("#modalHeaderForReturn").html(retHtmlHeaderString);
+                $("#modalBodyForReturn").html(retHtmlString);
+                $('#modalWrapperForReturn').modal('show');
+
+                $("#txtareaReturnComment").on("change keyup paste", function () {
+                    var maxLength = 10;
+                    var currentVal = $(this).val();
+                    var currentLength = $(this).val().length;
+                    if (currentLength > maxLength) {
+                        $("#modalWrapperForReturn #danger_alert").html("Your entry of <span style='color:blue;'>" + currentLength + "</span> " +
+                            "characters exceeds the maximum <span style='color:blue;'>" + maxLength + "</span> characters allowed." +
+                            "<br />Please reduce the number of characters entered.");
+                        $("#modalWrapperForReturn #danger_alert").slideDown();
+                        $('#modalFooterForReturn_ReturnBtn').prop("disabled", true);
+                    }
+                    else {
+                        $('#modalFooterForReturn_ReturnBtn').prop("disabled", false);
+                        $("#modalWrapperForReturn #danger_alert").slideUp();
+                    }
+                });
+
+                $("#modalFooterForReturn_CancelBtn").on("click", function () {
+                    $('#modalFooterForReturn_ReturnBtn').prop("disabled", false);
+                });
+
+            });
+            // ************************************************************************************************************
+
+
+            // Helper Function ajaxGetInvoiceDetails(row, rowData, tr):  Returns the div to be rendered by the child row, *
+            // while also using AJAX (asynchronous HTTP) request and a closure to populate that div asynchronously.
+            function parseJsonDate(jsonDateString) {
+                return $.datepicker.formatDate('mm/dd/yy', new Date(parseInt(jsonDateString.replace('/Date(', ''))));
+            }
+
+            /* Formatting function for row details - modify as you need */
+            function ajaxGetInvoices(row, rowData, tr, trVenMo_id, vendorDisplayId, divChildOfTrVenMo_id) {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("Invoices")",
+                    //data: invSubTbl_id,
+                    data: { 'outterMostTableId': outterMostTableId, 'outterMostRowId': trVenMo_id, 'vendorDisplayId': vendorDisplayId },
+                    //contentType: "application/json; charset=utf-8",
+                    dataType: "html",
+                    success: ajaxGetInvoices_SuccessCallBack,
+                    failure: function (response) {
+                        //alert(response.responseText);
+                        alert("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                    },
+                    error: function (response) {
+                        alert("dddddddddddddddddddddddddddddddd");
+                        //alert(response.responseText);
+                    }
+                });
+
+                function ajaxGetInvoices_SuccessCallBack(returnInvoices) {
+                    // Open this row
+                    var retHtmlInvoices = '' +
+                        '<div class="collapse no-padding" id="' + divChildOfTrVenMo_id + '">' +
+                                returnInvoices +
+                        '</div>';
+                    row.child(retHtmlInvoices, 'no-padding').show();
+                    tr.addClass('shown');
+                    $('#' + divChildOfTrVenMo_id, row.child()).slideDown(250);
+                }
+            }
+
+
+
+
+            // Add event listeners for Search Menu Bar ********************************************************************
+
+            // AJAX Functions *********************************************************************************************
+            function ajaxGetAssignInvoices_GetSearchCriteriaVendors() {
+                $.getJSON("@Url.Action("AssignInvoices_GetSearchCriteriaVendors")", function (data) {
+                    Result = data; //Use this data for further creation of your elements.
+                    var items = "";
+                    //items += "<option value=''>Payee</option>";
+                    $.each(data, function (i, SingleElement) {
+                        var strDisplayOption = SingleElement.EntityName.length > 40 ? SingleElement.EntityName.substr(0, 40) + " ..." : SingleElement.EntityName;
+                        items += "<option value='" + i + "'>" + strDisplayOption + "</option>";
+                    });
+
+                    if ($("#ddlSystem").val() != "") {
+                        $("#ddlPaymentExchangeEntity").html(items);
+                        $("#ddlPaymentExchangeEntity").prop("disabled", false);
+                        //$("#ddlModelType").html("<option value=''>Payment Type</option>");
+                        $("#ddlModelType").val('');
+                        $("#ddlModelType").prop("disabled", true);
+                    } else {
+                        $("#ddlPaymentExchangeEntity").val('');
+                        $("#ddlPaymentExchangeEntity").prop("disabled", true);
+                        $("#ddlModelType").val('');
+                        $("#ddlModelType").prop("disabled", true);
+                    }
+
+                    $("#ddlPaymentExchangeEntity").selectpicker('refresh');
+                    $("#ddlModelType").selectpicker('refresh');
+                });
+            }
+
+            function ajaxGetAssignInvoices_GetSearchCriteriaModelTypes() {
+                $.getJSON("@Url.Action("AssignInvoices_GetSearchCriteriaModelTypes")", function (data) {
+                    Result = data; //Use this data for further creation of your elements.
+                    var items = "";
+                    //items += "<option value=''>Model Type</option>";
+                    $.each(data, function (i, SingleElement) {
+                        items += "<option value='" + i + "'>" + SingleElement.ModelName + "</option>";
+                    });
+
+                    if ($("#ddlPaymentExchangeEntity").val() != "") {
+                        $("#ddlModelType").html(items);
+                        $("#ddlModelType").prop("disabled", false);
+                    } else {
+                        $("#ddlModelType").val('');
+                        $("#ddlModelType").prop("disabled", true);
+                    }
+
+                    $("#ddlModelType").selectpicker('refresh');
+                });
+            }
+
+
+
+            // ************************************************************************************************************
+
+            $("#ddlSystem").val('0');                           //Initialize to CAPMAN
+            $("#ddlSystem").selectpicker('refresh');
+            $("#ddlInvoiceStatus").val('0');                    //Initialize to UnAssigned
+            $("#ddlInvoiceStatus").selectpicker('refresh');
+            ajaxGetAssignInvoices_GetSearchCriteriaVendors();   //Initialial Call to Populate Payee, Payment Type, and Contract DropDowns.
+
+            $("#ddlSystem").change(ajaxGetAssignInvoices_GetSearchCriteriaVendors);
+            $("#ddlPaymentExchangeEntity").change(ajaxGetAssignInvoices_GetSearchCriteriaModelTypes);
+
+            $("#ddlInvoiceStatus").change(function () {
+                if ($(this).val() === '1') {    //Assigned
+                    $("#btnAssign").html('<span class="glyphicon glyphicon-user"></span>&nbsp;ReAssign');
+                } else {
+                    $("#btnAssign").html('<span class="glyphicon glyphicon-user"></span>&nbsp;Assign');
+                }
+            });
+
+
+            $("#btnReset").click(function () {
+                $('#ddlSystem').val('0').trigger('change');
+                $("#ddlSystem").prop("disabled", false);
+                $("#ddlInvoiceStatus").prop("disabled", false);
+                $('#ddlPaymentExchangeEntity').val('');
+                $("#ddlPaymentExchangeEntity").prop("disabled", false);
+                $("#ddlModelType").prop("disabled", false);
+                $('#ddlContractNumber').val('');
+
+                $("#ddlSystem").selectpicker('refresh');
+                $("#ddlInvoiceStatus").selectpicker('refresh');
+                $("#ddlPaymentExchangeEntity").selectpicker('refresh');
+                $("#ddlModelType").selectpicker('refresh');
+                $("#ddlContractNumber").selectpicker('refresh');
+            });
+
+            $("#btnSearchMenu").click(function () {
+                $(this).toggleClass("btn-dhcs-secondary");
+                $(this).toggleClass("btn-dhcs-primary");
+            });
+
+
+
+
+
+
+            // ************************************************************************************************************
+
+            // Initialize Popovers ****************************************************************************************
+            $('[data-toggle="popover"]').popover();
+            // ************************************************************************************************************
+
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+

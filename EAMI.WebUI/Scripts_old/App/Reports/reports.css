@@ -1,0 +1,21 @@
+﻿div.dt-buttons
+{
+    /*position: relative;
+    float: right;*/
+
+    /*float: right;*/
+    display: inline-block;
+}
+
+.outer
+{
+    width:100%;
+    /*text-align: center;*/
+        float: right;
+}
+
+.inner
+{
+    /*float: right;*/
+    display: inline-block;
+}

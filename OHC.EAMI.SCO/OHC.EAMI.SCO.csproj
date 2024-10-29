@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2B08BCEE-BE86-4391-A5AC-0323F313832F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OHC.EAMI.SCO</RootNamespace>
+    <AssemblyName>OHC.EAMI.SCO</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Base\SCOAuditDetailBase.cs" />
+    <Compile Include="Base\SCOClaimHeaderBase.cs" />
+    <Compile Include="Base\SCOClaimScheduleBase.cs" />
+    <Compile Include="Base\SCOClaimTotalRecordBase.cs" />
+    <Compile Include="Base\SCODetailPaymentStatementBase.cs" />
+    <Compile Include="Base\SCOFileHeaderBase.cs" />
+    <Compile Include="Base\SCOFileTotalRecordBase.cs" />
+    <Compile Include="Base\SCOGeneratedFileValidatorBase.cs" />
+    <Compile Include="Base\SCOPaymentDetailBase.cs" />
+    <Compile Include="Base\SCOPaymentFileBase.cs" />
+    <Compile Include="Base\SCOSecondaryPaymentDetailBase.cs" />
+    <Compile Include="DEX\EamiDexRecord.cs" />
+    <Compile Include="Interface\EamiClaimAuditRecord.cs" />
+    <Compile Include="Interface\EamiClaimPayment.cs" />
+    <Compile Include="Interface\EamiClaimRemittanceAdviceRecord.cs" />
+    <Compile Include="Interface\IClaimPayment.cs" />
+    <Compile Include="EFT\EFTAuditDetail.cs" />
+    <Compile Include="EFT\EFTClaimHeader.cs" />
+    <Compile Include="EFT\EFTClaimSchedule.cs" />
+    <Compile Include="EFT\EFTClaimTotalRecord.cs" />
+    <Compile Include="EFT\EFTDetailPaymentStatement.cs" />
+    <Compile Include="EFT\EFTFileHeader.cs" />
+    <Compile Include="EFT\EFTFileTotalRecord.cs" />
+    <Compile Include="EFT\EFTGeneratedFileValidator.cs" />
+    <Compile Include="EFT\EFTPaymentDetail.cs" />
+    <Compile Include="EFT\EFTPaymentFile.cs" />
+    <Compile Include="EFT\EFTSecondaryPaymentDetail.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ECS\ECSAuditDetail.cs" />
+    <Compile Include="ECS\ECSClaimHeader.cs" />
+    <Compile Include="ECS\ECSClaimSchedule.cs" />
+    <Compile Include="ECS\ECSClaimTotalRecord.cs" />
+    <Compile Include="ECS\ECSDetailPaymentStatement.cs" />
+    <Compile Include="DEX\SCODexRecord.cs" />
+    <Compile Include="ECS\ECSFileHeader.cs" />
+    <Compile Include="ECS\ECSFileTotalRecord.cs" />
+    <Compile Include="ECS\ECSGeneratedFileValidator.cs" />
+    <Compile Include="ECS\ECSPaymentDetail.cs" />
+    <Compile Include="ECS\ECSPaymentFile.cs" />
+    <Compile Include="ECS\ECSSecondaryPaymentDetail.cs" />
+    <Compile Include="ScoServiceManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OHC.EAMI.Common\OHC.EAMI.Common.csproj">
+      <Project>{eb529390-b76e-4a27-9c7c-ca0915c7cfb8}</Project>
+      <Name>OHC.EAMI.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /I /Q /Y /R  "$(TargetPath)" "$(SolutionDir)Assemblies\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

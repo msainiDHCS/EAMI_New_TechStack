@@ -1,0 +1,292 @@
+﻿.no-padding {
+    padding: 0px !important;
+    margin: 0px !important;
+    border: none !important;
+}
+
+.no-padding-left-right {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.rowDetails {
+    background-color: #fcf8e3 !important;
+    /*border-radius: 25px;*/
+}
+
+.col1-style {
+    width: 10px;
+}
+
+.col2-style {
+    width: 10px;
+}
+
+.col3-style {
+    width: 60px;
+}
+
+.col4-style {
+    width: 20px;
+}
+
+.borderLine {
+    border-top: 3px double #8c8b8b;
+}
+
+#searchMenu .panel {
+    display: inline-block;
+}
+
+.modal-customSize {
+    width: 90%;
+}
+
+/*EAMI Colors*****************************************************************************************************/
+.EAMI_Text_AlertWarning {
+    color: #8a6d3b;     /*alert-warning text color*/
+    font-weight:bold;
+}
+
+.EAMI_Text_BlueSteel {
+    color: #3d5475 !important;
+}
+
+.EAMI_Text_Purple {
+    color: #4f0c4c !important;
+}
+
+.EAMI_Text_White {
+    color: #fff !important;
+}
+
+.EAMI_Text_Warning {
+    color: gold !important;
+}
+
+.EAMI_BgColor_BlueSteel {
+    background-color: #2d6e8d !important;
+}
+
+.EAMI_BgColor_Purple {
+    background-color: #4f0c4c !important;
+}
+
+.EAMI_BgColor_White {
+    background-color: #fff !important;
+}
+
+.EAMI_BtnRadius {
+    border-radius: 4px !important;
+}
+
+.selectorWidth {
+    width: 1em;
+}
+
+.modal-content {
+    overflow: hidden;
+}
+
+.modal-header {
+    background-color: #17315a !important; /*EAMI_BgColor_Purple*/
+    color: #fff !important; /*EAMI_Text_White*/
+    border-bottom: 0;
+}
+
+.modal-body {
+    position: relative;
+    padding: 0;
+}
+
+.wrapperDefinitions:hover {
+    cursor: help !important;
+}
+
+.wrapperOnHold {
+    color: #333;  /* hex gray 20 */
+    cursor: default;
+}
+.wrapperOnHold:hover:not(.outtermostFlag) {
+    cursor: help !important;
+}
+
+.holdText {
+    /*color: #F39C12;*/
+    color: #eb9316;  /* This is same color as remittance advice icon. */
+    cursor: help !important;
+    font-weight: bold;
+}
+.deniedText {
+    color: #ff0000;  /* red */
+    cursor: help !important;
+    font-weight: bold;
+}
+
+.wrapperReleaseFromSupervisor {
+    color: greenyellow;
+}
+
+.wrapperReleaseFromSupervisor :hover {
+        cursor: help;
+        color: greenyellow;
+    }
+
+.wrapperRA :hover {
+        cursor: help;        
+    }
+
+.ihssIcon {
+    width: 14px;
+    height: 16px;
+}
+.wrapperIHSS {
+    color: white;
+}
+
+.wrapperIHSS :hover {
+    color: white;
+    cursor: help;
+}
+
+.wrapperSCHIP {
+    color: black;
+}
+
+.wrapperSCHIP :hover {
+    color: black;
+    cursor: help;
+}
+.bootstrap-select.btn-group .dropdown-menu {
+    z-index: 2000;
+}
+
+.bootstrap-select.btn-group .dropdown-menu.inner {
+    position: static;
+}
+
+/*************************************************/
+/* PaymentSuperGroup Table Columns Td formatting */
+td.iconColumn {
+    width:25px !important;
+}
+.wrapperIconColumnRect {
+    font-weight: bold;
+}
+td.iconColumnRect {
+    /*width:80px !important;*/
+    width:56px !important;
+    text-align:center;
+}
+td.iconColumnPSG {
+    width:20px !important;
+    cursor: default;
+}
+td.PP_contractNumberSuperGroup {
+    width: 10%;
+}
+td.PP_sfySuperGroup {
+    width: 7%;
+}
+.PP_totalAmountSuperGroup {
+    width: 10%;
+    text-align:right !important;
+}
+.PP_PCS_totalAmountSuperGroup {
+    text-align:right !important;
+}
+.PP_selectedTotalAmountSuperGroup {
+    width: 16.05%;
+    text-align:right !important;
+}
+.btnInTdPGPlusMinus,
+.btnInTdPGPlusMinus:hover,
+.btnInTdPGPlusMinus:active,
+.btnInTdPGPlusMinus:focus,
+.btnInTdPGPlusMinus:active:focus
+    {
+    color:#fff;                 /*EAMI White*/
+    background-color:#8a6d3b;   /*alert-warning text color*/
+    border-color:#8a6d3b;       /*alert-warning text color*/
+    width:25px;
+    height:25px;
+    padding:0px;
+}
+/* PayentGroup Table Columns Td formatting *******/
+td.PP_PaymentGroup_Shift {
+    /*width: 9.775em !important;*/
+    /*width: 13em !important;*/
+    width: 7.3em !important;
+}
+td.PP_PCS_PaymentGroup_Shift {
+    width: 6.85em !important;
+}
+/*td.A_PR_PaymentGroup_Shift {
+    width: 7.3em !important;
+}*/
+td.PP_PaymentGroup_UniqueNumber {
+    /* Allow this column to fluctuate accordingly.*/
+}
+
+.PP_PCS_PaymentGroup_UniqueNumber {
+    /*padding-left:3px !important;*/
+    width: 33.5%;
+}
+td.PP_PayDate {
+    width: 22%;
+}
+td.PP_AssignedTo {
+    width: 15%;
+}
+th.PP_PG_Amount,
+td.PP_PG_Amount {
+    width: 30%;
+    text-align:right !important;
+    /*padding-right:150px !important;*/
+}
+th.PP_PCS_Amount,
+td.PP_PCS_Amount {
+    width: 32%;
+    text-align:right !important;
+    /*padding-right:150px !important;*/
+}
+/*************************************************/
+/* PayentRecord Table Columns Td formatting ******/
+td.PP_PaymentRecord_Shift {
+    /*width: 1.68em !important;*/
+    /*width: 23.5px !important;*/
+    width: 48px !important;
+}
+
+td.PP_PCS_PaymentRecord_Shift {
+    /*width: .36em !important;*/
+    /*width: 4.75px !important;*/
+    width: 18.5px !important;
+}
+td.PP_PaymentRecord_UniqueNumber {
+    /* Allow this column to fluctuate accordingly.*/
+}
+td.PP_PaymentDate {
+    /*width: 34%;*/
+    /*width: 20.8%;*/
+    width: 27% !important;
+}
+td.PP_PCS_PaymentDate {
+    /*width: 30.1%;*/
+    /*width: 17.5%;*/
+    width: 24.3%;
+}
+th.PP_PR_Amount,
+td.PP_PR_Amount {
+    /*width: 18.5%;*/
+    /*width: 12.3%;*/
+    width: 15%;
+    text-align:right !important;
+}
+th.PP_PR_PCS_Amount,
+td.PP_PR_PCS_Amount {
+    /*width: 29.45%;*/
+    width: 22.8%;
+    text-align:right !important;
+}
+/*************************************************/

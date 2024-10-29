@@ -1,0 +1,414 @@
+﻿@model OHC.EAMI.WebUI.ViewModels.AssignInvoicesViewModel
+
+@{
+    //ViewBag.Title = "Assign Invoice";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+
+<style type="text/css">
+    /*tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;*/
+        /*display: table-header-group;*/
+    /*}*/
+
+    td.details-control {
+        background: url('../Content/DataTables/images/details_open.png') no-repeat center center;
+        /*background: url('../Content/DataTables/images/glyphicons-433-plus.png') no-repeat center center;*/
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../Content/DataTables/images/details_close.png') no-repeat center center;
+        /*background: url('../Content/DataTables/images/glyphicons-434-minus.png') no-repeat center center;*/
+    }
+
+    table.dataTable tbody td.no-padding {
+        padding: 0;
+    }
+
+    .rowDetails {
+        background-color: #fcf8e3 !important;
+        /*border-radius: 25px;*/
+    }
+
+    .col1-style {
+        width: 10px;
+    }
+    .col2-style {
+        width: 10px;
+    }
+    .col3-style {
+        width: 60px;
+    }
+    .col4-style {
+        width: 20px;
+    }
+
+    .borderLine {
+        border-top: 3px double #8c8b8b;
+    }
+
+</style>
+
+<div>
+@*<table id="invoices" class="table table-striped table-hover" cellspacing="0" width="100%">*@
+<table id="invoices" class="table table-hover" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th class="col1-style"></th>
+            <th class="col2-style"></th>  @*This column gets auto-replaced by checkboxes.  Needs to be repeat of FiscalYear to work for some reason.*@
+            <th class="col3-style">@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().PayDate)</th>
+            <th class="col4-style">@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().FiscalYear)</th>
+            <th>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().InvoiceNumber)</th>
+            <th>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().InvoiceDate)</th>
+            <th>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().PaymentExchangeEntity.EntityName)</th>
+            <th>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().ModelType.ModelName)</th>
+            <th>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().InvoiceStatuses.FirstOrDefault().InvoiceStatusType.Code)</th>
+            <th>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().Amount)</th>
+        </tr>
+</thead>
+<tbody>
+    @foreach (var invoice in Model.Invoices)
+    {
+        <tr>
+            <td></td>
+            <td>@Html.DisplayFor(m => invoice.FiscalYear)</td>     @*This column gets auto-replaced by checkboxes.  Needs to be repeat of FiscalYear to work for some reason.*@
+            <td>@Html.DisplayFor(m => invoice.PayDate)</td>
+            <td>@Html.DisplayFor(m => invoice.FiscalYear)</td>
+            <td>@Html.DisplayFor(m => invoice.InvoiceNumber)</td>
+            <td>@Html.DisplayFor(m => invoice.InvoiceDate)</td>
+            <td>@Html.DisplayFor(m => invoice.PaymentExchangeEntity.EntityName)</td>
+            <td>@Html.DisplayFor(m => invoice.ModelType.ModelName)</td>
+            <td>@Html.DisplayFor(m => invoice.InvoiceStatuses.FirstOrDefault().InvoiceStatusType.Code)</td>
+            <td>@Html.DisplayFor(m => invoice.Amount)</td>
+        </tr>
+    }
+</tbody>
+</table>
+</div>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        // DataTable Initialization ***********************************************************************************
+        var table = $('#invoices').DataTable({
+            //"processing": true, //Feature control the processing indicator.
+            //"serverSide": true, //Feature control DataTables' server-side processing mode.
+            //"order": [], //Initial no order.
+            //"aaSorting": [],
+            // Load data for the table's content from an Ajax source
+            //"ajax": {
+            //    "url": "Invoice/Invoices",
+            //    "type": "POST"
+            //},
+
+
+
+
+
+            @*$.ajax({
+                type: "POST",
+                url: "@Url.Action("Detail")",
+                data: JSON.stringify(jsonObject),
+
+            contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: successCallBack,
+        failure: function (response) {
+            //alert(response.responseText);
+            alert("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+        },
+        error: function (response) {
+            alert("dddddddddddddddddddddddddddddddd");
+            //alert(response.responseText);
+        }
+    });*@
+
+
+
+
+
+            //Set column definition initialisation properties.
+            "columnDefs": [
+            {
+                "targets": 0,
+                "class": "details-control",
+                "orderable": false,
+                "data": null,
+                "defaultContent": ""
+            },
+            {
+                "targets": 1,
+                "class": "checkbox-td",
+                //"data": "Invoices.0.PayDate",
+                "checkboxes": {
+                    "selectRow": true
+                }
+            }
+            ],
+
+            "select":
+            {
+                "style": "os",
+                "selector": "td:nth-child(2) input:checkbox"
+            },
+
+            "order": [[3, "asc"]]
+        });
+
+        // ************************************************************************************************************
+
+        // Add event listener for opening and closing details *********************************************************
+        $('#invoices tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('rowDetails');
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                ajaxGetInvoiceDetails(row, row.data(), tr);
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+        //$('#invoices thead').on('change', '.dt-checkboxes-select-all', function () {
+
+
+
+        //    var checkBoxVal = $(this).find('input:checked').val() == "on" ? false : true;
+
+
+
+
+        //    $('#invoices tbody').find('input[type="text"]').prop("disabled", checkBoxVal);
+
+
+        //    //alert($('#invoices tbody').find('input:checked').val());
+
+
+        //    //var checkBoxVal = tr.find('input:checked').val() == "on" ? false : true;
+
+
+
+
+
+
+        //    //tr.find('input[type="text"]').prop("disabled", checkBoxVal);
+
+
+        //});
+
+
+
+
+
+        $('#invoices tbody').on('change', 'td.checkbox-td', function () {
+
+            //$('#my_table td').click(function (e) {
+            //    $(this).parent().find('input:checkbox:first').attr('checked', 'checked');
+            //});
+
+
+
+            //alert($(this).parent().find('input[type="text"]').val());
+
+            //alert($(this).parent().find('input[type="checkbox"]').val());
+
+
+            //var tr = $(this).closest('tr');
+            //var row = table.row(tr);
+            //var checkBoxVal = $(this).parent().find('input[type="checkbox"]').val() == "on" ? true : false;
+            //$(this).parent().find('input[type="text"]').prop("disabled", checkBoxVal);
+
+
+
+
+
+
+
+
+            var tr = $(this).closest('tr');
+
+
+
+            //var checkBoxVal = tr.find('input:checked').val() == "on" ? false : true;
+            //tr.find('input[type="text"]').prop("disabled", checkBoxVal);
+
+
+
+
+
+
+
+        });
+
+        //var result = $(this).parent().parent().find('input[type="text"]').val();
+
+        //this.siblings().find("paydate-input").prop("disabled", this.checked);
+
+
+
+        ////Remove the following line:
+        //$("#parent").find("input.input-text").attr("disabled", false);
+
+        //...because that's enabling all inputs within the #parent element.
+
+        ////You already seem to know how to use $(this).parent(...).find(...) to get the textbox related to the clicked item, so just modify that code:
+        //$(document).on('change', '.disable-input', function () {
+        //    $(this).parent().find("input.input-text").prop("disabled", this.checked);
+        //});
+
+
+
+
+
+
+
+
+
+
+        // ************************************************************************************************************
+
+        // Helper Function ajaxGetInvoiceDetails(row, rowData, tr):  Returns the div to be rendered by the child row, *
+        // while also using AJAX (asynchronous HTTP) request and a closure to populate that div asynchronously.
+        function parseJsonDate(jsonDateString) {
+            return $.datepicker.formatDate('mm/dd/yy', new Date(parseInt(jsonDateString.replace('/Date(', ''))));
+        }
+
+        /* Formatting function for row details - modify as you need */
+        function ajaxGetInvoiceDetails(row, rowData, tr) {
+
+                    var jsonObject = {
+                        "AssignChecked": tr.find('input:checked').val() == "on" ? true : false,
+                        "FiscalYear": rowData.FiscalYear,
+                        "InvoiceNumber" : rowData.InvoiceNumber,
+                        "InvoiceDate" : rowData.InvoiceDate,
+                        "PaymentExchangeEntity": {
+                            "EntityName": rowData.EntityName
+                        },
+                        "ModelType": {
+                            "ModelName": rowData.ModelName
+                        },
+                        "InvoiceStatuses": [
+                            {
+                                "InvoiceStatusType" :
+                                    {
+                                        "Code" : rowData.Code
+                                    }
+                            }
+                        ],
+                        "Amount" : rowData.Amount
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Action("Detail")",
+                        data: JSON.stringify(jsonObject),
+
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: successCallBack,
+                        failure: function (response) {
+                            //alert(response.responseText);
+                            alert("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                        },
+                        error: function (response) {
+                            alert("dddddddddddddddddddddddddddddddd");
+                            //alert(response.responseText);
+                        }
+                    });
+
+
+            function successCallBack(returnInvoice) {
+
+                // build funding string
+                var fundingString = '';
+                $.each(returnInvoice.FundingDetails, function (index, value) {
+                    if (index == 0) {
+                        fundingString = fundingString +
+                            '<tr><td colspan="5" style="height: 10px;"></td></tr>' +
+                            '<tr><td colspan="4" class="borderLine"></td></tr>' +
+                            '<tr><td>' + '@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().FundingDetails.FirstOrDefault().FundingSourceName)' + '</td>' +
+                                '<td>' + '@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().FundingDetails.FirstOrDefault().Amount)' + '</td></tr>' +
+                            '<tr><td colspan="4" class="borderLine"></td></tr>'
+                    }
+
+                    if (this.length == 0) {
+                        fundingString = fundingString + '<tr><td colspan="5">' +
+                            'There are currently no funding sources associated with this invoice.'
+                            + '</td></tr>';
+                    }
+                    else {
+                        fundingString = fundingString + '<tr><td>' + this.FundingSourceName + '</td><td>' + numeral(this.Amount).format('$0,0.00') + '</td><tr>';
+                    }
+                });
+
+                // build Invoice Details return html string
+                var retHtmlString = '' +
+                    '<div style="margin-left:227px; margin-right:0px;">' +
+                        '<table class="rowDetails" cellspacing="0" width="100%"' +
+                          '<tr><td colspan="5" style="height: 10px;"></td></tr>' +
+                            '<tr>' +
+                                '<td>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().PaymentExchangeEntity.EntityID):&nbsp;&nbsp;' + returnInvoice.PaymentExchangeEntity.EntityID + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().IndexCode):&nbsp;&nbsp;' + returnInvoice.IndexCode + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().ObjectAgencyCode):&nbsp;&nbsp;' + returnInvoice.ObjectAgencyCode + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().ObjectDetailCode):&nbsp;&nbsp;' + returnInvoice.ObjectDetailCode + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().PCACode):&nbsp;&nbsp;' + returnInvoice.PCACode + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>Contract Term:&nbsp;&nbsp;' + parseJsonDate(returnInvoice.Contract.EffectiveDateFrom) + ' - ' + parseJsonDate(returnInvoice.Contract.EffectiveDateTo) + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().Contract.ContractNumber):&nbsp;&nbsp;' + returnInvoice.Contract.ContractNumber + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.Invoices.FirstOrDefault().Contract.CurrentQuarter):&nbsp;&nbsp;' + returnInvoice.Contract.CurrentQuarter + '</td>' +
+                            '</tr>' +
+                            fundingString +
+                            '<tr><td colspan="5" style="height: 10px;"></td></tr>' +
+                        '</table>' +
+                    '</div>';
+
+                // Open this row
+                row.child(retHtmlString, 'no-padding rowDetails').show();
+                tr.addClass('rowDetails');
+                tr.addClass('shown');
+            }
+        }
+
+        // ************************************************************************************************************
+
+    } );
+
+
+
+
+
+
+
+
+
+
+</script>

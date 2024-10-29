@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "YEFCi4zIxdcVLq0ey58VkT3uXjCn0McuntM08Qe4NSw=",
+  "Source": "EAMI.WebAPI",
+  "BasePath": "_content/EAMI.WebAPI",
+  "Mode": "Default",
+  "ManifestType": "Publish",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

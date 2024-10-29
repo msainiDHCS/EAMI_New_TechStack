@@ -1,0 +1,12 @@
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\bin\Release\OHC.EAMI.CommonEntity.dll.config
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\bin\Release\OHC.EAMI.CommonEntity.dll
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\bin\Release\OHC.EAMI.CommonEntity.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\bin\Release\OHC.EAMI.Common.dll
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\bin\Release\Ninject.dll
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\bin\Release\NLog.dll
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\bin\Release\OHC.EAMI.Common.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\obj\Release\OHC.EAMI.CommonEntity.csproj.AssemblyReference.cache
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\obj\Release\OHC.EAMI.CommonEntity.csproj.CoreCompileInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\obj\Release\OHC.EAMI.3E745646.Up2Date
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\obj\Release\OHC.EAMI.CommonEntity.dll
+C:\Projects\TestProjects\EAMI_WebAPI\OHC.EAMI.CommonEntity\obj\Release\OHC.EAMI.CommonEntity.pdb

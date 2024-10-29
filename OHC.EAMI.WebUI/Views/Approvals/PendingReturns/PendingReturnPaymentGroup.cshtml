@@ -1,0 +1,206 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model List<PaymentProcessingRecordChild>
+
+@{
+
+    string grdName = ViewBag.ID + "_grdPaymentRecordSetsForPayeeAndPRType";
+    string grdNameSelector = grdName + "_All";
+}
+
+@if (Model != null && Model.Count > 0)
+{
+
+    <table id="@grdName" class="table table-hover table-bordered EAMITableNoBorder" data-id="@ViewBag.ID" cellspacing="0" style="width:100%; margin:0px !important;border:none !important;" data-top-groupname="@ViewBag.PaymentGroupName">
+        <thead>
+            <tr class="alert-warning">
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders text-center" style="width:25px;"><span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders"></th>                
+                <th class="EAMITableTDBorders A_PR_PaymentGroup_UniqueNumber">Payment Set # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Pay Date <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Assigned To <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_PR_PG_PaymentSetAmount" style="padding-right:200px !important;">Payment Set Amount <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_PR_PG_DenyBtn"></th>
+                <th class="EAMITableTDBorders"></th>
+            </tr>
+        </thead>
+        <tbody class="alert-warning">
+            @foreach (var item in Model)
+            {
+                var checkboxName = grdName + "_PaymentRecordSetRow";
+                <tr data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" id="tr_@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" style="cursor: default;">
+                    <td class="EAMITableTDBorders A_PR_PaymentGroup_Shift">&nbsp;</td>
+                    @if (!item.ExclusivePaymentType_Code.Equals("NONE"))
+                    {
+                        <td class="EAMITableTDBorders iconColumn iconColumnRect">
+                            <span class="wrapperIconColumnRect">
+                                <span>@item.ExclusivePaymentType_Code</span>
+                            </span>
+                            <label style="display:none;">1</label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="EAMITableTDBorders PGIcon iconColumn iconColumnRect">
+                            <span class="noIconColumnRect">&nbsp;</span>
+                            <label style="display:none;">0</label>
+                        </td>
+                    }
+                    <td class="EAMITableTDBorders" style="width: 0.5em;">
+                        <button type="button" class="btn btn-default btn-xs btnPRSet" style="color:#fff;background-color:#8a6d3b;border-color:#8a6d3b;" id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)">
+                            <span class="glyphicon glyphicon-plus" style="font-size:12px;padding-right:0.5px;padding-left:0.5px;"></span>
+                        </button>
+                    </td>
+                    <td class="EAMITableTDBorders" data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)">
+                        <span title="Return Date:  @item.Return_StatusDate&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return Issuer:  @item.Return_CreatedBy"
+                              data-toggle="popover" data-placement="right" data-trigger="hover"
+                              data-content="Return Note:  <br />@item.Return_StatusNote" data-html="true">
+                            <button class="btn btn-xs btn-danger" style="cursor: help !important;">
+                                <span class="glyphicon glyphicon-list-alt"></span>
+                            </button>
+                        </span>
+                        &nbsp;
+                        @Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)&nbsp;
+                        @if (item.Payment_Method_Type.Equals("WARRANT"))
+                        {
+                            <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;">
+                        }
+                    </td>
+                    <td class="EAMITableTDBorders">@string.Format("{0:MM/dd/yyyy}", item.AssignedPaymentDate)</td>
+                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.AssignedUser)</td>
+                    @if (item.PaymentSetTotalAmount <= 0)
+                    {
+                        <td name="mytd" class="RowAmount EAMITableTDBorders A_PR_PG_PaymentSetAmount" style="color:red;">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+
+                    }
+                    else
+                    {
+                        <td name="mytd" class="RowAmount EAMITableTDBorders A_PR_PG_PaymentSetAmount">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+                    }
+                    <td class="EAMITableTDBorders">
+                        <button class="btn btn-danger btn-xs" onclick="showPRDenyModal('@item.PaymentRecNumberSetNumber')"><span class="glyphicon glyphicon-remove"></span>&nbsp;Deny</button>
+                    </td>
+                    <td class="EAMITableTDBorders">                        
+                        <button class="btn btn-success btn-xs" onclick="showPRApproveModal('@item.PaymentRecNumberSetNumber', '@item.Return_StatusNote')"><span class="glyphicon glyphicon-ok"></span>&nbsp;Approve</button>                        
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="dvPRApproveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Return Payment</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <form id="frmPRApprove">
+                            <div class="col-xs-12">
+                                <p>
+                                    <strong>
+                                        Approve Return of Payment Set "<label id="lbPRApprovePaymentSetId"></label>"?
+                                    </strong>
+                                </p>
+                            </div>
+                            <div class="col-xs-offset-2 col-xs-8">
+                                <label for="txtPreviousComment">Previous Note:</label>
+                                <textarea class="form-control" rows="2" id="txtPreviousComment" name="txtPreviousComment" maxlength="200"></textarea>
+                                <input type="hidden" id="hdnPaymentSetNumberApprove" />
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                            <div class="col-xs-12">&nbsp;</div>
+                            <div class="col-xs-2">&nbsp;</div>
+                            <div class="col-xs-8">
+                                <div class="form-group">
+                                    <label for="txtApproveComment">Note:</label>&nbsp;&nbsp;
+                                    <textarea class="form-control" rows="4" id="txtApproveComment" name="txtApproveComment" maxlength="200" required></textarea>
+                                    <div class="text-right"><a class="btn btn-xs btn-warning" onclick="copyPreviousNote()"><span class="glyphicon glyphicon-paste"></span>&nbsp;Paste Previous Note</a></div>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                            <div class="col-xs-3">&nbsp;</div>
+                            <div class="col-xs-6">
+                                <input class="form-check-input" type="checkbox" value="1" name="chkAcknowledge" id="chkAcknowledge" required>
+                                <br />
+                                <div class="text-left">
+                                    <label class="form-check-label" for="chkAcknowledge" style="color: #ff0000;">
+                                        By clicking this you acknowledge that the payment will be sent back to System of Record and will no longer be in EAMI.
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">&nbsp;</div>
+
+                        </form>
+                    </div>
+                    <div style="clear:both;margin-bottom:10px;"></div>
+                    <div id="dvPRApproveStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvPRApproveErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmPRApprove()">Approve</button>
+                        <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvPRDenyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Return Payment</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <form id="frmPRDeny">
+                            <div class="col-xs-12">
+                                <p>
+                                    <strong>
+                                        Deny Return of Payment Set "<label id="lbPRDenyPaymentSetId"></label>"?
+                                    </strong>
+                                </p>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                            <div class="col-xs-8">
+                                <div class="form-group">
+                                    <label for="txtDenyComment">Comment:</label>
+                                    <textarea class="form-control" rows="4" id="txtDenyComment" name="txtDenyComment" maxlength="200" required></textarea>
+                                    <input type="hidden" id="hdnPaymentSetNumberDeny" />
+                                </div>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                        </form>
+                    </div>
+                    <div style="clear:both;margin-bottom:10px;"></div>
+                    <div id="dvPRDenyStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvPRDenyErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmPRDeny()">Deny</button>
+                        <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger" style="margin:20px;">
+        An error occured while retriving the data.
+    </div>
+}
+<script type="text/javascript">
+    var gridName = '@ViewBag.ID' + "_grdPaymentRecordSetsForPayeeAndPRType";
+    @*var topGroupID = '@ViewBag.ID';*@
+</script>
+<script type="text/javascript" src="~/Scripts/App/Approvals/PendingReturns/pendingreturns-paymentgroup.js"></script>
+

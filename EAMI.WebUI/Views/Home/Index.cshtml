@@ -1,0 +1,191 @@
+﻿@model List<EAMI.RuleEngine.UserProfileModelRE>
+@{
+    ViewData["Title"] = "Home Page";
+}
+@section myStyles{
+ <link rel="stylesheet" href="~/css/bootstrap-select.min.css" />
+}
+
+
+@section myScripts{
+    <script src="~/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript">
+    // Start Loading... Animation
+    // $('#divLoadingAnimation').css("display", "block");
+    // EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    // var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+       // alert('function');
+        //eami.antiForgeryToken = '@Html.AntiForgeryToken()' + ':' + prgId;
+        // $.ajaxSetup({
+        //     beforeSend: function (xhr) {
+        //        // xhr.setRequestHeader('ProgramChoiceId', prgId);
+        //         // xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+        //         xhr.setRequestHeader('Access-Control-Allow-Credentials', 'false');
+        //         xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+        //          xhr.setRequestHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+        //          xhr.setRequestHeader('GET', 'HEAD', 'POST', 'OPTIONS');
+        //     }
+        // });
+    });
+
+    $(document).ready(function () {
+       // alert('document ready');
+            //  $.ajaxSetup({
+            //     beforeSend: function (xhr) {
+            //         // xhr.setRequestHeader('ProgramChoiceId', prgId);
+            //         // xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            //         xhr.setRequestHeader('Access-Control-Allow-Credentials', 'false');
+            //         xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+            //         xhr.setRequestHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+            //         xhr.setRequestHeader('GET', 'HEAD', 'POST', 'OPTIONS');
+            //     }
+            // });
+        // End Loading... Animation
+        // $('#divLoadingAnimation_Inner').empty();
+        // $('#divLoadingAnimation').css("display", "none");
+    });
+
+        function SubmitProgram(programChoiceId) {
+            // var xhr = new XMLHttpRequest();
+            // xhr.open("GET", "http://localhost:42595/api/ProgramChoice?prgId=" + programChoiceId, true);
+            // // xhr.setRequestHeader('Content-Type', 'application/json');
+            // // xhr.setRequestHeader('Accept', 'application/json');
+            //  // xhr.setRequestHeader("Access-Control-Allow-Headers", "*");
+            // xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+            // xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET', 'HEAD', 'POST');
+            // xhr.setRequestHeader('ProgramChoiceId', programChoiceId);
+
+            alert(programChoiceId);
+            var apiurl = `http://localhost:42595/api/ProgramChoice?prgId=${programChoiceId}`;
+            //alert(apiurl);
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:42595/api/ProgramChoice",
+                contentType: "application/json",
+                data: { prgId: programChoiceId },
+                //    headers: headers,
+                beforeSend: function (xhr) {
+                    // Set custom headers
+                    //xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+                    xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET', 'HEAD', 'POST');
+                    xhr.setRequestHeader('ProgramChoiceId', programChoiceId);
+                },
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (data) {
+                    //console.log(data);
+                    //alert('success program index');
+                    console.log(JSON.stringify(data, null, 2));
+                    // var userDtls = JSON.stringify(data, null, 2);
+                    // sessionStorage.setItem('userDetails', JSON.stringify(data));
+                    // Redirect to the new view
+                    //  var accountApiUrl = `http://localhost:42595/api/Account/UserDetails?userDetails=${userDtls}`;
+                    // window.location.href = accountApiUrl;
+                    
+                    // var userDetailsDiv = document.getElementById('dvUserDetails');
+                    // dvUserDetails.innerHTML = JSON.stringify(data, null, 2);
+
+                   console.log("API Response:", data);
+                    if (Array.isArray(data)) {
+                        var table = '<table class="table"><thead><tr><th>User ID</th><th>User Name</th><th>Domain Name</th><th>Display Name</th><th>Email Address</th></tr></thead><tbody>';
+                        data.forEach(function (item) {
+                            table += '<tr>';
+                            table += '<td>' + item.user_ID + '</td>';
+                            table += '<td>' + item.user_Name + '</td>';
+                            table += '<td>' + item.domain_Name + '</td>';
+                            table += '<td>' + item.display_Name + '</td>';
+                            table += '<td>' + item.user_EmailAddr + '</td>';
+                            table += '</tr>';
+                        });
+                        table += '</tbody></table>';
+                        $('#dvUserDetails').html(table);
+                    } else {
+                        console.error("Expected an array but got:", data);
+                        alert("Unexpected data format received from the API.");
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                    alert('error program index');
+                }
+            });
+        }
+</script>
+}
+
+<link type="text/css" rel="stylesheet" href="~/Scripts/jquery-ui-month-picker-master/jquery-ui-month-picker-master/src/MonthPicker.css" />
+<div style="margin-top:25px;"></div>
+
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+
+@* @using (Html.BeginForm("Index", "ProgramChoice", new { @class = "form-horizontal", role = "form", @ID = "frmProgramChoice", autocomplete = "off" }))
+{ *@
+    <div class="col-lg-offset-0 col-lg-12" id="dvMainArea">
+        <div class="panel panel-default">
+            <div class="panel-heading" style= color:white;">
+                <h3 class="panel-title"><i class="glyphicon glyphicon-th-large">&nbsp;</i>Program Selection</h3>
+            </div>
+            <div class="panel-body">
+                <div id="dvErrorHolder"></div>
+                <div style="clear:both"></div>
+                <div class="row form-group" style="margin-bottom:20px;margin-top:20px;">
+                    <div class="col-xs-12" style="text-align: center;">
+                        @Html.Label("SelectAProgram:", "Select a Program:", new { @class = "control-label" })&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-dhcs-secondary btn-md" id="btnManagedCare" name="ProgramChoiceId" value="1" onClick="SubmitProgram('1')">
+                            <span class="fas fa-mortar-pestle"></span>&nbsp;&nbsp;ManagedCare
+                        </button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" class="btn btn-dhcs-secondary btn-md" id="btnDental" name="ProgramChoiceId" value="2" onClick="SubmitProgram('2')">
+                            <span class="fas fa-tooth"></span>&nbsp;&nbsp;Dental
+                        </button>
+                          @*Added for Managed Care*@
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button type="submit" class="btn btn-dhcs-secondary btn-md" id="btnPharmacy" name="ProgramChoiceId" value="3" width="500px !important;" onClick="SubmitProgram('3')">
+                    
+                        <span class="fas fa-plus-square"></span>&nbsp;&nbsp;Pharmacy                      
+                    </button>
+                    </div>
+                </div>
+
+                <div style="clear:both"></div>
+                <div id="dvgridArea">
+                   @*  <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" /> *@
+                </div>
+
+            </div>
+        </div>
+    </div>
+@* } *@
+<div id="dvUserDetails">
+    @*  <table class="table">
+        <tdead>
+            <tr>
+                <th>User_ID</th>
+                <th>User_Name</th>
+                <th>Display_Name</th>
+                <th>User_Password</th>
+                <th>User_EmailAddr</th>
+            </tr>
+        </tdead>
+            <tbody>
+                @foreach (var item in Model)
+               {
+                    <tr>
+                        <td>@item.User_ID</td>
+                        <td>@item.User_Name</td>
+                        <td>@item.Display_Name</td>
+                        <td>@item.User_Password</td>
+                        <td>@item.User_EmailAddr</td>
+                    </tr>
+               }
+            </tbody>
+    </table> *@
+</div>
+

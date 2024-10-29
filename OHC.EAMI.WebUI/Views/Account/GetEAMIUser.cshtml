@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "EAMI User";
+}
+
+<h2>EAMI User</h2>
+
+<input type="text" id="prgId" placeholder="Enter ProgramChoice" />
+<input type="text" id="userName" placeholder="Enter UserName" />
+<button id="getUserBtn">Get User</button>
+
+<div id="userDetails"></div>
+
+<script>
+    document.getElementById('getUserBtn').addEventListener('click', function () {
+        alert('insideGetEAMIUser.cshtml');
+        var userName = document.getElementById('userName').value;
+        var prgID = document.getElementById('prgId').value;
+        fetch(`/Account/GetEAMIUser?userName=${userName, prgID}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                var userDetailsDiv = document.getElementById('userDetails');
+                userDetailsDiv.innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => console.error('Error:', error));
+    });
+</script>

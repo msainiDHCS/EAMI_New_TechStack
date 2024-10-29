@@ -1,0 +1,129 @@
+﻿@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "Manage " + ViewBag.DataTypeM;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-top:25px;"></div>
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+
+@using (Html.BeginForm("ManageMasterData", "Administration", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmManageMasterData", autocomplete = "off" }))
+{
+    @*@Html.AntiForgeryToken()*@
+    <div class="col-lg-offset-0 col-lg-12" id="dvMainArea">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #17315a; color: white;">
+                <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+                <h3 class="panel-title"><i class="fa fa-users">&nbsp;</i>Manage @ViewBag.DataTypeM</h3>
+            </div>
+            <div class="panel-body">
+                <div id="dvErrorHolder"></div>
+                <div style="clear:both"></div>
+                <div class="row" style="margin-bottom:20px;margin-top:20px;">
+                    <div class="col-xs-12">
+                        <button type="button" onclick="javascript: return AddNewMasterDataMain();" class="btn btn-dhcs-secondary btn-md" id="btnAddMasterData" style="float:right;margin-right:10px;">Add New @ViewBag.DataTypeS</button>
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+                <hr />
+                <div id="dvgridArea">
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+<div id="dvActionArea">
+</div>
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+<script type="text/javascript">
+    // Start Loading... Animation
+    $('#divLoadingAnimation').css("display", "block");
+    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+
+    var currentMasterDataID = 0;
+
+
+    var DataTypeM = '@(ViewBag.DataTypeM)';
+    var DataTypeS = '@(ViewBag.DataTypeS)';
+    var DataTypeO = '@(ViewBag.DataTypeO)';
+
+    function AddNewMasterDataMain() {
+        // Start Loading... Animation
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            //EAMIShowAjaxLoadingContent('dvActionArea');
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvActionArea').load(getEAMIAbsoluteUrl('~/Administration/AddMasterData?datatype=' + DataTypeS.toUpperCase()));
+
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    function EditMasterData(masterdataid) {
+        // Start Loading... Animation
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        if (masterdataid != null) {
+
+            currentMasterDataID = masterdataid;
+
+            $("#dvMainArea").slideUp(250, function () {
+                // Animation complete.
+                //EAMIShowAjaxLoadingContent('dvActionArea');
+                $('#dvActionArea').slideDown(250, function () {
+                    var url = '';
+                    if (DataTypeO != 'S') {
+                        url = getEAMIAbsoluteUrl('~/Administration/EditMasterData?masterDataID=' + masterdataid + "&datatype=" + DataTypeS);
+                    }
+                    else {
+                        url = getEAMIAbsoluteUrl('~/Administration/EditSystemsInfo?systemId=' + masterdataid);
+                    }
+                    $('#dvActionArea').load(url);
+                    // End Loading... Animation
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                });
+            });
+        }
+    }
+
+    $(document).ready(function () {
+
+        //EAMIShowAjaxLoadingContent('dvgridArea');
+        if (DataTypeO == 'S') {
+            //disable the "Add New System"" button. this button is used in other views as well heance the condition check.
+            $('#btnAddMasterData').prop('disabled', true);
+        }
+        $('#dvgridArea').load(getEAMIAbsoluteUrl('~/Administration/ManageMasterDataList?datatype=' + DataTypeO));
+
+        // End Loading... Animation
+        $('#divLoadingAnimation_Inner').empty();
+        $('#divLoadingAnimation').css("display", "none");
+    });
+</script>

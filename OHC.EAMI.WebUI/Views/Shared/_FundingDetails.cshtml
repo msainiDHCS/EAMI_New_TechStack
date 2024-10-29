@@ -1,0 +1,121 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model IPFundingDetails
+
+@if (Model != null && Model.FundingDataGroups.Count > 0)
+{
+    <link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/PaymentProcessing/funding-detail.css" />
+    using (Html.BeginForm("InvoiceProcessingFundingDetails", "InvoicePocessing", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmFundingDetails", autocomplete = "off" }))
+    {
+        <div class="container-fluid">
+            <table class="table" id="tblPaymentRecordDetails_TopHeaders">
+                <thead>
+                    <tr>
+                        <th>Vendor Name - Model: @Model.GroupName</th>
+                        <th>FundFY: @Model.FFY</th>
+                    </tr>
+                    <tr>
+                        <th>Vendor Code: @Model.VendorCode</th>
+                        <th>Index: @Model.Index</th>
+                    </tr>
+                    <tr>
+                        <th>Contract Term: @Model.ContractTerm</th>
+                        <th>Object: @Model.Object</th>
+                    </tr>
+                    <tr>
+                        <th>Contract#: @Model.ContractNumber</th>
+                        <th>PCA Code: @Model.PCACode</th>
+                    </tr>
+                </thead>
+            </table>
+            @{
+                foreach (IPFundingListGroup ipfg in Model.FundingDataGroups)
+                {
+                    <table class="table table-hover table-bordered" style="margin-bottom:25px;">
+                        <caption>@ipfg.FundingListGroupIdentifierHeader</caption>
+                        <thead class="EAMI_BgColor_BlueSteel EAMI_Text_White">
+                            <tr style="text-align:right;">
+                                <th width="35%" style="text-align:left;">Funding Source</th>
+                                <th style="text-align:right;">FFP Amount</th>
+                                <th style="text-align:right;">SGF Amount</th>
+                                <th style="text-align:right;">Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (IPFundingDetail ipfd in ipfg.FundingData)
+                            {
+                                if (ipfd.FundingSource == "Total Amount")
+                                {
+                                    <tr style="text-align:right;">
+                                        <td style="text-align:left;"><strong>@ipfd.FundingSource</strong></td>
+                                        @if (ipfd.FFPAmount <= 0)
+                                        {
+                                            <td style="color:red;"><strong>@ipfd.FFPAmount.ToString("C")</strong></td>
+                                        }
+                                        else
+                                        {
+                                            <td><strong>@ipfd.FFPAmount.ToString("C")</strong></td>
+                                        }
+                                        @if (ipfd.SGFAmount <= 0)
+                                        {
+                                            <td style="color:red;"><strong>@ipfd.SGFAmount.ToString("C")</strong></td>
+                                        }
+                                        else
+                                        {
+                                            <td><strong>@ipfd.SGFAmount.ToString("C")</strong></td>
+                                        }
+                                        @if (ipfd.TotalAmount <= 0)
+                                        {
+                                            <td style="color:red;"><strong>@ipfd.TotalAmount.ToString("C")</strong></td>
+                                        }
+                                        else
+                                        {
+                                            <td><strong>@ipfd.TotalAmount.ToString("C")</strong></td>
+                                        }
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr style="text-align:right;">
+                                        <td style="text-align:left;">@ipfd.FundingSource</td>
+                                        @if (ipfd.FFPAmount <= 0)
+                                        {
+                                            <td style="color:red;">@ipfd.FFPAmount.ToString("C")</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@ipfd.FFPAmount.ToString("C")</td>
+                                        }
+                                        @if (ipfd.SGFAmount <= 0)
+                                        {
+                                            <td style="color:red;">@ipfd.SGFAmount.ToString("C")</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@ipfd.SGFAmount.ToString("C")</td>
+                                        }
+                                        @if (ipfd.TotalAmount <= 0)
+                                        {
+                                            <td style="color:red;">@ipfd.TotalAmount.ToString("C")</td>
+                                        }
+                                        else
+                                        {
+                                            <td>@ipfd.TotalAmount.ToString("C")</td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-danger" style="margin:20px;">
+                        An error occured while retriving the data.
+                    </div>
+                }

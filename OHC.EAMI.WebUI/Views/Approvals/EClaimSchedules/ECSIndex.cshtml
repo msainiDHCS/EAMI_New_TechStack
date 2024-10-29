@@ -1,0 +1,100 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model PaymentProcessingFilters
+
+<div id="dvPECSSearchCriteria" style="">
+    <div>
+        <form id="frmECSSearch">
+            <div class="form-group">
+                <div class="col-xs-1">
+                    @Html.Label("System", "System")<span style="color:red;font-weight:bold">&nbsp;*</span>
+                    @Html.DropDownList("ECSSystems", new SelectList(Model.Systems, "Value", "Text"), new { @class = "form-control input-sm selectpicker", id = "ddlECSSystems" })
+                </div>
+                <div class="col-xs-2">
+                    @Html.Label("ECS Status", "Select ECS Status")<span style="color:red;font-weight:bold">&nbsp;*</span>
+                    @Html.DropDownList("ddlECSStatusTypes", new SelectList(Model.ECSStatusTypes, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlECSStatusTypes" })
+                </div>
+                <div class="col-xs-2" style="max-width: 270px;">
+                    @Html.Label("Select Month From", "Select Month From")<span id="fromRequiredMark" style="visibility:hidden;color:red;font-weight:bold">&nbsp;*</span>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" name="dtPickerFromRange" id="dtPickerFromRange" placeholder="MM/DD/YYYY" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-2" style="max-width: 270px;">
+                    @Html.Label("Select Month To", "Select Month To")<span id="toRequiredMark" style="visibility:hidden;color:red;font-weight:bold">&nbsp;*</span>
+                    <div class="form-group">
+                        <div class="input-group date">
+                            <input type="text" class="form-control" name="dtPickerToRange" id="dtPickerToRange" placeholder="MM/DD/YYYY" />
+                        </div>
+                    </div>
+                </div>               
+                <div class="col-xs-5" style="margin-top:25px;">
+                    <button type="button" onclick="javascript: return ECSSearch();" class="btn btn-dhcs-secondary btn-md" id="btnECSSearch">
+                        <span class="glyphicon glyphicon-search"></span> Search
+                    </button>&nbsp;
+                    <button type="button" onclick="javascript: return ECSReset();" class="btn btn-dhcs-secondary btn-md" id="btnECSReset">
+                        <span class="glyphicon glyphicon-refresh"></span> Reset
+                    </button>
+                </div>
+                <div class="col-xs-12">
+                    <hr />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="clearfix"></div>    
+    <div class="panel panel-dhcs-primary" id="pnlECSSearch" style="margin-left:15px;margin-top:10px;margin-right:15px;display:none; border-top:0.1px solid;">
+        <div class="panel-heading">
+            <div class="container-fluid">
+                <div class="row" style="font-weight: bold;">
+                    <div class="col-md-6" style="cursor:default;">Search Results</div>
+                    <div class="col-md-6 text-right">
+                        <span class="wrapperDefinitions" title='<span class="fa fa-book EAMI_Text_White"></span> Definitions'
+                              data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                              data-content='<p><i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>&nbsp;&nbsp;indicates when Payee-PaymentType groupings include Payment Sets with any of the following exclusive payment types:</p>
+                                <p>
+                                    <ul>
+                                        @foreach (var refCode in ViewBag.ExclusivePaymentTypesRefCodeList)
+                                        {
+                                            <li><span class="EAMI_Text_AlertWarning">@Html.Raw(refCode.Code)</span> - @Html.Raw(refCode.Description)</li>
+                                        }
+                                    </ul>
+                                </p>
+                                <p>Additional features:</p>
+                                <p>
+                                    <ul>
+                                        @if (ViewBag.ProcessWarrants == true)
+                                        {
+                                            @*<li><img src="../images/MCEFT_Warrant_Indicator_24.png"> - indicates Warrant Payment</li>*@
+                                            <li><img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.6em;vertical-align:top;"> - indicates Warrant Payment <br /><br /></li>
+                                        }
+                                        <li>
+                                            <button type="button" class="btn btn-xs btn-warning">
+                                                <span class="glyphicon glyphicon-list-alt"></span>
+                                            </button>
+                                            - indicates Remittance Advice for Claim Schedule.&nbsp;&nbsp;Click to view.
+                                        </li>
+                                    </ul>
+                                </p>
+                                <p>
+                                    <ul>
+                                        <li>
+                                            <i class="fas fa-money-check-alt alert-warning"></i>
+                                             - indicates Warrant Received.&nbsp;&nbsp;Hovering over this flag shows details of the Warrant associated with this Claim Schedule.</li>
+                                    </ul>
+                                </p>' data-html="true">
+                                <span class="fa fa-book EAMI_Text_White"></span> <span class="EAMI_Text_White">Definitions <span style="font-weight:normal;">(hover over to display)</span></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" id="dvECSMasterGridHolder" style="visibility:hidden;">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="~/Scripts/App/Approvals/EClaimSchedules/eclaimschedule-index.js"></script>
+<script type="text/javascript" src="~/Scripts/bootstrap-datetimepicker.min.js"></script>

@@ -1,0 +1,196 @@
+﻿
+@{
+    ViewBag.Title = "Sample";
+}
+
+
+@using System.Web.Optimization;
+@model OHC.EAMI.WebUI.Models.UserProfileDataModel
+
+@Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/JMask", true))
+
+@using (Html.BeginForm("EditMyProfile", "Portal", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmEditMyProfile", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div id="dvErrorHolder"></div>
+
+    <input type="hidden" name="OrganizationId" value=@Html.DisplayFor(m => m.Organization)>
+    <input type="hidden" name="StatusID" value=@Html.DisplayFor(m => m.StatusID)>
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.HiddenFor(m => m.PersonID)
+            @Html.LabelFor(m => m.UserName, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control input-sm", id = "UserName", maxlength = "50" })
+        </div>
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.StreetAddress, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.StreetAddress, new { @class = "form-control input-sm", id = "StreetAddress", @tabindex = "2", maxlength = "250" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.EmailID, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.EmailID, new { @class = "form-control input-sm", id = "EmailID" })
+        </div>
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.City, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.City, new { @class = "form-control input-sm", id = "City", @tabindex = "3", maxlength = "100" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.FirstName, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(m => m.FirstName, new { @class = "form-control input-sm", id = "FirstName", @tabindex = "1", maxlength = "50" })
+        </div>
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.State, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.State, new { @class = "form-control input-sm", id = "State", @tabindex = "4", maxlength = "2" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.LastName, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.LastName, new { @class = "form-control input-sm", id = "LastName", maxlength = "50" })
+        </div>
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.ZipCode, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control input-sm", id = "ZipCode", @tabindex = "5", maxlength = "20" })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.Label("Organization", "Employment Organization", new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.OrganizationName, new { @class = "form-control input-sm", id = "LastName", maxlength = "50" })
+        </div>
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.Phone, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Phone, new { @class = "form-control input-sm", id = "Phone", @tabindex = "6", })
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-4">
+            @Html.Label("Status", "Status", new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Status, new { @class = "form-control input-sm", id = "LastName", maxlength = "50" })
+        </div>
+        <div class="col-xs-4">
+            @Html.LabelFor(m => m.Fax, new { @class = "control-label" })
+            @Html.TextBoxFor(m => m.Fax, new { @class = "form-control input-sm", id = "Fax", @tabindex = "7", })
+        </div>
+    </div>
+
+    <div style="clear:both"></div>
+    <div class="row" style="margin-bottom:20px;margin-top:20px;">
+        <div class="col-xs-12">
+            <button type="button" onclick="EditMyProfileUpdate()" class="btn btn-primary btn-sm" id="btneditmyprofilesave" style="float:none" tabindex="13">Update</button>&nbsp;
+            <button type="button" onclick="EditMyProfileReset('@Html.DisplayFor(m => m.PersonID)')" class="btn btn-primary btn-sm" id="btneditmyprofileReset" style="float:none" tabindex="14">Reset</button>&nbsp;
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    var frmValidator = $("#frmEditMyProfile").validate({
+        errorElement: 'span',
+        ignore: ".ignore",
+        rules: {
+            FirstName: {
+                required: true,
+            },
+        },
+
+        // Messages for form validation
+        messages: {
+            FirstName: {
+                required: 'Please enter first name',
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        }
+
+    });
+
+    function EditMyProfileUpdate() {
+        var isSuccess = false;
+        if (!ajaxValidateMyUserProfile()) {
+            setFormStatusMessage('frmEditMyProfile', 'dvErrorHolder', false, 'Form error!', 8);
+            return false;
+        }
+        else {
+
+            $.ajax({
+                url: getEAMIAbsoluteUrl('~/Home/SampleFormWithSubmit'),
+                type: 'POST',
+                datatype: "html",
+                cache: false,
+                data: $("#frmEditMyProfile").serialize(),
+                success: function (data) {
+
+                    if (data != null) {
+                     
+                    }
+                },
+                error: function () {
+                    setFormStatusMessage('frmEditMyProfile', 'dvErrorHolder', false, 'An error occured');
+
+                }
+            });
+
+
+            setFormStatusMessage('frmEditMyProfile', 'dvErrorHolder', true, 'Form submitted!', 8);
+        }
+        return isSuccess;
+    }
+
+    // Edit user validation rules
+    function ajaxValidateMyUserProfile() {
+        return frmValidator.form();
+    }
+
+    function EditMyProfileReset(persionid) {
+        
+        Clear_Form('frmEditMyProfile');
+        frmValidator.resetForm();
+        
+        HideFormStatusMessage('frmEditMyProfile', 'dvErrorHolder');
+
+        return false;
+    }
+
+    $(document).ready(function () {
+
+        $("#Phone").mask("(999) 999-9999? x99999");
+        $("#Fax").mask("(999) 999-9999? x99999");
+        $("#ZipCode").mask("99999?-99999");
+
+
+        $('#FirstName').keypress(function (event) {
+            var kCode = (event.keyCode ? event.keyCode : event.which);
+            if ((kCode > 64 && kCode < 91) || (kCode > 96 && kCode < 123)) {
+                return true;
+            }
+            else {
+                event.keyCode = 0
+                return false;
+            }
+        });
+
+        $('#City').keypress(function (event) {
+            var kCode = (event.keyCode ? event.keyCode : event.which);
+            return EAMIControlAllowOnlyAlphabets(kCode);
+        });
+
+
+        $('#State').keypress(function (event) {
+            var kCode = (event.keyCode ? event.keyCode : event.which);
+            return EAMIControlAllowOnlyAlphabets(kCode);
+        });
+
+    });
+
+</script>

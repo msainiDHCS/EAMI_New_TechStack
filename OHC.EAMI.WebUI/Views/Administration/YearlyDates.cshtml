@@ -1,0 +1,744 @@
+﻿@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "View and set yearly pay and draw dates";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/Calendar/yearcalendar.js"></script>
+<link href="~/Content/Calendar/yearcalendar.css" rel="stylesheet" />
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+
+<style type="text/css">
+
+</style>
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+
+@using (Html.BeginForm("YearlyDates", "Administration", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmYearlyDates", autocomplete = "off" }))
+{
+    <div class="col-lg-offset-0 col-lg-12" id="dvMainArea" style="margin-top:25px;">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #17315a; color: white;">
+                <h3 class="panel-title"><i class="fa fa-calendar">&nbsp;</i>Yearly Draw and Pay Date Calendar</h3>
+            </div>
+            <div class="panel-body">
+                <div id="dvErrorHolder" style="margin-left:19px;margin-right:19px;"></div>
+                <div style="clear:both"></div>
+                <div class="row" style="margin-bottom:20px;margin-top:2px;">
+                    <div class="col-xs-12">
+                        <div data-provide="calendar" id="calendar" style="overflow:visible;min-height:250px;width:100%;line-height:normal;"></div>
+                        <hr />
+                        <div style="margin-top:10px;">
+                            <label style="min-height:10px;padding:2px;font-weight:normal">&nbsp;&nbsp;Draw Date:</label> <label style="min-width:20px;min-height:10px;background-color:red;">&nbsp;</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label style="min-height:10px;padding:2px;font-weight:normal">Pay Date:</label> <label style="min-width:20px;min-height:10px;background-color:greenyellow;">&nbsp;</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <label style="min-height:10px;padding:2px;font-weight:normal">Both on Same Day:</label> <label style="min-width:20px;min-height:10px;background-image: linear-gradient(45deg, red 50%, greenyellow 50%) !important;">&nbsp;</label>
+                        </div>
+                        <div>
+                            <label style="min-height:10px;padding:2px;font-weight:normal">*&nbsp;Click Desired Date To Assign/Remove Draw/Pay Dates</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div id="dvsetDate" title="Set Dates:" style="overflow:visible;display:none;">
+    <form id="frmSetDates">
+        <div class="row" style="margin-bottom:20px;margin-top:20px;">
+            <div class="col-xs-12">
+                <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+                <input type="hidden" id="hdnSelectedDate" name="hdnSelectedDate" value="" />
+                @Html.CheckBox("chkDrawDate", false)
+                @Html.Hidden("hdnchkDrawDate", false)
+                <label for="lblDrawDate" class="control-label">Set Draw Date</label><div style="clear:both"></div>
+                <label id="lblDrawDate" class="control-label">Note:</label>@Html.TextBox("txtDrawDateNote", "", new { @class = "form-control input-sm", maxlength = "50" })
+                @Html.Hidden("hdntxtDrawDateNote", "")
+            </div>
+            <div class="col-xs-12">
+                @Html.CheckBox("chkPayDate", false)
+                @Html.Hidden("hdnchkPayDate", false)
+                <label for="lblPayDate" class="control-label">Set Pay Date</label><div style="clear:both"></div>
+                <label id="lblPayDate" class="control-label">Note:</label>@Html.TextBox("txPayDateNote", "", new { @class = "form-control input-sm", maxlength = "50" })
+                @Html.Hidden("hdntxtPayDateNote", "")
+            </div>
+            <div class="col-xs-12">
+                <button type="button" onclick="javascript: return saveCancel();" class="btn btn-primary" id="btnCancelCalendarEntry" style="margin-top:10px;float:right;margin-left:5px;">Cancel</button>
+                <button type="button" onclick="javascript: return saveEvent();" class="btn btn-primary" id="btnAddCalendarEntry" style="margin-top:10px;float:right;">Save</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="dvconfirmDelete" title="Confirm Delete:" style="overflow:visible;display:none;">
+    <form id="frmconfirmDelete">
+        <div class="row" style="margin-bottom:20px;margin-top:20px;">
+            <div name="dvcontent" style="padding:5px;">
+                <span id="spntext"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    // Start Loading... Animation
+    $('#divLoadingAnimation').css("display", "block");
+    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+
+    var datearray = new Array();
+    var currentYear;
+    var offdays = new Array();
+    var calendarData = null;
+
+    var minOperableDate;
+    var maxOperableDate;
+
+    var currentActiveDate = null;
+
+    function saveCancel() {
+        DateDialog.dialog("close");
+
+        return false;
+    }
+
+    function editEvent(event) {
+        if (event.startDate.getFullYear() < (new Date().getFullYear()))
+            return false;
+
+        HideFormStatusMessage('frmYearlyDates', 'dvErrorHolder');
+        var date = event.startDate.getDate();
+        var month = (event.startDate.getMonth() + 1);
+        ///Date Format => MM/DD/YYYY. Prepend 0 if month and date is single digit.
+        if (date < '10') {
+            date = '0' + date;
+        }
+        if (month < '10') {
+            month = '0' + month;
+        }
+        DateDialog = $("#dvsetDate").dialog({
+            autoOpen: false,
+            modal: true,
+            title: 'Date: ' + month + '/' + date + '/' + event.startDate.getFullYear(),
+            close: function () {
+                Clear_Form('frmSetDates');
+            }
+        });
+
+        DateDialog.dialog("open");
+
+        var matchingArrayInstanceForDraw = searchAssignedTypeForDate('D', event.startDate, datearray);
+        var matchingArrayInstanceForPay = searchAssignedTypeForDate('P', event.startDate, datearray);
+
+        $('#dvsetDate input[name="chkDrawDate"]').prop('checked', (matchingArrayInstanceForDraw != null));
+        $('#dvsetDate input[name="hdnchkDrawDate"]').val($('#dvsetDate input[name="chkDrawDate"]').prop('checked'));
+
+        if (matchingArrayInstanceForDraw != null) {
+            $('#dvsetDate input[name="txtDrawDateNote"]').val(matchingArrayInstanceForDraw['note']);
+            $('#dvsetDate input[name="hdntxtDrawDateNote"]').val(matchingArrayInstanceForDraw['note']);
+        }
+
+        if ($('#dvsetDate input[name="chkDrawDate"]').prop('checked') == true) {
+            $('#dvsetDate input[name="txtDrawDateNote"]').hide();
+            $('#dvsetDate label[id="lblDrawDate"]').hide();
+            //$('#dvsetDate input[name="txtDrawDateNote"]').show();
+            //$('#dvsetDate label[id="lblDrawDate"]').show();
+        }
+        else {
+            $('#dvsetDate input[name="txtDrawDateNote"]').hide();
+            $('#dvsetDate label[id="lblDrawDate"]').hide();
+        }
+
+        $('#dvsetDate input[name="chkPayDate"]').prop('checked', (matchingArrayInstanceForPay != null));
+        $('#dvsetDate input[name="hdnchkPayDate"]').val($('#dvsetDate input[name="chkPayDate"]').prop('checked'));
+
+        if (matchingArrayInstanceForPay != null) {
+            $('#dvsetDate input[name="txPayDateNote"]').val(matchingArrayInstanceForPay['note']);
+            $('#dvsetDate input[name="hdntxtPayDateNote"]').val(matchingArrayInstanceForPay['note']);
+        }
+
+        if ($('#dvsetDate input[name="chkPayDate"]').prop('checked') == true) {
+            //$('#dvsetDate input[name="txPayDateNote"]').show();
+            //$('#dvsetDate label[id="lblPayDate"]').show();
+            $('#dvsetDate input[name="txPayDateNote"]').hide();
+            $('#dvsetDate label[id="lblPayDate"]').hide();
+        }
+        else {
+            $('#dvsetDate input[name="txPayDateNote"]').hide();
+            $('#dvsetDate label[id="lblPayDate"]').hide();
+        }
+
+        $('#dvsetDate input[name="hdnSelectedDate"]').val(event.startDate);
+        currentActiveDate = event.startDate;
+
+        //console.log(datearray);
+    }
+
+    function searchAssignedTypeForDate(nameKey, date, myArray) {
+
+        for (var i = 0; i < myArray.length; i++) {
+            if (myArray[i]['type'] == nameKey && myArray[i]['startDate'].getTime() == date.getTime()) {
+                //console.log('type is : ' + myArray[i]['type'] + ' , array datetime is : ' + myArray[i]['startDate'].getTime() + ', searched datetime is : ' + date.getTime());
+                //console.log(myArray[i]);
+                return myArray[i];
+            }
+        }
+
+        return null;
+    }
+
+    function searchAndUpdate(nameKey, date, myArray, noteToUpdate) {
+
+        for (var i = 0; i < myArray.length; i++) {
+            if (myArray[i]['type'] == nameKey && myArray[i]['startDate'].getTime() == date.getTime()) {
+
+                myArray[i]['note'] = noteToUpdate;
+            }
+        }
+    }
+
+    function searchAssignedTypeForDateAndDelete(nameKey, date) {
+
+        for (var i = 0; i < datearray.length; i++) {
+            if (datearray[i]['type'] == nameKey && datearray[i]['startDate'].getTime() == date.getTime()) {
+                datearray.splice(i, 1);
+            }
+        }
+    }
+
+    function deleteEvent(event) {
+
+        var dataSource = $('#calendar').data('calendar').getDataSource();
+
+        for (var i in dataSource) {
+            if (dataSource[i].id == event.id) {
+                dataSource.splice(i, 1);
+                break;
+            }
+        }
+
+        $('#calendar').data('calendar').setDataSource(dataSource);
+
+        $('#calendar').data('calendar').setCustomDayRenderer(function (element, date) {
+            if ($.inArray(date.getTime(), setStylesForPDDays(datearray)) != -1) {
+                element.closest('td').css('background-image', 'linear-gradient(47deg, red 50%, greenyellow 50%)');
+            }
+        });
+    }
+
+    function continueSave() {
+        //console.log('at start of continuesave');
+        //determine what changed
+        var wasDrawDateSetOriginally = false, isDrawDateSetNow = false, wasPayDateSetOriginally = false, isPayDateSetNow = false;
+
+        //N for No Chane, D for delete, A for Add
+        var drawDateActionType = 'N';
+        var payDateActionType = 'N';
+
+        wasDrawDateSetOriginally = $.parseJSON($('#dvsetDate input[name="hdnchkDrawDate"]').val());
+        isDrawDateSetNow = $('#dvsetDate input[name="chkDrawDate"]').prop('checked');
+        wasPayDateSetOriginally = $.parseJSON($('#dvsetDate input[name="hdnchkPayDate"]').val());
+        isPayDateSetNow = $('#dvsetDate input[name="chkPayDate"]').prop('checked');
+
+        if (wasDrawDateSetOriginally != isDrawDateSetNow) {
+            if (!wasDrawDateSetOriginally && isDrawDateSetNow)
+                drawDateActionType = 'A';
+            else if (wasDrawDateSetOriginally && !isDrawDateSetNow)
+                drawDateActionType = 'D';
+        }
+
+        if (wasPayDateSetOriginally != isPayDateSetNow) {
+            if (!wasPayDateSetOriginally && isPayDateSetNow)
+                payDateActionType = 'A';
+            else if (wasPayDateSetOriginally && !isPayDateSetNow)
+                payDateActionType = 'D';
+        }
+        //console.log('okay till now');
+        //check if note needs save other than add
+        if (isDrawDateSetNow) {
+            var originalDrawDateNote = $('#dvsetDate input[name="hdntxtDrawDateNote"]').val().toLowerCase();
+            var updatedDrawDateNote = $('#dvsetDate input[name="txtDrawDateNote"]').val().toLowerCase();
+
+            if ($.trim(originalDrawDateNote) != $.trim(updatedDrawDateNote)) {
+                if (drawDateActionType != 'A')
+                    drawDateActionType = 'U';
+            }
+            else {
+                if (drawDateActionType != 'A')
+                    drawDateActionType = 'N';
+            }
+        }
+
+        if (isPayDateSetNow) {
+            var originalPayDateNote = $('#dvsetDate input[name="hdntxtPayDateNote"]').val().toLowerCase();
+            var updatedPayDateNote = $('#dvsetDate input[name="txPayDateNote"]').val().toLowerCase();
+
+            if ($.trim(originalPayDateNote) != $.trim(updatedPayDateNote)) {
+                if (payDateActionType != 'A')
+                    payDateActionType = 'U';
+            }
+            else {
+                if (payDateActionType != 'A')
+                    payDateActionType = 'N';
+            }
+        }
+
+
+        //call ajax save/delete
+        var dt = (currentActiveDate.getMonth() + 1) + '/' + currentActiveDate.getDate() + '/' + currentActiveDate.getFullYear();
+        $.ajax({
+            url: getEAMIAbsoluteUrl('~/Administration/SaveYearlyDateAssignment?currentDate=' + dt + '&payDateActionType=' + payDateActionType +
+                '&drawDateActionType=' + drawDateActionType + '&payDateNote=' + updatedPayDateNote + '&drawDateNote=' + updatedDrawDateNote),
+            type: 'POST',
+            datatype: "json",
+            cache: false,
+            success: function (data) {
+                var message = "";
+                var status = "";
+                if (data != null) {
+                    //undefined in case of some exception. for ex: Session override error
+                    if (data.message == undefined || data.status == undefined) {
+                        message = "An error occured. Please refresh the screen and try again.";
+                        status = false;
+                    }
+                    else {
+                        message = data.message;
+                        status = data.status;
+                    }
+                    wasItAAsuccess = (status == "OK");
+
+                    if (wasItAAsuccess) {
+
+                        setFormStatusMessage('frmYearlyDates', 'dvErrorHolder', true, 'Date assignments saved successfully');
+
+                        //update datasource
+                        var myArray = new Array();
+
+                        if (drawDateActionType == 'A') {
+
+                            myArray['type'] = 'D';
+                            myArray['color'] = 'red';
+                            myArray['name'] = 'Draw Date';
+                            myArray['startDate'] = currentActiveDate;
+                            myArray['endDate'] = currentActiveDate;
+                            myArray['note'] = updatedDrawDateNote;
+
+                            datearray.push(myArray);
+                        }
+
+                        if (payDateActionType == 'A') {
+
+                            myArray = new Array();
+
+                            myArray['type'] = 'P';
+                            myArray['color'] = 'greenyellow';
+                            myArray['name'] = 'Pay Date';
+                            myArray['startDate'] = currentActiveDate;
+                            myArray['endDate'] = currentActiveDate;
+                            myArray['note'] = updatedPayDateNote;
+
+                            datearray.push(myArray);
+                        }
+
+                        if (drawDateActionType == 'U') {
+                            searchAndUpdate('D', currentActiveDate, datearray, updatedDrawDateNote);
+                        }
+
+                        if (payDateActionType == 'U') {
+                            searchAndUpdate('P', currentActiveDate, datearray, updatedPayDateNote);
+                        }
+
+                        if (drawDateActionType == 'D') {
+                            //console.log(datearray);
+                            searchAssignedTypeForDateAndDelete('D', currentActiveDate);
+                            //console.log(datearray);
+                        }
+
+                        if (payDateActionType == 'D') {
+                            searchAssignedTypeForDateAndDelete('P', currentActiveDate);
+                        }
+
+                        $('#calendar').data('calendar').setDataSource(datearray);
+
+                        $('#calendar').data('calendar').setCustomDayRenderer(function (element, date) {
+                            if ($.inArray(date.getTime(), setStylesForPDDays(datearray)) != -1) {
+                                element.closest('td').css('background-image', 'linear-gradient(47deg, red 50%, greenyellow 50%)');
+                            }
+                        });
+
+                        setBehavior();
+
+                    }
+                    else {
+                        setFormStatusMessage('frmYearlyDates', 'dvErrorHolder', false, message);
+                    }
+                }
+            }
+        });
+
+        DateDialog.dialog("close");
+
+        return false;
+    }
+
+    function saveEvent() {
+
+        //check if user has made any change
+        var haveValuesChanged = false;
+
+        if (($.parseJSON($('#dvsetDate input[name="hdnchkDrawDate"]').val()) != $('#dvsetDate input[name="chkDrawDate"]').prop('checked')) ||
+            ($.parseJSON($('#dvsetDate input[name="hdnchkPayDate"]').val()) != $('#dvsetDate input[name="chkPayDate"]').prop('checked'))) {
+            haveValuesChanged = true;
+        }
+
+        //console.log('in saveevent before note check');
+
+        if ($('#dvsetDate input[name="chkDrawDate"]').prop('checked')) {
+            var originalDrawDateNote = $('#dvsetDate input[name="hdntxtDrawDateNote"]').val().toLowerCase();
+            var updatedDrawDateNote = $('#dvsetDate input[name="txtDrawDateNote"]').val().toLowerCase();
+
+            if ($.trim(originalDrawDateNote) != $.trim(updatedDrawDateNote)) {
+                haveValuesChanged = true;
+            }
+        }
+
+        if ($('#dvsetDate input[name="chkPayDate"]').prop('checked')) {
+            var originalPayDateNote = $('#dvsetDate input[name="hdntxtPayDateNote"]').val().toLowerCase();
+            var updatedPayDateNote = $('#dvsetDate input[name="txPayDateNote"]').val().toLowerCase();
+
+            if ($.trim(originalPayDateNote) != $.trim(updatedPayDateNote)) {
+                haveValuesChanged = true;
+            }
+        }
+
+        if (!haveValuesChanged) {
+            alert('You have not made any changes!');
+            return false;
+        }
+
+        var isdrawdatebeingdeleted = false;
+        var ispaydatebeingdeleted = false;
+
+        if ($('#dvsetDate input[name="hdnchkDrawDate"]').val() == 'true' && $('#dvsetDate input[name="chkDrawDate"]').prop('checked') == false) {
+            isdrawdatebeingdeleted = true;
+        }
+
+        if ($('#dvsetDate input[name="hdnchkPayDate"]').val() == 'true' && $('#dvsetDate input[name="chkPayDate"]').prop('checked') == false) {
+            ispaydatebeingdeleted = true;
+        }
+
+        if (isdrawdatebeingdeleted || ispaydatebeingdeleted) {
+            var tmessage = 'You are about to delete ';
+            if (isdrawdatebeingdeleted)
+                tmessage = tmessage + 'draw-date ';
+
+            if (ispaydatebeingdeleted && !isdrawdatebeingdeleted)
+                tmessage = tmessage + 'pay-date ';
+            else if (ispaydatebeingdeleted && isdrawdatebeingdeleted)
+                tmessage = tmessage + 'and pay-date ';
+
+            tmessage = tmessage + 'set on the date ' + (currentActiveDate.getMonth() + 1) + '/' + currentActiveDate.getDate() + '/' + currentActiveDate.getFullYear() + '.';
+
+            tmessage = tmessage + ' Are you sure?'
+
+            $('#dvconfirmDelete span[id="spntext"]').html(tmessage);
+
+            $("#dvconfirmDelete").dialog({
+                //buttons: {
+                //    "Confirm": function () {
+                //        $("#dvconfirmDelete").dialog("close");
+                //        return continueSave();
+                //    },
+                //    "Cancel": function () {
+                //        $("#dvconfirmDelete").dialog("close");
+                //        return false;
+                //    }
+                //}
+
+                buttons:
+                    [
+                        {
+                            text: "Confirm",
+                            click: function () {
+                                $("#dvconfirmDelete").dialog("close");
+                                return continueSave();
+                            },
+                            class: "btn btn-dhcs-secondary1"
+                        },
+                        {
+                            text: "Cancel",
+                            click: function () {
+                                $("#dvconfirmDelete").dialog("close");
+                                return false;
+                            },
+                            class: "btn btn-dhcs-secondary"
+                        }
+                    ]
+
+            });
+        }
+        else {
+            return continueSave();
+        }
+    }
+
+
+
+    function countInTimeArray(array, what) {
+        var count = 0;
+        for (var i = 0; i < array.length; i++) {
+            if (array[i].getTime() === what.getTime()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    function setStylesForPDDays(datearray) {
+        var datearray_startDates = $.map(datearray, function (SingleElement) {
+            return SingleElement.startDate;
+        });
+        var datearray_PDDates = [];
+        $.each(datearray_startDates, function (i, singleStartDate) {
+            if (countInTimeArray(datearray_startDates, singleStartDate) === 2) {
+                datearray_PDDates.push(singleStartDate.getTime());
+            }
+        });
+        return $.unique(datearray_PDDates);
+    }
+
+    function SetCalendar(datasource) {
+        if (datasource == null)
+            return;
+
+        for (i = 0; i < datasource.length; i++) {
+
+            var myArray = new Array();
+
+            if (datasource[i]['type'] == 'P') {
+                myArray['type'] = 'P';
+                myArray['color'] = 'greenyellow';
+                myArray['name'] = 'Pay Date';
+            }
+            else {
+                myArray['type'] = 'D';
+                myArray['color'] = 'red';
+                myArray['name'] = 'Draw Date';
+            }
+
+            myArray['startDate'] = new Date(currentYear, datasource[i]['startMonth'] - 1, datasource[i]['startDay']);
+            myArray['endDate'] = new Date(currentYear, datasource[i]['endMonth'] - 1, datasource[i]['endDay']);
+            myArray['note'] = datasource[i]['note'];
+
+            datearray.push(myArray);
+        }
+
+        var menuArray = new Array();
+        var menuArrayElement = new Array();
+
+        if (currentYear >= (new Date().getFullYear())) {
+
+            menuArrayElement['text'] = 'Delete';
+            menuArrayElement['click'] = 'deleteEvent';
+            menuArray.push(menuArrayElement);
+        }
+
+
+        $('#calendar').calendar({
+            style: 'background',
+            minDate: minOperableDate,
+            maxDate: maxOperableDate,
+            enableContextMenu: false,
+            enableRangeSelection: true,
+            //disabledDays: offdays,
+            disabledWeekDays: [0, 6],
+            startYear: currentYear,
+            contextMenuItems: menuArray,
+            selectRange: function (e) {
+                editEvent({ startDate: e.startDate, endDate: e.endDate });
+            },
+            //mouseOnDay: function (e) {
+            //    if (e.events.length > 0) {
+            //        var content = '';
+
+            //        for (var i in e.events) {
+            //            content += '<div class="event-tooltip-content">'
+            //                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + GetFormattedNote(e.events[i].note) + '</div>'
+            //                        + '</div>';
+            //        }
+
+            //        $(e.element).popover({
+            //            trigger: 'manual',
+            //            container: 'body',
+            //            html: true,
+            //            content: content
+            //        });
+
+            //        $(e.element).popover('show');
+            //    }
+            //},
+            //mouseOutDay: function (e) {
+            //    if (e.events.length > 0) {
+            //        $(e.element).popover('hide');
+            //    }
+            //},
+            //dayContextMenu: function (e) {
+            //    $(e.element).popover('hide');
+            //},
+            dataSource: datearray,
+            customDayRenderer: function (element, date) {
+                if ($.inArray(date.getTime(), setStylesForPDDays(datearray)) != -1) {
+
+                    //$(element).closest('td').closest('table').css('border', '3px;');
+
+                    element.closest('td').css('background-image', 'linear-gradient(47deg, red 50%, greenyellow 50%)');
+                }
+            }
+        });
+
+        setBehavior();
+    }
+
+    function setBehavior() {
+        $('th.year-title').click(function () {
+
+            var newyear = parseInt($(this).text());
+
+            if (newyear < minOperableDate.getFullYear() || newyear > maxOperableDate.getFullYear())
+                return false;
+            else {
+                currentYear = parseInt($(this).text());
+                intiateCalendarBuild();
+            }
+        });
+
+        $('th.prev').bind('mousedown', function () {
+
+            if (currentYear > minOperableDate.getFullYear()) {
+                currentYear = currentYear - 1;
+                intiateCalendarBuild();
+            }
+
+        });
+
+        $('th.next').bind('mousedown', function () {
+
+            if (currentYear < maxOperableDate.getFullYear()) {
+                currentYear = currentYear + 1;
+                intiateCalendarBuild();
+            }
+
+        });
+    }
+
+    function GetFormattedNote(note) {
+        if (note != null && $.trim(note) != '') {
+            return ' | Note: ' + note;
+        }
+
+        return '';
+    }
+
+    function getDefaultOffDays(year) {//not used
+
+        offdays = new Array();
+
+        i = 0;
+
+        for (month = 0; month < 12; month++) {
+
+            tdays = new Date(year, month + 1, 0).getDate();
+
+            for (date = 1; date <= tdays; date++) {
+
+                smonth = (month < 10) ? "0" + (month + 1) : (month + 1);
+                sdate = (date < 10) ? "0" + date : date;
+
+                var day = new Date(year, month, date);
+
+                if (day.getDay() == 0 || day.getDay() == 6) {//sunday and saturday are off limits
+                    offdays[i++] = day;
+                }
+            }
+        }
+
+        SetCalendar(calendarData);
+    }
+
+    function intiateCalendarBuild() {
+        HideFormStatusMessage('dvErrorHolder', 'frmYearlyDates');
+        datearray = new Array();
+
+        $.ajax({
+            url: getEAMIAbsoluteUrl('~/Administration/GetYearlyDates?activeYear=' + currentYear),
+            type: 'GET',
+            datatype: "json",
+            cache: false,
+            async: false,
+            success: function (data) {
+                if (data != null) {
+                    SetCalendar(data);
+                }
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        //Calendar Embedding causing .ajaxError handler not callable when in _Layout, so must repeat fuction below.
+        $(document).ajaxError(
+            function (event, jqXHR, options, exc) {
+                handleAjaxErrorReturned(jqXHR.responseText);
+            }
+        );
+
+        minOperableDate = new Date(new Date().getFullYear() - 1, 0, 1);
+        maxOperableDate = new Date(new Date().getFullYear() + 1, 11, 31);
+
+        currentYear = new Date().getFullYear();
+
+        $('#dvsetDate input[name="chkDrawDate"]').click(function () {
+            if ($(this).prop('checked') == true) {
+                $('#dvsetDate input[name="txtDrawDateNote"]').hide();
+                $('#dvsetDate label[id="lblDrawDate"]').hide();
+                //$('#dvsetDate input[name="txtDrawDateNote"]').show();
+                //$('#dvsetDate label[id="lblDrawDate"]').show();
+            }
+            else {
+                $('#dvsetDate input[name="txtDrawDateNote"]').hide();
+                $('#dvsetDate label[id="lblDrawDate"]').hide();
+            }
+        });
+
+        $('#dvsetDate input[name="chkPayDate"]').click(function () {
+            if ($(this).prop('checked') == true) {
+                //$('#dvsetDate input[name="txPayDateNote"]').show();
+                //$('#dvsetDate label[id="lblPayDate"]').show();
+                $('#dvsetDate input[name="txPayDateNote"]').hide();
+                $('#dvsetDate label[id="lblPayDate"]').hide();
+            }
+            else {
+                $('#dvsetDate input[name="txPayDateNote"]').hide();
+                $('#dvsetDate label[id="lblPayDate"]').hide();
+            }
+        });
+
+        intiateCalendarBuild();
+
+        // End Loading... Animation
+        $('#divLoadingAnimation_Inner').empty();
+        $('#divLoadingAnimation').css("display", "none");
+    });
+
+</script>

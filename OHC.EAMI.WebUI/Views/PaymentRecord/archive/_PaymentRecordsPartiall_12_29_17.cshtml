@@ -1,0 +1,570 @@
+﻿@model OHC.EAMI.WebUI.ViewModels.AssignPaymentRecordsViewModel
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+
+
+
+
+
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+@*<link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />*@
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+@*<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>*@
+
+@*-------------------------------------------------------------------------------------------------------------*@
+@*<link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>*@
+
+@*-------------------------------------------------------------------------------------------------------------*@
+
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+
+<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.16/api/sum().js"></script>
+
+
+
+
+
+
+<style type="text/css">
+    /*td.details-control {
+        background: url('../Content/DataTables/images/details_open.png') no-repeat center center;*/
+    /*background: url('../Content/DataTables/images/glyphicons-433-plus.png') no-repeat center center;*/
+    /*cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../Content/DataTables/images/details_close.png') no-repeat center center;*/
+    /*background: url('../Content/DataTables/images/glyphicons-434-minus.png') no-repeat center center;*/
+    /*}
+
+    td.Invoices-control {
+        /*background: url('../Content/DataTables/images/details_open.png') no-repeat center center;*/
+    /*background: url('../Content/DataTables/images/glyphicons-433-plus.png') no-repeat center center;
+        cursor: pointer;
+    }*/
+
+    /*tr.shown td.Invoices-control {*/
+    /*background: url('../Content/DataTables/images/details_close.png') no-repeat center center;*/
+    /*background: url('../Content/DataTables/images/glyphicons-434-minus.png') no-repeat center center;
+    }*/
+
+    .no-padding {
+        padding: 0px !important;
+        margin: 0px !important;
+        border: none !important;
+    }
+
+    .rowDetails {
+        background-color: #fcf8e3 !important;
+        /*border-radius: 25px;*/
+    }
+
+    .col1-style {
+        width: 10px;
+    }
+
+    .col2-style {
+        width: 10px;
+    }
+
+    .col3-style {
+        width: 60px;
+    }
+
+    .col4-style {
+        width: 20px;
+    }
+
+    .borderLine {
+        border-top: 3px double #8c8b8b;
+    }
+
+
+    .modal-customSize {
+        width: 90%;
+    }
+</style>
+
+
+
+<!-- Button trigger modal -->
+@*<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalWrapperForTrPRec">
+        Launch demo modal
+    </button>*@
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="modalWrapperForTrPRec" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-customSize" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>*@
+                <h4 class="modal-title" id="myModalLabel">Funding Record Details - MC309-0012345</h4>
+            </div>
+            <div class="modal-body" id="modalBodyForTrPRec">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                @*<button type="button" class="btn btn-primary">Save changes</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="no-padding">*@
+<table id="tblPRec_@Html.DisplayFor(m => m.PayeeDisplayId)" class="table table-hover" style="margin-top:0px !important; margin-bottom:0px !important;" cellspacing="0" width="100%">
+    @*<table id="PaymentRecords" class="table table-hover" cellspacing="0" width="100%">*@
+    <thead class="no-padding">
+        <tr>
+            @*<th style="width: 1.7em;"></th>*@
+
+            <th style="width: 1.2em;"></th>
+            @*<th style="width: 1.7em;"></th>*@
+            <th style="width: 0em;"></th>
+            <th style="width: 0.5em;"></th>
+
+
+
+
+            <th class="col2-style"></th>  @*This column gets auto-replaced by checkboxes.  Needs to be repeat of FiscalYear to work for some reason.*@
+            <th class="col3-style">@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().PaymentDate)</th>
+            <th class="col4-style">@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().FiscalYear)</th>
+
+            <th>Assigned To</th>
+
+            <th>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().PaymentRecNumber)</th>
+
+            <th>Contract #</th>
+
+            <th>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().PaymentDate)</th>
+            @*<th>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().PaymentExchangeEntity.EntityName)</th>
+                <th>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().ModelType.ModelName)</th>
+                <th>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().InvoiceStatuses.FirstOrDefault().InvoiceStatusType.Code)</th>*@
+            <th>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().Amount)</th>
+        </tr>
+    </thead>
+    <tbody class="no-padding">
+        @foreach (var PaymentRecord in Model.PaymentRecords)
+            {
+            <tr id="trPRec_@Html.DisplayFor(m => PaymentRecord.PaymentRecNumber )">
+                @*<td id="tdPRec_@Html.DisplayFor(m => PaymentRecord.PaymentRecordNumber)"></td>*@
+
+
+                <td></td>
+                <td></td>
+                <td id="tdPRecFlag_@Html.DisplayFor(m => PaymentRecord.PaymentRecNumber)">
+                    <span class="glyphicon glyphicon-flag wrapperOnHold" title="<span class='glyphicon glyphicon-flag wrapperOnHold'></span> Reason for On Hold" 
+                          data-toggle="popover" data-placement="right" data-trigger="hover"
+                          data-content="<p>Indicates when Payment Record is On Hold.</p><p>(Read-Only Flag)</p>" data-html="true">
+                            @*<span class="glyphicon glyphicon-flag" style="color:red;visibility:hidden;"></span>*@
+                    </span>
+                </td>
+
+
+
+
+
+
+
+
+                @*<td id="cbxPRec_@Html.DisplayFor(m => PaymentRecord.PaymentRecordNumber)"></td>*@     @*This column gets auto-replaced by checkboxes.  Needs to be repeat of FiscalYear to work for some reason.*@
+                @*<td></td >*@
+
+                <td id="cbxPRec_@Html.DisplayFor(m => PaymentRecord.PaymentRecNumber)">@Html.DisplayFor(m => PaymentRecord.FiscalYear)</td>     @*This column gets auto-replaced by checkboxes.  Needs to be repeat of FiscalYear to work for some reason.*@
+                @*<td>@Html.DisplayFor(m => PaymentRecord.PayDate)</td>*@
+                <td></td>
+                <td>@Html.DisplayFor(m => PaymentRecord.FiscalYear)</td>
+                <td>--------------------------</td>
+                <td><a href="javascript:void(0)" id="anchorInTdPRec_@Html.DisplayFor(m => PaymentRecord.PaymentRecNumber)">@Html.DisplayFor(m => PaymentRecord.PaymentRecNumber)</a></td>
+
+                <td>--------------------------</td>
+
+                <td>@Html.DisplayFor(m => PaymentRecord.PaymentDate)</td>
+                @*<td>@Html.DisplayFor(m => PaymentRecord.PaymentExchangeEntity.EntityName)</td>
+                    <td>@Html.DisplayFor(m => PaymentRecord.ModelType.ModelName)</td>
+                    <td>@Html.DisplayFor(m => PaymentRecord.InvoiceStatuses.FirstOrDefault().InvoiceStatusType.Code)</td>*@
+
+                @if (@PaymentRecord.Amount < 0)
+                {
+                    <td class="EAMI_Text_Danger">@Html.DisplayFor(m => PaymentRecord.Amount)</td>
+                }
+                else
+                {
+                    <td>@Html.DisplayFor(m => PaymentRecord.Amount)</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@*</div>*@
+
+
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var datatableTblPRec = [];
+        var intPayeeDisplayId = parseInt(@Html.DisplayFor(m => m.PayeeDisplayId));
+
+        // DataTable Initialization ***********************************************************************************
+        @*var datatableTblPRec = $('#tblPRec_@Html.DisplayFor(m => m.PayeeDisplayId)').DataTable({*@
+        datatableTblPRec[intPayeeDisplayId] = $('#tblPRec_@Html.DisplayFor(m => m.PayeeDisplayId)').DataTable({
+            "paging": false,
+            "info": false,
+            "lengthChange": false,
+            "filter": false, // this is for disable filter (search box)
+
+            //Set column definition initialisation properties.
+            "columnDefs": [
+            //{
+            //    "targets": 0,
+            //    "class": "details-control",
+            //    "orderable": false,
+            //    "data": null,
+            //    "defaultContent": ""
+            //}
+
+            //,
+            {
+                "targets": 0,
+                "orderable": false
+            }
+            ,
+            {
+                "targets": 1,
+                "orderable": false
+            }
+            ,
+            {
+                "targets": 2,
+                "orderable": true
+            }
+            ,
+
+
+
+            {
+                //"targets": 1,
+                "targets": 3,
+                "class": "checkbox-td",
+                //"data": "PaymentRecords.0.PayDate",
+                "checkboxes": {
+                    "selectRow": true
+                }
+            }
+            //,
+            //{
+            //    "name": "Amount",
+            //    "targets": 9
+            //}
+            ],
+
+            "select":
+            {
+                "style": "os",
+                //"selector": "td:nth-child(2) input:checkbox"
+                "selector": "td:nth-child(4) input:checkbox"
+            },
+
+            //"order": [[3, "asc"]]
+            "order": [[10, "desc"], [5, "asc"], [4, "asc"]]
+
+
+        });
+
+        // Smooth out drop down table slide-down/slide-up**************************************************************
+        //$(datatableTblPRec.table().container()).addClass('no-padding');
+        $(datatableTblPRec[intPayeeDisplayId].table().container()).addClass('no-padding');
+        // ************************************************************************************************************
+
+        // Add event listener for opening and closing details *********************************************************
+        @*$('#tblPRec_@Html.DisplayFor(m => m.PayeeDisplayId) tbody').on('click', 'td.details-control', function () {*@
+        $('#tblPRec_@Html.DisplayFor(m => m.PayeeDisplayId) tbody a').on('click', function () {
+            var tdPRec_id = $(this).attr('id');
+            var trPRec_id = tdPRec_id.replace("tdPRec_", "trPRec_");
+            var PaymentRecordNumber = tdPRec_id.replace("tdPRec_", "");
+
+            var tr = $(this).closest('#' + trPRec_id);
+            //var tr = $(this).closest("tr[id='" + trPRec_id + "']");
+
+            //var row = datatableTblPRec.row(tr);
+            var row = datatableTblPRec[intPayeeDisplayId].row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('rowDetails');
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                ajaxGetPaymentRecordDetails(row, row.data(), tr, PaymentRecordNumber);
+            }
+        });
+
+
+        // ************************************************************************************************************
+
+        // Helper Function ajaxGetPaymentRecordDetails(row, rowData, tr):  Returns the div to be rendered by the child row, *
+        // while also using AJAX (asynchronous HTTP) request and a closure to populate that div asynchronously.
+        function parseJsonDate(jsonDateString) {
+            return $.datepicker.formatDate('mm/dd/yy', new Date(parseInt(jsonDateString.replace('/Date(', ''))));
+        }
+
+        /* Formatting function for row details - modify as you need */
+        function ajaxGetPaymentRecordDetails(row, rowData, tr, PaymentRecordNumber) {
+            var jsonObject = {
+                "PaymentRecordNumber": PaymentRecordNumber
+
+
+                //"AssignChecked": tr.find('input:checked').val() == "on" ? true : false,
+                //"FiscalYear": rowData.FiscalYear,
+                //"PaymentRecordNumber": rowData.PaymentRecordNumber
+
+                //,
+                //"PaymentRecordDate" : rowData.PaymentRecordDate,
+                //"PaymentExchangeEntity": {
+                //    "EntityName": rowData.EntityName
+                //},
+                //"ModelType": {
+                //    "ModelName": rowData.ModelName
+                //},
+                //"InvoiceStatuses": [
+                //    {
+                //        "InvoiceStatusType" :
+                //            {
+                //                "Code" : rowData.Code
+                //            }
+                //    }
+                //],
+                //"Amount" : rowData.Amount
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Detail")",
+                data: JSON.stringify(jsonObject),
+
+                //contentType: "application/json; charset=utf-8",
+                //dataType: "json",
+                dataType: "html",
+                success: ajaxGetPaymentRecordWithDetails_SuccessCallBack,
+                failure: function (response) {
+                    //alert(response.responseText);
+                    alert("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                },
+                error: function (response) {
+                    alert("dddddddddddddddddddddddddddddddd");
+                    //alert(response.responseText);
+                }
+            });
+
+
+            function ajaxGetPaymentRecordWithDetails_SuccessCallBack(returnPaymentRecordWithDetails) {
+                // build funding string
+                var fundingString = '';
+                @*$.each(returnPaymentRecord.FundingDetails, function (index, value) {
+                    if (index == 0) {
+                        fundingString = fundingString +
+                            '<tr><td colspan="5" style="height: 10px;"></td></tr>' +
+                            '<tr><td colspan="4" class="borderLine"></td></tr>' +
+                            '<tr><td>' + '@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().FundingDetails.FirstOrDefault().FundingSourceName)' + '</td>' +
+                                '<td>' + '@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().FundingDetails.FirstOrDefault().Amount)' + '</td></tr>' +
+                            '<tr><td colspan="4" class="borderLine"></td></tr>'
+                    }
+
+                    if (this.length == 0) {
+                        fundingString = fundingString + '<tr><td colspan="5">' +
+                            'There are currently no funding sources associated with this PaymentRecord.'
+                            + '</td></tr>';
+                    }
+                    else {
+                        fundingString = fundingString + '<tr><td>' + this.FundingSourceName + '</td><td>' + numeral(this.Amount).format('$0,0.00') + '</td><tr>';
+                    }
+                });*@
+
+                //// build Invoice Details return html string
+                //var retHtmlString = '' +
+                //'<div style="margin-left:227px; margin-right:0px;">' +
+                //    '<table class="rowDetails" cellspacing="0" width="100%">' +
+                @*'<div>' +
+                        '<table>' +
+                          '<tr><td colspan="5" style="height: 10px;"></td></tr>' +
+                            '<tr>' +
+                                '<td>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().PaymentExchangeEntity.EntityID):&nbsp;&nbsp;' + returnPaymentRecord.PaymentExchangeEntity.EntityID + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().IndexCode):&nbsp;&nbsp;' + returnPaymentRecord.IndexCode + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().ObjectAgencyCode):&nbsp;&nbsp;' + returnPaymentRecord.ObjectAgencyCode + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().ObjectDetailCode):&nbsp;&nbsp;' + returnPaymentRecord.ObjectDetailCode + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().PCACode):&nbsp;&nbsp;' + returnPaymentRecord.PCACode + '</td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>Contract Term:&nbsp;&nbsp;' + parseJsonDate(returnPaymentRecord.Contract.EffectiveDateFrom) + ' - ' + parseJsonDate(returnPaymentRecord.Contract.EffectiveDateTo) + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().Contract.ContractNumber):&nbsp;&nbsp;' + returnPaymentRecord.Contract.ContractNumber + '</td>' +
+                                '<td>@Html.DisplayNameFor(m => m.PaymentRecords.FirstOrDefault().Contract.CurrentQuarter):&nbsp;&nbsp;' + returnPaymentRecord.Contract.CurrentQuarter + '</td>' +
+                            '</tr>' +
+                            fundingString +
+                            '<tr><td colspan="5" style="height: 10px;"></td></tr>' +
+                        '</table>' +
+                    '</div>';*@
+
+                //// Open this row
+                //row.child(retHtmlString, 'no-padding rowDetails').show();
+                //tr.addClass('rowDetails');
+                //tr.addClass('shown');
+
+
+
+
+                var retHtmlPaymentRecordWithDetails = '' +
+                    //'<div' +  '>' +
+                            returnPaymentRecordWithDetails;
+                //        +
+                //'</div>';
+
+
+
+                //alert(retHtmlInvoiceWithDetails);
+
+
+                $("#modalBodyForTrPRec").html(retHtmlPaymentRecordWithDetails);
+                $('#modalWrapperForTrPRec').modal('show');
+
+
+
+
+            }
+        }
+
+
+
+        // 2nd Level Table Total Amount Calculation*************************************************************************
+        @*$('#tblPRec_@Html.DisplayFor(m => m.PayeeDisplayId)' + ' tbody').on('change', 'td.checkbox-td', function () {*@
+        @*$('#tblPRec_@Html.DisplayFor(m => m.PayeeDisplayId)' + ' tbody').on('change', 'input[type="checkbox"]', function () {*@
+
+        datatableTblPRec[intPayeeDisplayId].on('select', function (e, dt, type, indexes) {
+            //datatableTblPRec.on('select', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                var numSelectedRowsAmount = getSelectedRowsAmount(datatableTblPRec[intPayeeDisplayId], 10);
+                var negativeNumberDecorationClass = numSelectedRowsAmount < 0 ? "EAMI_Text_Danger" : "";
+                $('#tblPayeePaymentType').find('#trPayeePaymentType_@Html.DisplayFor(m => m.PayeeDisplayId)')
+                                         .find('.PayeePaymentTypeTotalAmount').html('Selected Payment Total: <span class="' + negativeNumberDecorationClass + '">' +
+                                          numeral(numSelectedRowsAmount).format('($0,0.00)') + '</span>');
+
+                updateFlag_OnlyOnHoldsSelected(datatableTblPRec[intPayeeDisplayId], 2);
+            }
+        });
+
+        datatableTblPRec[intPayeeDisplayId].on('deselect', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                var numSelectedRowsAmount = getSelectedRowsAmount(datatableTblPRec[intPayeeDisplayId], 10);
+                var negativeNumberDecorationClass = numSelectedRowsAmount < 0 ? "EAMI_Text_Danger" : "";
+                $('#tblPayeePaymentType').find('#trPayeePaymentType_@Html.DisplayFor(m => m.PayeeDisplayId)')
+                                         .find('.PayeePaymentTypeTotalAmount').html('Selected Payment Total: <span class="' + negativeNumberDecorationClass + '">' +
+                                          numeral(numSelectedRowsAmount).format('($0,0.00)') + '</span>');
+            }
+
+        });
+
+        function getSelectedRowsAmount(datatableOfInterest, columnNumberToSum) {
+            var retTotalAmount = 0;
+            var selectedRowsData = datatableOfInterest.rows('.selected').data();
+            $.each(selectedRowsData, function (index, value) {
+                //var floatRowAmountWithoutCurrencyDecorations = parseFloat(this[columnNumberToSum].replace(/[^0-9\.-]+/g, ""));
+                //retTotalAmount += floatRowAmountWithoutCurrencyDecorations;
+                retTotalAmount += numeral(this[columnNumberToSum]).value();
+            });
+            //return retTotalAmount.toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 });
+            return retTotalAmount;
+        }
+        // ************************************************************************************************************
+
+        // 2nd Level Table Determine If ONLY On Holds Selected*********************************************************
+        function updateFlag_OnlyOnHoldsSelected(datatableOfInterest, columnNumberOfFlag) {
+            var selectedTrs = datatableOfInterest.rows('.selected').nodes();
+
+
+
+
+
+
+            //$.each(selectedTrsWitWrapperOnHold, function (index, value) {
+
+            //    //alert(this[columnNumberOfFlag].user_id);
+            //    alert(this[index].toString());
+            //   //alert( value);
+
+            //    //alert(this[columnNumberOfFlag].hasClass('wrapperOnHold'));
+
+            //});
+
+
+
+
+
+            //alert($(selectedTrs).find('td:eq(' + columnNumberOfFlag + ') span').hasClass('wrapperOnHold').toString());
+
+            $.each(selectedTrs, function (index, value) {
+
+                //alert(this[columnNumberOfFlag].user_id);
+                if (!$(this).find('td:eq(' + columnNumberOfFlag + ') span').hasClass('wrapperOnHold')) {
+                    alert('it is true');
+                }
+                //alert( value);
+
+                //alert(this[columnNumberOfFlag].hasClass('wrapperOnHold'));
+
+            });
+
+
+
+
+
+        }
+        // ************************************************************************************************************
+
+        // Initialize Popovers ****************************************************************************************
+        $('[data-toggle="popover"]').popover();
+        // ************************************************************************************************************
+
+
+        // ************************************************************************************************************
+
+    });
+
+
+
+
+
+
+
+
+
+
+</script>

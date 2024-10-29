@@ -1,0 +1,52 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model AddToClaimSchedule
+   
+    <form id="frmAddToCSValidator" style="margin-left: 20px;">
+        <div class="form-group text-center">
+            @if (Model != null && Model.ClaimSchedules != null && Model.ClaimSchedules.Count > 0)
+            {
+                <div class="col-xs-5">
+                    <input type="radio" name="AddToCSGroup" value="EXISTING" id="rdExisting" onclick="return SetAddToCSOption(1);"> Add to existing claim schedule<br>
+                </div>
+                <div class="col-xs-5">
+                    <input type="radio" name="AddToCSGroup" checked value="NEW" id="rdNew" onclick="return SetAddToCSOption(2);"> Add to new claim schedule<br>
+                </div>
+            }
+            else
+            {
+                <div class="col-xs-12">
+                    <input type="radio" name="AddToCSGroup" checked value="NEW" id="rdNew" onclick="return SetAddToCSOption(2);"> Add to new claim schedule<br>
+                </div>
+            }
+        </div>
+        @if (Model != null && Model.ClaimSchedules != null && Model.ClaimSchedules.Count > 0)
+        {
+        <div id="dvCSSelect">
+            <div style="clear:both"></div>
+            <div class="form-group" style="margin-top:20px;">
+                <div class="col-xs-10">
+                    <label for="CSName">Claim Schedule Number</label><span style="color:red;font-weight:bold">&nbsp;*</span>
+                    @Html.DropDownListFor(input => input.ClaimScheduleID, new SelectList(Model.ClaimSchedules, "Value", "Text"), new { @class = "form-control input-sm cselect", @id = "ddlCSs", @required = "required" })
+                </div>
+            </div>
+        </div>
+        }
+        <div style="clear:both;margin-bottom:20px;"></div>
+        <div id="dvHighAmountAlert" class="text-center" style="display:none;margin: 10px;color:red;font-weight:bold;">
+            The payment total is over the limit. This Payment Set will be split, becoming linked claim schedules.
+            <br />
+            Do you want to assign?
+        </div>
+        <div id="dvStatus" style="display:none;margin-right:20px;">
+            <h5><strong>Errors:</strong></h5>
+            <div id="dvErrorMessage" class="alert alert-danger"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="AssignPRSetsToClaimSchedule();">Assign</button>
+            <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </form>
+
+<script type="text/javascript" src="~/Scripts/App/PaymentProcessing/InvoiceProcessing/invoice-processing-add-cs.js"></script>

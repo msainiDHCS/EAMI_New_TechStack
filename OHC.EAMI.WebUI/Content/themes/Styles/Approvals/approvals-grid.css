@@ -1,0 +1,194 @@
+﻿@import url("../PaymentProcessing/invoice-proccessing-grid.css");
+
+/*************************************************/
+/* PaymentSuperGroup Table Columns Td formatting */
+td.A_PR_contractNumberSuperGroup {
+    /*width: 10%;*/
+    width: 15%;
+}
+td.A_PCS_contractNumberSuperGroup {
+    /*width: 10%;*/
+    /*width: 15%;*/
+}
+td.A_PR_sfySuperGroup {
+    width: 7%;
+    /*width: 15%;*/
+}
+td.A_PCS_sfySuperGroup {
+    width: 7%;
+    /*width: 15%;*/
+}
+.A_PR_totalAmountSuperGroup {
+    width: 21%;
+    text-align:right !important;
+    /*border:red solid 1px !important;*/
+}
+.A_PCS_totalAmountSuperGroup {
+    width: 12%;
+    /*width: 15%;*/
+    text-align:right !important;
+    /*border:red solid 1px !important;*/
+}
+.A_ECS_totalAmountSuperGroup {
+    /*width: 12%;*/
+    width: 21%;
+    text-align:right !important;
+    /*border:red solid 1px !important;*/
+}
+/* PayentGroup Table Columns Td formatting *******/
+.A_PR_PaymentGroup_Shift {
+    width: 4.75em !important;
+}
+.A_PCS_PaymentGroup_Shift {
+    /*width: 9.6em !important;*/
+    /*width: 138.8px !important;*/
+    width: 135px !important;
+}
+.A_ECS_PaymentGroup_Shift {
+    /*width: 3.15em !important;*/
+    /*width: 4.335em !important;*/
+    /*width: 2.3em !important;*/
+    width: 3em !important;
+}
+
+.A_PR_PaymentGroup_UniqueNumber {
+    width: 21.65%;
+}
+.A_PCS_PaymentGroup_UniqueNumber {
+    width:406.5px;
+}
+.A_PCS_PG_PayDate {
+    width: 17%;
+}
+.A_PCS_PG_Amount {
+    width: 32%;
+    text-align:right !important;
+}
+
+.A_PR_PG_PaymentSetAmount {
+    width:200px;
+    text-align:right !important;
+    padding-right:200px !important;
+}
+
+.A_PR_PG_DenyBtn {
+    width:82.5px;
+}
+
+.A_ECS_CSNumber {
+    /*width: 11% !important;*/
+    /*width: 12% !important;*/
+    width: 100px !important;
+}
+.A_ECS_Vendor {
+    /*width: 36.8% !important;*/
+    width: 35.5% !important;
+}
+.A_ECS_ContractNumber {
+    width: 7% !important;
+}
+.A_ECS_FiscalYear {
+    width: 7% !important;
+}
+.A_ECS_PayDate {
+    width: 7% !important;
+}
+.A_ECS_User {
+    width: 10% !important;
+    /*border:red solid 1px !important;*/
+}
+.A_ECS_Amount {
+    width: 12%;
+    /*width: 21%;*/
+    text-align:right !important;
+    /*border:red solid 1px !important;*/
+}
+
+.PP_PCS_PaymentGroup_UniqueNumber {
+    padding-left:3px !important;
+}
+td.PP_PayDate {
+    width: 13.85%;
+}
+td.PP_AssignedTo {
+    width: 20%;
+}
+td.PP_PG_Amount {
+    width: 25%;
+}
+
+/*************************************************/
+/* PayentRecord Table Columns Td formatting ******/
+.A_PR_PR_Shift {
+    /*width: 1.9em;*/
+    /*width: 1.859em;*/
+    width: 52px !important;
+}
+.A_PCS_PR_Shift {
+    /*width: 1.32em;*/
+    /*width: 19.75px !important;*/
+    width: 40px !important;
+}
+.A_PR_PR_PayDate {
+    /*width: 31.4%;*/
+    /*width: 30.8%;*/
+    width: 30%;
+}
+.A_PCS_PR_PayDate {
+    /*width: 26.6% !important;*/
+    /*width: 26.2% !important;*/
+    width: 31.3% !important;
+}
+.A_PR_PR_Amount {
+    width: 30%;
+    text-align:right !important;
+    /*padding-right:330px !important;*/
+    /*padding-right:312px !important;*/
+    /*padding-right:311px !important;*/
+}
+.A_PCS_PR_Amount {
+    width: 25%;
+    text-align:right !important;
+    /*padding-right:122px !important;*/
+}
+/*************************************************/
+
+.vwrapper {
+    position: relative;
+    /*width: 250px;*/
+    height: 55px;
+    /*border: 1px dashed #ccc;*/
+    /*margin: 10px;*/
+}
+
+.line {
+    position: absolute;
+    left: 49%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: #ccc;
+    z-index: 1;
+}
+
+.wordwrapper {
+    text-align: center;
+    height: 12px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-top: -12px;
+    z-index: 2;
+}
+
+.word {
+    color: #ccc;
+    /*color: black;*/
+    font-weight:bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px;
+    font: bold 12px arial,sans-serif;
+    background: #fff;
+}

@@ -1,0 +1,290 @@
+﻿@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "EAMI Landing page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/Chart.js"></script>
+<script src="~/Scripts/Chart.PieceLabel.js"></script>
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+
+<style type="text/css">
+    .chart-container {
+        position: relative;
+        margin: auto;
+        height: 25vh;
+        width: 45vw;
+    }
+</style>
+
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+
+<div style="margin-top:25px;"></div>
+<div class="col-lg-offset-0 col-lg-12" id="dvMainArea" style="padding-left:35px; padding-right:35px;">
+    <div class="panel panel-default" style="margin-bottom: 20px !important;">
+        <div class="panel-heading" style="background-color: #17315a; color: white;">
+            <h3 class="panel-title"><i class="fa fa-calendar">&nbsp;</i>Supervisor Dashboard</h3>
+        </div>
+        <div class="panel-body" style="padding-bottom: 0px !important;">
+            <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+            <table>
+                <tr>
+                    @*<td style="padding-right: 13px;">
+                        <div class="row" style="margin-bottom:0px;margin-top:0px;display:block;overflow:visible;">
+                            <div class="col-md-12" style="width:28% !important;">
+                                <div class="chart-container" style="height:58vh !important;">
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding-left: 13px;">
+                        <div class="row" style="margin-bottom:0px;margin-top:0px;display:block;overflow:visible;">
+                            <div class="col-md-12" style="width:28% !important;">
+                                <div class="chart-container" style="height:58vh !important;">
+                                    <canvas id="myChartAssignment"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </td>*@
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Start Loading... Animation
+    $('#divLoadingAnimation').css("display", "block");
+    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('Authorization', 'Bearer ACCESSTOKEN');
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+
+    $(document).ready(function () {
+
+        $('.wrapper').css("margin", "0px");
+
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        //--------------------------------------------//
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetEAMICounts")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                ajaxGetEAMI_NumbersForChart_SuccessCallBack(data);
+            }
+        });
+
+        function ajaxGetEAMI_NumbersForChart_SuccessCallBack(data) {
+            var arrayEAMICounts_Labels = []
+            $.each(data, function (i, SingleElement) {
+                arrayEAMICounts_Labels[i] = SingleElement.Item1;
+            });
+            var arrayEAMICounts_Numbers = []
+            $.each(data, function (i, SingleElement) {
+                arrayEAMICounts_Numbers[i] = SingleElement.Item2 == 0 ? '' : SingleElement.Item2;
+            });
+
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: arrayEAMICounts_Labels,
+                    datasets: [{
+                        label: '',
+                        data: arrayEAMICounts_Numbers,
+                        backgroundColor: [
+                            'rgba(77, 77, 77, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(200, 90, 23, 0.2)',
+                            'rgba(37, 142, 37, 0.2)',
+                            'rgba(141, 38, 155, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 206, 86, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(77, 77, 77, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(200, 90, 23, 1)',
+                            'rgba(37, 142, 37, 1)',
+                            'rgba(141, 38, 155, 1)',
+                            'rgba(255 ,99, 132, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }],
+                        xAxes: [{
+                            position: 'top',
+                            ticks: { beginAtZero: true, suggestedMax: Math.max.apply(null, arrayEAMICounts_Numbers) + 21 }
+                        }]
+                    },
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'EAMI By The Numbers'
+                    },
+                    responsive: true,
+                    events: true,
+                    tooltips: {
+                        enabled: false
+                    },
+                    hover: {
+                        animationDuration: 0
+                    },
+                    animation: {
+                        duration: 1000,
+                        onComplete: function () {
+                            var chartInstance = this.chart,
+                                ctx = chartInstance.ctx;
+                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+
+                            this.data.datasets.forEach(function (dataset, i) {
+                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                meta.data.forEach(function (bar, index) {
+                                    var data = dataset.data[index];
+                                    ctx.fillText(data, bar._model.x + 15, bar._model.y + 7);
+                                });
+                            });
+                        }
+                    },
+                }
+            });
+        }
+        //-------------------------------------//
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("GetAssignees")",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                ajaxGetAssigneesForChart_SuccessCallBack(data);
+            }
+        });
+
+        function ajaxGetAssigneesForChart_SuccessCallBack(data) {
+            var result = data.filter(function (SingleElement) {
+                return SingleElement.Item1.Display_Name != 'administrator';
+            });
+
+            var processorNamesArray = [];
+            var paymentSetCountPerProcessorArray = [];
+            $.each(result, function (i, SingleElement) {
+                processorNamesArray[i] = SingleElement.Item1.Display_Name;
+                paymentSetCountPerProcessorArray[i] = SingleElement.Item2 == 0 ? '' : SingleElement.Item2;
+            });
+
+            var ctx = document.getElementById("myChartAssignment");
+            var myChart = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: processorNamesArray,
+                    datasets: [
+                        {
+                            label: 'Payment Set Count',
+                            data: paymentSetCountPerProcessorArray,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                suggestedMax: Math.max.apply(null, paymentSetCountPerProcessorArray) + 21
+                            }
+                        }]
+                    },
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Assigned Payment Sets'
+                    },
+                    responsive: true,
+                    events: true,
+                    tooltips: {
+                        enabled: false
+                    },
+                    hover: {
+                        animationDuration: 0
+                    },
+                    animation: {
+                        duration: 1000,
+                        onComplete: function () {
+                            var chartInstance = this.chart,
+                                ctx = chartInstance.ctx;
+                            ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'bottom';
+
+                            this.data.datasets.forEach(function (dataset, i) {
+                                var meta = chartInstance.controller.getDatasetMeta(i);
+                                meta.data.forEach(function (bar, index) {
+                                    var data = dataset.data[index];
+                                    ctx.fillText(data, bar._model.x + 15, bar._model.y + 7);
+                                });
+                            });
+                        }
+                    },
+                }
+            });
+
+        }
+        //-------------------------------------//
+
+        // End Loading... Animation
+        $('#divLoadingAnimation_Inner').empty();
+        $('#divLoadingAnimation').css("display", "none");
+    });
+</script>

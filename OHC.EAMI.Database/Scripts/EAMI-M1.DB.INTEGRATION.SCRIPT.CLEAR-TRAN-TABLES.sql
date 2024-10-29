@@ -1,0 +1,134 @@
+select * from TB_REQUEST
+select * from TB_RESPONSE 
+select * from TB_TRACE_TRANSACTION
+select * from TB_TRACE_PAYMENT
+
+select * from TB_TRANSACTION 
+select * from TB_PAYMENT_EXCHANGE_ENTITY
+--select * from TB_PAYMENT_EXCHANGE_ENTITY_INFO
+select * from TB_PEE_SYSTEM
+select * from TB_PEE_ADDRESS
+select * from TB_PEE_EFT_INFO
+
+select * from TB_PAYMENT_RECORD
+select * from TB_PAYMENT_RECORD_EXT_CAPMAN
+select * from TB_PAYMENT_USER_ASSIGNMENT
+select * from TB_PAYMENT_KVP 
+select * from TB_PAYMENT_STATUS 
+select * from TB_PAYMENT_DN_STATUS
+
+select * from TB_FUNDING_DETAIL 
+select * from TB_FUNDING_DETAIL_EXT_CAPMAN
+select * from TB_FUNDING_DETAIL_KVP 
+
+select * from TB_PAYMENT_PAYDATE_CALENDAR
+select * from TB_PAYDATE_CALENDAR
+select * from TB_DRAWDATE_CALENDAR 
+
+select * from TB_CLAIM_SCHEDULE
+select * from TB_PAYMENT_CLAIM_SCHEDULE
+select * from TB_CLAIM_SCHEDULE_DN_STATUS
+select * from TB_CLAIM_SCHEDULE_STATUS
+select * from TB_CLAIM_SCHEDULE_USER_ASSIGNMENT
+select * from TB_CLAIM_SCHEDULE_REMITTANCE_ADVICE_NOTE
+
+select * from TB_ECS
+select * from TB_CLAIM_SCHEDULE_ECS
+select * from TB_WARRANT
+select * from TB_CLAIM_SCHEDULE_WARRANT
+
+
+
+-- clear out all transactional tables
+CREATE TABLE #tmp
+(
+	ID INT IDENTITY(1,1),
+	Table_Name VARCHAR (100)
+)
+
+--CAPTURE TABLE NAMES
+INSERT INTO #tmp 
+VALUES 
+    ('TB_CLAIM_SCHEDULE_WARRANT'),
+	('TB_WARRANT'),
+	('TB_CLAIM_SCHEDULE_ECS'),
+	('TB_ECS'),
+	('TB_CLAIM_SCHEDULE_REMITTANCE_ADVICE_NOTE'),
+	('TB_CLAIM_SCHEDULE_DN_STATUS'),
+	('TB_CLAIM_SCHEDULE_USER_ASSIGNMENT'),
+	('TB_CLAIM_SCHEDULE_STATUS'),
+	('TB_PAYMENT_CLAIM_SCHEDULE'),
+	('TB_CLAIM_SCHEDULE'),
+	('TB_PAYMENT_PAYDATE_CALENDAR'),
+	('TB_PAYDATE_CALENDAR'),
+	('TB_DRAWDATE_CALENDAR'),
+	('TB_FUNDING_DETAIL_KVP'),
+	('TB_FUNDING_DETAIL_EXT_CAPMAN'),
+	('TB_FUNDING_DETAIL'),
+	('TB_PAYMENT_DN_STATUS'),
+	('TB_PAYMENT_USER_ASSIGNMENT'),
+	('TB_PAYMENT_STATUS'),
+	('TB_PAYMENT_KVP'),
+	('TB_PAYMENT_RECORD_EXT_CAPMAN'),
+	('TB_PAYMENT_RECORD'),		
+	('TB_PAYMENT_EXCHANGE_ENTITY_INFO'),
+	('TB_PEE_ADDRESS'),
+	('TB_PEE_EFT_INFO'),
+	('TB_PEE_SYSTEM'),
+	('TB_PAYMENT_EXCHANGE_ENTITY'),
+	('TB_TRACE_PAYMENT'),
+	('TB_TRANSACTION'),
+	('TB_TRACE_TRANSACTION'),
+	('TB_RESPONSE'),
+	('TB_REQUEST')
+
+
+-- CURSOR, GO THROUGH EACH TABLE
+-- 1. DELETE TABLE RECORDS
+-- 2. DETERMINE IF TABLE NEEDS RESEED 
+-- 3. DETERMINE HOW TO RESEED
+-- 4. RESEED
+
+DECLARE @table_Name VARCHAR(100)
+DECLARE cur CURSOR 
+FOR SELECT Table_Name FROM #tmp ORDER BY ID ASC
+
+OPEN cur
+FETCH NEXT FROM cur INTO @table_Name
+WHILE @@FETCH_STATUS = 0
+BEGIN
+		
+	--DELETE RECORDS
+	EXEC ('DELETE FROM ' + @table_Name)
+	
+	--CHECK TABLE HAS IDENTITY
+	DECLARE @has_identity BIT
+	DECLARE @has_identity_cmd NVARCHAR(500) = 'SELECT @has_ident=OBJECTPROPERTY( OBJECT_ID(@tbl_Name), ''TableHasIdentity'')'	
+	EXECUTE sp_executesql @has_identity_cmd, N'@tbl_Name VARCHAR(100),@has_ident BIT OUTPUT', @tbl_Name = @table_Name, @has_ident=@has_identity OUTPUT
+
+	IF(@has_identity = 1)
+	BEGIN
+		--DTERMINE HOW TO RESEED THE TABLE by getting the Last _Value
+		DECLARE @last_value INT 
+		DECLARE @get_last_value_cmd NVARCHAR(500) = 'SELECT @lst_value=CONVERT(INT,last_value) FROM sys.identity_columns WHERE OBJECT_NAME(OBJECT_ID) = @tbl_Name'	
+		EXECUTE sp_executesql @get_last_value_cmd, N'@tbl_Name VARCHAR(100),@lst_value INT OUTPUT', @tbl_Name = @table_Name, @lst_value=@last_value OUTPUT
+
+		IF @last_value IS NULL
+		BEGIN
+			-- RESEED TO 0 - Table is NEW
+			DBCC CHECKIDENT (@table_Name, RESEED, 1);
+		END
+		ELSE
+		BEGIN
+			-- RESEED TO 1 - Table is NOT NEW
+			DBCC CHECKIDENT (@table_Name, RESEED, 0);
+		END
+	END
+	FETCH NEXT FROM cur INTO @table_Name
+END
+
+CLOSE cur
+DEALLOCATE cur
+DROP TABLE #tmp
+
+

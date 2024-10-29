@@ -1,0 +1,51 @@
+﻿tfoot input {
+    width: 100%;
+    padding: 3px;
+    box-sizing: border-box;
+    /*display: table-header-group;*/
+}
+
+tr.group,
+tr.group:hover {
+    background-color: #ddd !important;
+}
+
+.ui-state-active, .ui {
+    background-color: #2d6e8d !important;
+}
+
+.EAMITableNoBorder {
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-top: 1px;
+}
+
+.EAMITableRowBackground {
+    background-color: white !important;
+}
+
+.EAMITableTDBorders {
+    border-right-width: 0px !important;
+}
+
+div.slider {
+    display: none;
+}
+
+table.dataTable tbody td.no-padding {
+    padding: 0;
+}
+
+.popover-title {
+    background-color: #3d5475;
+    color: white;
+}
+
+.popover {
+    color: black;    
+    max-width: 100%;    
+}
+.negative-amount {
+    color: #ff0000;
+    font-weight: bold;
+}

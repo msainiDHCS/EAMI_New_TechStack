@@ -1,0 +1,201 @@
+﻿
+
+@{
+    ViewBag.Title = "Add New Fund";
+}
+
+
+@using System.Web.Optimization;
+@model OHC.EAMI.WebUI.Models.FacesheetModel
+
+@using (Html.BeginForm("CreateFacesheetValues", "ManageSystems", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmAddNewFacesheet", autocomplete = "off" }))
+{
+<div class="panel-body">
+    <div id="dvAddErrorHolder"></div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            <input type="hidden" id="hdnSystemId" value="@Model.System_ID" />
+            <div class="form-group">
+                <div class="col-xs-4">
+                    @Html.HiddenFor(input => input.System_ID, new { @class = "form-control input-sm", id = "hdnSystemID", maxlength = "10" })
+                    @Html.HiddenFor(input => input.System_Code, new { @class = "form-control input-sm", id = "hdnSystemCode", maxlength = "10" })
+                </div>
+            </div>
+            @Html.LabelFor(input => input.System_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.System_Code, new { @class = "form-control input-sm", id = "txtSystemCode", maxlength = "200", @disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Fund_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.DropDownListFor(input => input.Fund_Code, new SelectList(Model.List_Funds, "Value", "Text") , new { @class = "form-control input-sm", id = "ddlFundCode" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Reference_Item, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(input => input.Reference_Item, new { @class = "form-control input-sm", id = "txtReferenceItem", maxlength = "50" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Chapter, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(input => input.Chapter, new { @class = "form-control input-sm", id = "txtChapter", maxlength = "100" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Element, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Element, new { @class = "form-control input-sm", id = "txtChapter", maxlength = "100" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Program, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Program, new { @class = "form-control input-sm", id = "txtProgram", maxlength = "100" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Description, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(input => input.Description, new { @class = "form-control input-sm", id = "txtDescription", maxlength = "100" })
+        </div>
+    </div>
+</div>
+    <div class="form-group">
+
+    </div>
+    <div style="clear:both"></div>
+    <div class="form-group" style="margin-top:20px;">
+        <div class="col-xs-4">
+            <button type="button" onclick="return AddNewFacesheet();" class="btn btn-dhcs-secondary btn-sm" id="btnAddNewFacesheet">Add New</button>&nbsp;
+            <button type="button" onclick="return AddNewFacesheetReset();" class="btn btn-dhcs-secondary btn-sm" id="btnAddNewFacesheetReset">Reset</button>&nbsp;
+            <button type="button" onclick="return AddNewFacesheetBack();" class="btn btn-dhcs-secondary btn-sm" id="btnAddNewFacesheetBack" style="float:none">Back</button>&nbsp;
+        </div>
+    </div>
+    @*</div>*@
+    @*</div>*@
+}
+
+<script type="text/javascript">
+    var frmValidator = $("#frmAddNewFacesheet").validate({
+        errorElement: 'span',
+        ignore: ".ignore",
+        rules: {
+            Reference_Item: {
+                required: true,
+            },
+            Fund_Code: {
+                required: true,
+            },
+            Chapter: {
+                required: true,
+            },
+            Description: {
+                required: true,
+            },
+        },
+
+        // Messages for form validation
+        messages: {
+            Reference_Item: {
+                required: 'Please enter Reference Item',
+            },
+            Fund_Code: {
+                required: 'Please enter Fund Code',
+            },
+            Chapter: {
+                required: 'Please enter Chapter',
+            },
+            Description: {
+                required: 'Please enter Description',
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        }
+
+    });
+
+    function ajaxValidateAddNewFacesheet() {
+        return frmValidator.form();
+    }
+
+    function AddNewFacesheet() {
+        if (!ajaxValidateAddNewFacesheet()) {
+            return false;
+        }
+        else {
+            HideFormStatusMessage('frmAddNewFacesheet', 'dvAddErrorHolder');
+            var systemID = document.getElementById('hdnSystemID').value;
+
+            //alert(systemID);
+            var isSuccess = false;
+            $.ajax({
+                url: getEAMIAbsoluteUrl('~/ManageSystems/CreateFacesheet'),
+                type: 'POST',
+                datatype: "html",
+                cache: false,
+                data: $("#frmAddNewFacesheet").serialize(),
+                success: function (data) {
+                    var message = "";
+                    var status = "";
+                    if (data != null) {
+                        //undefined in case of some exception. for ex: Session override error
+                        if (data.message == undefined || data.status == undefined) {
+                            message = "An error occured. Please refresh the screen and try again.";
+                            status = false;
+                        }
+                        else {
+                            message = data.message;
+                            status = data.status;
+                        }
+                        wasItAAsuccess = (status == "OK");
+
+                        if (wasItAAsuccess) {
+                            setFormStatusMessage('frmAddNewFacesheet', 'dvAddErrorHolder', true, message, 4);
+                        }
+                        else {
+                            setFormStatusMessage('frmAddNewFacesheet', 'dvAddErrorHolder', false, message, 5);
+                        }
+                    }
+                },
+                error: function () {
+                    setFormStatusMessage('frmAddNewFacesheet', 'dvAddErrorHolder', false, 'An error occured. Please refresh the screen and try again.', 5);
+                }
+            });
+        }
+        return false;
+    }
+
+    function AddNewFacesheetReset() {
+
+        Clear_Form('frmAddNewFacesheet');
+        HideFormStatusMessage('frmAddNewFacesheet', 'dvAddErrorHolder');
+        frmValidator.resetForm();
+        document.getElementById('txtSystemCode').value = document.getElementById('hdnSystemCode').value;
+
+        return false;
+    }
+
+    function AddNewFacesheetBack() {
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            //EAMIShowAjaxLoadingContent('dvActionArea');
+            var systemID = document.getElementById('hdnSystemID').value;
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab5').load(getEAMIAbsoluteUrl('~/ManageSystems/ViewFacesheetValues?systemID=' + systemID + '&includeInactive=' + false));
+
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+</script>

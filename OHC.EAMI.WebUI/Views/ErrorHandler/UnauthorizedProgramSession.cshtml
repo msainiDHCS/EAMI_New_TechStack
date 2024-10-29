@@ -1,0 +1,40 @@
+﻿@{
+    Session["ProgramChoiceId"] = ViewData.Model;
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+
+<link rel="stylesheet" href="~/Content/bootstrap-select.min.css">
+<script src="~/Scripts/bootstrap-select.min.js"></script>
+
+<script type="text/javascript" src="~/Scripts/DataTablePlugins/moment.js"></script>
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+
+<div class="panel panel-default modal-content"
+     style="width:97%;min-height:250px;margin-left:20px;margin-right:20px;margin-top:20px;" id="divuuppanel">
+    <div class="modal-header">
+        <h4 class="modal-title"><span class="glyphicon glyphicon-warning-sign EAMI_Text_Danger"></span> Error</h4>
+    </div>
+    <div class="container-fluid">
+        <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+        <div class="alert alert-danger" style="margin-top: 20px;text-align:center;vertical-align:central;line-height:250px;" id="warning_danger">
+            <b>An error occured while processing your request.&nbsp;&nbsp;EAMI admin has been notified.&nbsp;&nbsp;Please click on the EAMI icon to Refresh.</b>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+        handleProgramSessionError();
+    });
+</script>

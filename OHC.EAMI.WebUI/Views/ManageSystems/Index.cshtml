@@ -1,0 +1,64 @@
+﻿@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "Manage System";
+}
+
+
+<link type="text/css" href="~/Content/themes/Styles/Approvals/approvals.css" rel="stylesheet" />
+
+
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+<div style="margin-top:25px;"></div>
+<div class="col-lg-offset-0 col-lg-12">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="background-color: #17315a; color: white;">
+            <h3 class="panel-title"><i class="fa fa-edit">&nbsp;</i>Edit System : @ViewBag.SystemName</h3>
+        </div>
+        <div class="panel-body">
+            <div id="tabs" style="padding-left:0px;padding-right:0px;padding-top:0px;">
+
+                <ul style="border-left-width: 0px; border-right-width: 0px; border-top-width: 0px; padding-left: 0px; padding-right: 0px; padding-top: 0px; list-style: none;">
+                    <li class="text-center" style="width: 16.666%; margin: 0px; cursor: pointer; border-color: #c5c5c5; "><a href="#dvtab1" onclick="javascript: return loadIPTabs(1);" style="width:100%;">System Information </a></li>
+                    <li class="text-center" style="width: 16.666%; margin: 0px; border-color: #c5c5c5; cursor: pointer;"><a href="#dvtab2" onclick="javascript: return loadIPTabs(2);" style="width:100%;">Exclusive Payment Type</a></li>
+                    <li class="text-center" style="width: 16.666%; margin: 0px; border-color: #c5c5c5; cursor: pointer;"><a href="#dvtab3" onclick="javascript: return loadIPTabs(3);" style="width:100%;">Fund Code</a></li>
+                    <li class="text-center" style="width: 16.666%; margin: 0px; border-color: #c5c5c5; cursor: pointer;"><a href="#dvtab4" onclick="javascript: return loadIPTabs(4);" style="width:100%;">Funding Sources</a></li>
+                    <li class="text-center" style="width: 16.666%; margin: 0px; border-color: #c5c5c5; cursor: pointer;"><a href="#dvtab5" onclick="javascript: return loadIPTabs(5);" style="width:100%;">FaceSheet Values</a></li>
+                    <li class="text-center" style="width: 16.666%; margin: 0px; border-color: #c5c5c5; cursor: pointer;"><a href="#dvtab6" onclick="javascript: return loadIPTabs(6);" style="width:100%;">SCO Properties</a></li>
+                </ul>
+                <div id="dvtab1" style="padding-left:0px;padding-right:0px; display:inline;">
+                </div>
+                <div id="dvtab2" style="padding-left:5px;padding-right:5px;">
+                </div>
+                <div id="dvtab3" style="padding-left:5px;padding-right:5px;">
+                </div>
+                <div id="dvtab4" style="padding-left:5px;padding-right:5px;">
+                </div>
+                <div id="dvtab5" style="padding-left:5px;padding-right:5px;">
+                </div>
+                <div id="dvtab6" style="padding-left:5px;padding-right:5px;">
+                </div>
+                <input type="hidden" id="hdnSystemId" value="@ViewBag.SystemId" />
+                <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+</script>
+<script type="text/javascript" src="~/Scripts/App/ManageSystems/index-script.js"></script>
+

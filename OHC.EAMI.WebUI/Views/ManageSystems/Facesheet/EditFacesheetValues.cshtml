@@ -1,0 +1,310 @@
+﻿@{
+    ViewBag.Title = "Edit Facesheet Values";
+}
+
+@using System.Web.Optimization;
+@model OHC.EAMI.WebUI.Models.FacesheetModel
+
+@using (Html.BeginForm("EditFacesheetValues", "ManageSystems", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmEditFacesheetValue", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+<div class="panel-body">
+    <div id="dvEditErrorHolder"></div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            <input type="hidden" id="hdnSystemId" value="@Model.System_ID" />
+            <input type="hidden" id="hdnFundId" value="@Model.Fund_ID" />
+            <input type="hidden" id="hdnFSId" value="@Model.Facesheet_ID" />
+            @Html.HiddenFor(input => input.Facesheet_ID, new { @class = "form-control input-sm", id = "txtFacesheetID", maxlength = "10" })
+            @Html.HiddenFor(input => input.Fund_ID, new { @class = "form-control input-sm", id = "txtFundID", maxlength = "10" })
+            @Html.HiddenFor(input => input.System_ID, new { @class = "form-control input-sm", id = "hdnSystemID", maxlength = "10" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.System_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.System_Code, new { @class = "form-control input-sm", id = "txtSystemCode", maxlength = "200", @disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Fund_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Fund_Code, new { @class = "form-control input-sm", id = "txtFundCode", maxlength = "20", @disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Fund_Name, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Fund_Name, new { @class = "form-control input-sm", id = "txtFundName", maxlength = "50", @disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Agency_Number, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Agency_Number, new { @class = "form-control input-sm", id = "txtAgencyNumber", maxlength = "50", @disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Agency_Name, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Agency_Name, new { @class = "form-control input-sm", id = "txtAgencyName", maxlength = "50", @disabled = "disabled" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Stat_Year, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Stat_Year, new { @class = "form-control input-sm", id = "txtStatYear", maxlength = "50", @disabled = "disabled" })
+        </div>
+    </div>
+    @*<div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.Stat_Year, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+                @Html.TextBoxFor(input => input.Stat_Year, new { @class = "form-control input-sm", id = "txtStatYear", maxlength = "50", @disabled = "disabled" })
+            </div>
+        </div>*@
+    @*<div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.Fiscal_Year, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+                @Html.TextBoxFor(input => input.Fiscal_Year, new { @class = "form-control input-sm", id = "txFiscalYear", maxlength = "50", @disabled = "disabled" })
+            </div>
+        </div>*@
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Reference_Item, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(input => input.Reference_Item, new { @class = "form-control input-sm", id = "txtReferenceItem", maxlength = "50" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Chapter, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(input => input.Chapter, new { @class = "form-control input-sm", id = "txtChapter", maxlength = "100" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Element, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Element, new { @class = "form-control input-sm", id = "txtChapter", maxlength = "100" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Program, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Program, new { @class = "form-control input-sm", id = "txtProgram", maxlength = "100" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Description, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(input => input.Description, new { @class = "form-control input-sm", id = "txtDescription", maxlength = "100" })
+        </div>
+    </div>
+</div>
+    <input type="checkbox" checked="@Model.IsActive" style="visibility:hidden" id="chkIsFSActive" />
+
+    <div class="modal fade" id="modalFSDeleteConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog text-center" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Delete Facesheet Chapter Value : @Model.Chapter</h4>
+                </div>
+                <div class="modal-body" style="margin: 10px;">
+                    <p>
+                        <strong>
+                            Are you sure you want to delete this Facesheet Value <label id="lblDeleteFSId"></label>?
+                        </strong>
+                    </p>
+                </div>
+                <div style="clear:both;margin-bottom:20px;"></div>               
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="ConfirmDeleteFS()">Delete</button>
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="CloseDeleteFSModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="clear:both"></div>
+    <div class="form-group" style="margin-top:20px;" id="dvActive">
+        <div class="col-xs-4">
+            <button type="button" onclick="return EditFacesheetValue();" class="btn btn-dhcs-secondary btn-sm" id="btnEditFacesheetValue">Update</button>&nbsp;
+            <button type="button" onclick="return EditFacesheetValueReset();" class="btn btn-dhcs-secondary btn-sm" id="btnEditFacesheetValueReset">Reset</button>&nbsp;
+            <button type="button" onclick="return EditFacesheetValueBack();" class="btn btn-dhcs-secondary btn-sm" id="btnEditFacesheetValueBack" style="float:none">Back</button>&nbsp;
+            <button type="button" onclick="return DeleteFacesheet();" class="btn btn-dhcs-secondary btn-sm" id="btnFSDelete" style="float:none">Delete</button>&nbsp;
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    var frmValidator = $("#frmEditFacesheetValue").validate({
+        errorElement: 'span',
+        ignore: ".ignore",
+        rules: {
+            Reference_Item : {
+                required: true,
+            },
+            //Fiscal_Year: {
+            //    required: true,
+            //},
+            Chapter: {
+                required: true,
+            },
+        },
+
+        // Messages for form validation
+        messages: {
+            Reference_Item: {
+                required: 'Please enter Reference Item',
+            },
+            //Fiscal_Year: {
+            //    required: 'Please enter Fiscal Year',
+            //},
+            Chapter: {
+                required: 'Please enter Chapter',
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        }
+
+    });
+
+    function ajaxValidateAddNewUser() {
+        return frmValidator.form();
+    }
+
+    function EditFacesheetValue() {
+        var isActive = document.getElementById('chkIsFSActive').checked;
+
+        if (!ajaxValidateAddNewUser()) {
+            return false;
+        }
+        else {
+            $('#header').css("display", "block");
+            HideFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder');
+
+            $.ajax({
+                url: getEAMIAbsoluteUrl('~/ManageSystems/UpdateFacesheet?isActive=' + isActive),
+                type: 'POST',
+                datatype: "html",
+                cache: false,
+                data: $("#frmEditFacesheetValue").serialize(),
+                success: function (data) {
+                    var message = "";
+                    var status = "";
+                    if (data != null) {
+                        //undefined in case of some exception. for ex: Session override error
+                        if (data.message == undefined || data.status == undefined) {
+                            message = "An error occured. Please refresh the screen and try again.";
+                            status = false;
+                        }
+                        else {
+                            message = data.message;
+                            status = data.status;
+                        }
+
+                        wasItAAsuccess = (status == "OK");
+
+                        if (wasItAAsuccess) {
+
+                            setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', true, 'Facesheet values successfully updated', 4);
+                        }
+                        else {
+                            setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', false, message, 5);
+                        }
+                    }
+                    else { setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', false, message, 5); }
+                },
+                error: function () {
+                    setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', false, 'An error occured. Please refresh the screen and try again', 5);
+
+                }
+            });
+        }
+        return false;
+    }
+
+    function EditFacesheetValueReset() {
+        HideFormStatusMessage('frmEditFacesheetValue', 'dvAddErrorHolder');
+        var systemID = document.getElementById('hdnSystemId').value;
+        var fsID = document.getElementById('hdnFSId').value;
+        $('#dvtab5').load(getEAMIAbsoluteUrl('~/ManageSystems/EditFacesheetValues?fsID=' + fsID + '&systemID=' + systemID));
+        return false;
+    }
+
+    function EditFacesheetValueBack() {
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+        var systemID = document.getElementById('hdnSystemId').value;
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab5').load(getEAMIAbsoluteUrl('~/ManageSystems/ViewFacesheetValues?systemID=' + systemID + '&includeInactive=' + false));
+
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    function DeleteFacesheet() {
+        $('#modalFSDeleteConfirm').modal('show');
+    }
+
+    function ConfirmDeleteFS() {
+        $.ajax({
+            url: getEAMIAbsoluteUrl('~/ManageSystems/DeleteFacesheet?isActive=' + false),
+            type: 'POST',
+            datatype: "html",
+            cache: false,
+            data: $("#frmEditFacesheetValue").serialize(),
+            success: function (data) {
+                $('#modalFSDeleteConfirm').modal('hide');
+                var message = "";
+                var status = "";
+                if (data != null) {
+                    //undefined in case of some exception. for ex: Session override error
+                    if (data.message == undefined || data.status == undefined) {
+                        message = "An error occured. Please refresh the screen and try again.";
+                        status = false;
+                    }
+                    else {
+                        message = data.message;
+                        status = data.status;
+                    }
+
+                    document.getElementById('btnEditFacesheetValue').disabled = true;
+                    document.getElementById('btnEditFacesheetValueReset').disabled = true;
+
+                    wasItAAsuccess = (status == "OK");
+                    if (wasItAAsuccess) {
+                        document.getElementById('btnFSDelete').disabled = true;
+                        setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', true, message, 4);
+                    }
+                    else {
+                        document.getElementById('btnFSDelete').disabled = false;
+                        setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', false, message, 5);
+                    }
+                }
+                else { setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', false, message, 5); }
+            },
+            error: function () {
+                setFormStatusMessage('frmEditFacesheetValue', 'dvEditErrorHolder', false, 'An error occured. Please refresh the screen and try again', 5);
+            }
+        });
+    }
+
+    function CloseDeleteFSModal() {
+        $('#modalFSDeleteConfirm').modal('hide');
+        $('.has-error').remove();
+    }
+
+    $(document).ready(function () {
+
+    });
+
+</script>

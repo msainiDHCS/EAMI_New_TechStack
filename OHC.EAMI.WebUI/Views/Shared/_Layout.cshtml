@@ -1,0 +1,406 @@
+﻿@using System.Web.Optimization;
+@using System.Collections.Generic;
+@using System.Runtime.InteropServices;
+@using System.Security.Claims;
+@using System.Security.Principal;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta content="IE=11.0000" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    @*<link href="~/Images/EAMILogo.gif" rel="shortcut icon">*@
+    <title>Electronic Modular Accounting Interface</title>
+
+    @Styles.Render("~/Content/css")
+
+    @Styles.Render("~/Content/Font.Awesome")    @*fontawesome 5.5*@
+    @Styles.Render("~/Content/FontAwesome")     @*fontawesome 4.7 -- To retain old images, rendered this second to override 5.5*@
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryvalunobtrusive")
+    @*@Scripts.Render(System.Web.Optimization.BundleTable.Bundles.ResolveBundleUrl("~/bundles/modernizr", true))*@
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/custom")
+    @Scripts.Render("~/bundles/eamijs")
+
+    <script type="text/javascript">
+        var settings = {
+            baseUrl: '@Url.Content("~")'
+        };
+    </script>
+
+    @*-----Boiler Plate--------------------------------------------------------------------------------------------*@
+
+
+    <link href="~/Content/EAMIbootstrap.css" rel="stylesheet" />
+
+    @*-------------------------------------------------------------------------------------------------------------*@
+
+
+
+
+
+
+
+
+    <style type="text/css">
+        /*EAMI Colors*****************************************************************************************************/
+        .EAMI_Text_BlueSteel {
+            color: #3d5475 !important;
+        }
+
+        .EAMI_Text_Purple {
+            color: #4f0c4c !important;
+        }
+
+        .EAMI_Text_White {
+            color: #fff !important;
+        }
+
+        .EAMI_BgColor_BlueSteel {
+            background-color: #3d5475 !important;
+        }
+
+        .EAMI_BgColor_Purple {
+            background-color: #4f0c4c !important;
+        }
+
+        .EAMI_BgColor_White {
+            background-color: #fff !important;
+        }
+        /*****************************************************************************************************************/
+
+        .user_roles_font {
+            font-size: 11px;
+        }
+    </style>
+    <style type="text/css" id="antiClickjack">
+        body {
+            display: none !important;
+        }
+    </style>
+
+
+
+</head>
+<body class="body-blue" id="LayoutBody">
+    @{
+        var username = "";
+        var authtype = "";
+        var passwordmessage = "";
+        var roles = "";
+        ClaimsIdentity uid = null;
+        var showlogout = false;
+        string environment = string.Empty;
+        string icon = string.Empty;
+        
+
+
+        if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            uid = (ClaimsIdentity)HttpContext.Current.User.Identity;
+
+            if (uid.HasClaim(a => a.Type == ClaimTypes.Expired) && uid.FindFirst(ClaimTypes.Expired).Value != "1")
+            {
+                username = uid.FindFirst(ClaimTypes.GivenName).Value;
+                authtype = uid.AuthenticationType;
+
+                if (authtype == "Negotiate" && !uid.HasClaim(a => a.Type == ClaimTypes.Authentication))
+                {
+                    passwordmessage = "Password expires in " + uid.FindFirst(ClaimTypes.Expiration).Value + " days";
+                }
+                else
+                {
+                    passwordmessage = "Password never expires";
+                }
+
+                var rolearray = uid.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
+                roles = "Logged in as " + string.Join(", ", rolearray);
+            }
+
+            if (uid.HasClaim(a => a.Type == ClaimTypes.Authentication) && uid.FindFirst(ClaimTypes.Authentication).Value == "UNP")
+            {
+                showlogout = true;
+            }
+        }
+
+        if (Session["ProgramChoiceId"].ToString() == "2")
+        {
+            environment = "Pharmacy";
+            icon = "fas fa-mortar-pestle";
+        }
+        else if (Session["ProgramChoiceId"].ToString() == "3")
+        {
+            environment = "Dental";
+            icon = "fas fa-tooth";
+        }
+        else if (Session["ProgramChoiceId"].ToString() == "4")
+        {
+            environment = "ManagedCare";
+            icon = "fas fa-plus-square";
+        }
+        else
+        {
+            environment = null;
+            icon = null;
+        }
+    }
+    <div id="container">
+        <!--style=" overflow-x:hidden;overflow-y:hidden;"-->
+        <div id="header">
+            @*<div class="mini-navbar mini-navbar-dark hidden-xs ">*@
+            @*<div class="customheader ">*@
+            @*<div class="container-fluid" style="padding-left:5px;">*@
+            <div class="container-fluid" id="top-header">
+                <div class="row no-gutters">
+                    <div class="col-lg-9 col-sm-6 col-md-8 text-left">
+                        @*<div class="apptitle"><img src="~/Images/DHCS-logo1.png" />  </div>*@
+                        <div class="container-fluid" style="">
+                            <img src="~/Images/DHCS_Logo_White.svg" style="vertical-align:text-bottom" width="125px" height="40px" class="img-rounded" />
+
+                            @if (environment == null)
+                            {
+
+                                <span class="text-header" style="">
+                                    <em>
+                                        EAMI<span style="font-family: Calibri, Arial, Verdana, Geneva, Tahoma, sans-serif;vertical-align:text-bottom;color:lightgrey;">
+                                            @if (environment == "Dental")
+                                            {
+                                                @:&nbsp;<span style="font-size: 30px; vertical-align: sub;color:lightgrey">@environment</span>
+                                                <span id="envIcon" class="@icon" style="font-size: 25px; vertical-align: text-bottom;"></span>
+                                            }
+                                            else if (environment == "Pharmacy")
+                                            {
+                                                @:&nbsp;<span style="font-size: 30px; vertical-align: sub;">@environment</span>
+                                                <span id="envIcon" class="@icon" style="font-size: 25px; vertical-align: text-bottom;"></span>
+                                            }
+                                            else if (environment == "ManagedCare")
+                                            {
+                                                @:&nbsp;<span style="font-size: 30px; vertical-align: sub;">@environment</span>
+                                                <span id="envIcon" class="@icon" style="font-size: 20px; vertical-align: text-bottom;text-align:match-parent"></span>
+                                            }
+                                            else
+                                            {
+                                            }
+                                            &nbsp;<span style="font-size: 25px; vertical-align: sub;">@System.Configuration.ConfigurationManager.AppSettings["EnvironmentName"]</span>
+                                        </span>
+                                    </em>
+                                </span>
+                            }
+                            else
+                            {<a href="~/Landing/Index" id="TopEamiLogo" style="text-decoration:none;">
+
+                                    
+                                    @*<a href="~/Landing/Index" id="TopEamiLogo" style="text-decoration:none;">*@
+                                    <span class="text-header" style="">
+                                        <em>
+                                            EAMI<span style="font-family: Calibri, Arial, Verdana, Geneva, Tahoma, sans-serif;vertical-align:text-bottom;color:lightgrey;">
+                                                @if (environment == "Dental")
+                                                {
+                                                    @:&nbsp;<span style="font-size: 30px; vertical-align: sub;color:lightgrey">@environment</span>
+                                                    <span id="envIcon" class="@icon" style="font-size: 25px; vertical-align: text-bottom;"></span>
+                                                }
+                                                else if (environment == "Pharmacy")
+                                                {
+                                                    @:&nbsp;<span style="font-size: 30px; vertical-align: sub;">@environment</span>
+                                                    <span id="envIcon" class="@icon" style="font-size: 25px; vertical-align: text-bottom;"></span>
+                                                }
+                                                else if (environment == "ManagedCare")
+                                                {
+                                                    @:&nbsp;<span style="font-size: 30px; vertical-align: sub;">@environment</span>
+                                                    <span id="envIcon" class="@icon" style="font-size: 20px; vertical-align: text-bottom;text-align:match-parent"></span>
+                                                }
+                                                else
+                                                {
+                                                }
+                                                &nbsp;<span style="font-size: 25px; vertical-align: sub;">@System.Configuration.ConfigurationManager.AppSettings["EnvironmentName"]</span>
+                                            </span>
+                                        </em>
+                                    </span>
+                                </a>}
+                            </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-md-4 text-left">
+                        <div class="pull-right">
+                            <div class="row">
+                                <div class="col-xs-12" style="vertical-align:middle !important;margin-top:5px;">
+                                    <div style="float:right;">
+                                        <div class="dropdown EAMI_Text_White" style="text-align:right;">
+                                            <span id="spnMasterPageLoginName"><b>@username</b></span><br />
+                                            <span class="user_roles_font">@roles</span><br />
+                                            <span class="user_roles_font">@passwordmessage</span>
+                                            @*<span id="spnMasterPageLoginName"><b>Alex Hoang</b></span><br />
+                                                <span>Access Level: Supervisor</span><br />
+                                                <span>Password expires in 25 days.</span>*@
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*</div>*@
+            @*</div>*@
+            <div class="navbar navbar-dark navbar-static-top .navmenu-fixed-left EAMI_BgColor_BlueSteel" role="navigation">
+                <div class="container-fluid" style="padding-left:0px;margin-left:20px;">
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            @if (User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR"))
+                            {
+                                <li class="dropdown">
+                                    <a class="bg-hover-color" href="~/Landing/Index" id="MenuColor">Home</a>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="bg-hover-color" href="~/PaymentRecord/AssignPaymentRecords" id="MenuColor">Payment Assignment</a>
+                                </li>
+                                showlogout = true;
+                            }
+                            @if (User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR") || User.IsInRole("PROCESSOR"))
+                            {
+                                <li class="dropdown">
+                                    <a class="bg-hover-color" href="~/PaymentProcessing/Index" id="MenuColor">Payment Processing</a>
+                                </li>
+                                showlogout = true;
+                            }
+                            @if (User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR"))
+                            {
+                                <li class="dropdown">
+                                    <a class="bg-hover-color" href="~/Approvals/Index" id="MenuColor">Approvals</a>
+                                </li>
+                                showlogout = true;
+                            }
+                            @if (User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR") || User.IsInRole("PROCESSOR"))
+                            {
+                                <li class="dropdown">
+                                    <a class="bg-hover-color" href="~/Reports/Reports" id="MenuColor">Reports</a>
+                                </li>
+                                showlogout = true;
+                            }
+                            @if (User.IsInRole("ADMIN") || User.IsInRole("SUPERVISOR"))
+                            {
+                                <li class="dropdown" style="display:block;">
+                                    <a class="dropdown-toggle bg-hover-color" href="#" id="MenuColor" data-toggle="dropdown">Administration<b class="caret"></b></a>
+                                    <ul class="dropdown-menu" id="ulHelp">
+                                        @if (User.IsInRole("ADMIN"))
+                                        {
+                                            <li>
+                                                <a class="bg-hover-color" href="~/Administration/ManageUsers" target="_self" id="lnkUserManual">Manage Users</a>
+                                            </li>
+                                            <li>
+                                                <a class="bg-hover-color" href="~/Administration/ManageMasterData?datatype=P" target="_self" id="lnkUserManual">Manage Permissions</a>
+                                            </li>
+                                            <li>
+                                                <a class="bg-hover-color" href="~/Administration/ManageMasterData?datatype=R" target="_self" id="lnkUserManual">Manage Roles</a>
+                                            </li>
+                                            <li>
+                                                <a class="bg-hover-color" href="~/Administration/ManageMasterData?datatype=S" target="_self" id="lnkUserManual">Manage Systems</a>
+                                            </li>
+                                            showlogout = true;
+                                        }
+                                        @if (User.IsInRole("SUPERVISOR") && !User.IsInRole("ADMIN"))
+                                        {
+                                            <li>
+                                                <a class="bg-hover-color" href="~/Administration/ViewUsers" target="_self" id="lnkViewUsers">View Users</a>
+                                            </li>
+                                            showlogout = true;
+                                        }
+                                        <li>
+                                            <a class="bg-hover-color" href="~/Administration/YearlyDates" target="_self" id="lnkYearlyCalendar">Yearly Calendar</a>
+                                        </li>
+                                        <li>
+                                            <a class="bg-hover-color" href="~/Administration/Forms" target="_self" id="lnkForms">Forms</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            }
+                            @*@if (showlogout)
+                                {
+                                    <li class="dropdown right" style="display:block; float:right">
+                                        <a class="bg-hover-color" href="~/Administration/closeProgram" id="MenuColor">Log Out</a>
+                                    </li>
+                                }*@
+                        </ul>
+                        <div style="padding-left:0px;margin-right:20px;">
+                            <ul class="nav navbar-nav navbar-right">
+                                @if (showlogout)
+                                {
+                                    <li class="dropdown right" style="display:block; float:right">
+                                        <a class="bg-hover-color" href="~/Administration/closeProgram" id="MenuColor"><b>Log Out</b></a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="body">
+            @*<div class="shadow" style="padding-top:0px"><img src="~/Images/null.png" /></div>*@
+            @*<div class="wrapper">*@
+            <div id="outtermostWrapper" class="wrapper" style="margin-top:0;">
+
+                @RenderBody()
+            </div>
+        </div>
+        <div id="footer">
+            <footer>
+                <div class="row-fluid">
+                    <div class="col-sm-12 footer">
+                        <p class="footercolor">
+                            © DHCS 2024 | Version <span id="spnVersion">4.3</span>
+                            <span id="spnEnvironment" style="font-weight:bold"></span>
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>
+
+<script type="text/javascript">
+    if (self === top) {
+        var antiClickjack = document.getElementById("antiClickjack");
+        antiClickjack.parentNode.removeChild(antiClickjack);
+    } else {
+        /*Original was just top.location = self.location, which triggered a false positive ID#2 in Checkmarx.
+        The code was changed to below to get around this false positive but may be reverted back
+        to original if need be since the Checkmarx error was a know false positive.*/
+        top.location.hash = encodeURIComponent(self.location.hash);
+        top.location.host = encodeURIComponent(self.location.host);
+        top.location.hostname = encodeURIComponent(self.location.hostname);
+        top.location.href = encodeURIComponent(self.location.href);
+        top.location.origin = encodeURIComponent(self.location.origin);
+        top.location.pathname = encodeURIComponent(self.location.pathname);
+        top.location.port = encodeURIComponent(self.location.port);
+        top.location.protocol = encodeURIComponent(self.location.protocol);
+        top.location.search = encodeURIComponent(self.location.search);
+    }
+    $(document).ready(function () {
+        $("input").attr("autocomplete", "off");
+
+        $(document).ajaxError(
+            function (event, jqXHR, options, exc) {
+                handleAjaxErrorReturned(jqXHR.responseText);
+            }
+        );
+    });
+</script>

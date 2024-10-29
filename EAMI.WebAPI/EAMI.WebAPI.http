@@ -1,0 +1,7 @@
+@EAMI.WebAPI_HostAddress = https://localhost:44319/api
+
+# GET {{EAMI.WebAPI_HostAddress}}/weatherforecast/
+# Accept: application/json
+
+
+###

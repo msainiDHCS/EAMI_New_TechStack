@@ -1,0 +1,131 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model List<PaymentProcessingRecordChild>
+
+@{
+
+    string grdName = ViewBag.ID + "_grdPaymentRecordSetsForPayeeAndPRType";
+    string grdNameSelector = grdName + "_All";
+}
+
+@if (Model != null && Model.Count > 0)
+{
+
+    <table id="@grdName" class="table table-hover table-bordered EAMITableNoBorder" data-id="@ViewBag.ID" cellspacing="0" style="width:100%; margin:0px !important;border:none !important;" data-top-groupname="@ViewBag.PaymentGroupName">
+        <thead>
+            <tr class="alert-warning">
+                <th class="EAMITableTDBorders text-center"><span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders text-center" style="width:25px;"><span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders text-center"><input name="@grdNameSelector" class="AllCheckBox" type="checkbox" onclick="return SetAllGridCheckboxes(this, '@ViewBag.ID');" /></th>
+                <th class="EAMITableTDBorders">Payment Set # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Pay Date <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders PP_PG_Amount" style="padding-right:177px !important;">Payment Set Amount <span class="sort-icon"></span></th>
+            </tr>
+        </thead>
+        <tbody class="alert-warning">
+            @foreach (var item in Model)
+            {
+                var checkboxName = grdName + "_PaymentRecordSetRow";
+                <tr data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" id="tr_@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" style="cursor: default;">
+                    <td class="EAMITableTDBorders PP_PaymentGroup_Shift"></td>
+                    @if (!item.ExclusivePaymentType_Code.Equals("NONE"))
+                    {
+                        <td class="EAMITableTDBorders iconColumn iconColumnRect">
+                            <span class="wrapperIconColumnRect">
+                                <span>@item.ExclusivePaymentType_Code</span>
+                            </span>
+                            <label style="display:none;">1</label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="EAMITableTDBorders PGIcon iconColumn iconColumnRect">
+                            <span class="noIconColumnRect">&nbsp;</span>
+                            <label style="display:none;">0</label>
+                        </td>
+                    }
+                    <td class="EAMITableTDBorders iconColumn">
+                        <button type="button" class="btn btn-default btn-xs btnPRSet btnInTdPGPlusMinus" style="color:#fff;background-color:#8a6d3b;border-color:#8a6d3b;" id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)">
+                            <span class="glyphicon glyphicon-plus" style="font-size:12px;padding-right:0.5px;padding-left:0.5px;"></span>
+                        </button>
+                    </td>
+                    <td class="EAMITableTDBorders iconColumn text-center">
+                        <input name="@checkboxName" type="checkbox" class="rowselectors" onclick="javascript: return DetermineCheckedTotal(this, '@ViewBag.ID');" />
+                        <input type="hidden" class="hdnRowSpecificPaymentRecordHighAmount" />
+                    </td>
+                    @if (item.IsOnHold)
+                    {
+                    <td class="EAMITableTDBorders" data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" data-order="HOLD - @item.PaymentRecNumberSetNumber">
+                        <span class="PRSNumber">@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)</span>&nbsp;
+
+                        @if (item.Payment_Method_Type.Equals("WARRANT"))
+                        {
+                        <span> <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;"></span>
+                        }
+
+
+                        <span class="holdText wrapperOnHold" title="Hold Date:  @Html.DisplayFor(modelItem =>
+                            item.OnHold_StatusDate)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            Hold Issuer:  @Html.DisplayFor(modelItem => item.OnHold_CreatedBy)"
+                            data-toggle="popover" data-placement="right" data-trigger="hover"
+                            data-content="Hold Comment:  <br />@Html.DisplayFor(modelItem => item.OnHold_StatusNote)" data-html="true">
+                            &nbsp;(HOLD)
+                        </span>
+                    </td>
+                    }
+                    else if (item.IsReleaseFromSupervisor)
+                    {
+                        <td class="EAMITableTDBorders" data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" data-order="DENIED - @item.PaymentRecNumberSetNumber">
+                            <span class="PRSNumber">@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)</span>&nbsp;
+
+                            @if (item.Payment_Method_Type.Equals("WARRANT"))
+                            {
+                            <span> <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;"></span>
+                            }
+                            <span class="deniedText wrapperDenied" title="Denied Date:  @Html.DisplayFor(modelItem =>
+                                item.Denied_StatusDate)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                Denied Issuer:  @Html.DisplayFor(modelItem => item.Denied_CreatedBy)"
+                                data-toggle="popover" data-placement="right" data-trigger="hover"
+                                data-content="Denied Comment:  <br />@Html.DisplayFor(modelItem => item.Denied_StatusNote)" data-html="true">
+                                &nbsp;(RETURN DENIED)
+                            </span>
+                        </td>
+                    }
+                    else
+                    {
+                <td class="EAMITableTDBorders" data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" data-order="&nbsp; - @item.PaymentRecNumberSetNumber">
+                    <span class="PRSNumber">@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)</span>&nbsp;
+                    @if (item.Payment_Method_Type.Equals("WARRANT"))
+                    {
+                        <span> <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;"></span>
+                    }
+                    <span class="noFlag"></span>
+                </td>
+                    }
+                    <td class="EAMITableTDBorders PP_PayDate">@string.Format("{0:MM/dd/yyyy}", item.AssignedPaymentDate)</td>
+                    @if (item.PaymentSetTotalAmount <= 0)
+                    {
+                        <td name="mytd" class="RowAmount EAMITableTDBorders PP_PG_Amount" style="padding-right:177px !important; color:red;">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+
+                    }
+                    else
+                    {
+                        <td name="mytd" class="RowAmount EAMITableTDBorders PP_PG_Amount" style="padding-right:177px !important;">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-danger" style="margin:20px;">
+        An error occured while retriving the data.
+    </div>
+}
+<script type="text/javascript">
+    var gridName = '@ViewBag.ID' + "_grdPaymentRecordSetsForPayeeAndPRType";    
+</script>
+<script type="text/javascript" src="~/Scripts/App/PaymentProcessing/InvoiceProcessing/invoice-processing-assignmentchild.js"></script>

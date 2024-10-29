@@ -1,0 +1,113 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.ViewModels
+
+
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "EAMI Data Summary Report";
+}
+
+<script type="text/javascript" src="~/Scripts/DataTablePlugins/moment.js"></script>
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+        alert("@ViewBag.Message");
+        history.go(-1);
+    </script>
+}
+else
+{
+<table id="tbl_EAMIDataSummary" class="table table-striped" style="width:100%">
+    <thead>
+        <tr style="cursor: pointer;">
+            <th>Claim_Schedule_Number</th>
+            <th>ECS_Number</th>
+            <th>CS_PayDate</th>
+            <th>Entity_ID</th>
+            <th>Entity_Name</th>
+            <th>VendorName1</th>
+            <th>PaymentSet_Number</th>
+            <th>PaymentSet_Received_Date</th>
+            <th>State_FiscalYear</th>
+            <th>State_Service_Qtr</th>
+            <th>IndexCode</th>
+            <th>PCACode</th>
+            <th>ObjectDetailCode</th>
+            <th>ServiceCategory</th>
+            <th>X_Type</th>
+            <th>Funding_Source_Name</th>
+            <th>HCDFAmount</th>
+            <th>FFPAmount</th>
+            <th>SGFAmount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr style="cursor: default;">
+                <td>
+                    @item.Claim_Schedule_Number
+                </td>
+                <td>
+                    @item.ECS_Number
+                </td>
+                <td>
+                    @string.Format("{0:MM/dd/yyyy}", item.CS_PayDate)
+                </td>
+                <td>
+                    @item.Entity_ID
+                </td>
+                <td>
+                    @item.Entity_Name
+                </td>
+                <td>
+                    @item.VendorName1
+                </td>
+                <td>
+                    @item.PaymentSet_Number
+                </td>
+                <td>
+                    @string.Format("{0:MM/dd/yyyy}", item.PaymentSet_Received_Date)
+                </td>
+                <td>
+                    @item.State_FiscalYear
+                </td>
+                <td>
+                    @item.State_Service_Qtr
+                </td>
+                <td>
+                    @item.IndexCode
+                </td>
+                <td>
+                    @item.PCACode
+                </td>
+                <td>
+                    @item.ObjectDetailCode
+                </td>
+                <td>
+                    @item.ServiceCategory
+                </td>
+                <td>
+                    @item.X_Type
+                </td>
+                <td>
+                    @item.Funding_Source_Name
+                </td>
+                <td>
+                    @item.HCDFAmount
+                </td>
+                <td>
+                    @item.FFPAmount
+                </td>
+                <td>
+                    @item.SGFAmount
+                </td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+}

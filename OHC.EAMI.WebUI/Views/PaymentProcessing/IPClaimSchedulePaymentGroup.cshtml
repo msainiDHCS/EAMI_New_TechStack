@@ -1,0 +1,106 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model List<PaymentProcessingRecordChild>
+
+@{
+
+    string grdName = ViewBag.ID + "_grdCSPaymentRecordSetsForPayeeAndPRType";
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <table id="@grdName" class="table table-hover table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%; margin:0px !important;border:none !important;" data-cs-unique-number="@ViewBag.ID" data-top-groupname="@ViewBag.paymentGroupName">
+        <thead>
+            <tr class="alert-warning">
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders PP_PCS_PaymentGroup_UniqueNumber">Payment Set # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Pay Date <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders PP_PCS_Amount" style="padding-right:55px !important;">Payment Set Amount <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders"></th>               
+            </tr>
+        </thead>
+        <tbody class="alert-warning">
+            @foreach (var item in Model)
+            {
+                <tr data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" class="alert-warning" id="tr_@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" data-top-group-id="@Html.DisplayFor(modelItem => item.PaymentSuperGroupKey)" style="cursor: default;">
+                    <td class="EAMITableTDBorders PP_PCS_PaymentGroup_Shift">&nbsp;</td>                    
+                    <td style="width: 0.5em;" class="EAMITableTDBorders">
+                        <button type="button" class="btn btn-default btn-xs btnPRSet" style="color:#fff;background-color:#8a6d3b;border-color:#8a6d3b;" id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)">
+                            <span class="glyphicon glyphicon-plus" style="font-size:12px;padding-right:0.5px;padding-left:0.5px;"></span>
+                        </button>
+                    </td>
+                    <td class="EAMITableTDBorders" data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)">@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)</td>
+                    <td class="EAMITableTDBorders">@string.Format("{0:MM/dd/yyyy}", item.AssignedPaymentDate)</td>
+                    @if (item.PaymentSetTotalAmount <= 0)
+                    {
+                        <td class="RowAmount EAMITableTDBorders PP_PCS_Amount" style="padding-right:55px !important; color:red;">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+
+                    }
+                    else
+                    {
+                        <td class="RowAmount EAMITableTDBorders PP_PCS_Amount" style="padding-right:55px !important;">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+                    }
+                    <td>
+                        <span data-toggle="popover" data-trigger="hover" data-placement="bottom"
+                              data-content="Remove Payment Set from Claim Schedule Processing." data-html="true">
+                            <button class="btn-xs btn-danger btnRemovePaymentRecord" onclick="removePaymentRecord('@ViewBag.ID', '@ViewBag.CSPID', '@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)', '@Model.Count()', '@Html.DisplayTextFor(modelItem => item.IsLinked)', '@Html.DisplayTextFor(modelItem => item.LinkedSets)')"><span class="fa fa-times"></span></button>
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="modalRemovePaymentConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:20px;">
+        <div class="modal-dialog text-center" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Remove Payment Set</h4>
+                </div>
+                <div class="modal-body" style="margin: 10px;">
+                    <div id="dvPSDeleteLinked" class="text-center" style="display:none;margin:15px;color:red;font-weight:bold">
+                        Claim schedule '<label id="lblSingleDeleteMainCSId"></label>' is part of a linked split claim schedule.
+                        <br />
+                        This action will also be performed on Claim Schedule(s)  <label id="lblSingleDeleteLinkedCSId"></label>.  
+                    </div>
+                    <p>
+                        <strong>
+                            Confirm removing Payment Set# "<label id="lblPaymentRecordSet"></label>"
+                            <br />
+                            <span id="spanSingleRemove" style="display:none">
+                                will also delete the Claim Schedule 
+                            </span>
+                            <span id="spanMultiRemove" style="display:none">
+                                from Claim Schedule 
+                            </span>                             
+                           "<label id="lblCSId"></label>"?                          
+                        </strong>
+                        <input type="hidden" id="hdnCSPId" />
+                        <input type="hidden" id="hdnPaymentRecordSet" />
+                    </p>
+                </div>                
+                <div style="clear:both;margin-bottom:20px;"></div>
+                <div id="dvStatus" style="display:none;margin:10px;">
+                    <div id="dvErrorMessage" class="alert alert-danger"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="confirmRemovePaymentRecordSet()">Remove</button>
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="closePaymentRemoveModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        An error occured while retriving the data.
+    </div>
+}
+
+<script type="text/javascript">
+    var gridName = '@ViewBag.ID' + "_grdCSPaymentRecordSetsForPayeeAndPRType";
+</script>
+<script type="text/javascript" src="~/Scripts/App/PaymentProcessing/ClaimSchedule/claim-schedule-payment-group.js"></script>

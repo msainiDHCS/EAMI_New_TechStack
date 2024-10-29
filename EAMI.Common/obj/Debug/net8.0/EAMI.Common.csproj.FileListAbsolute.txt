@@ -1,0 +1,15 @@
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\bin\Debug\net8.0\EAMI.Common.deps.json
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\bin\Debug\net8.0\EAMI.Common.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\bin\Debug\net8.0\EAMI.Common.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\bin\Debug\net8.0\Ninject.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\bin\Debug\net8.0\NLog.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Common.csproj.AssemblyReference.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Common.AssemblyInfoInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Common.AssemblyInfo.cs
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Common.csproj.CoreCompileInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Com.9FD5914B.Up2Date
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Common.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\refint\EAMI.Common.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\EAMI.Common.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Common\obj\Debug\net8.0\ref\EAMI.Common.dll

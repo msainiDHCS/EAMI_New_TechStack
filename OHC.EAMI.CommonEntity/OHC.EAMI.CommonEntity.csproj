@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3815BF56-24D3-47D0-853D-368379B54E15}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OHC.EAMI.CommonEntity</RootNamespace>
+    <AssemblyName>OHC.EAMI.CommonEntity</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Authorization\EAMIAuthBase.cs" />
+    <Compile Include="Authorization\EAMIMasterData.cs" />
+    <Compile Include="Authorization\EAMIRole.cs" />
+    <Compile Include="Authorization\EAMIUser.cs" />
+    <Compile Include="Base\BaseEntity.cs" />
+    <Compile Include="Common\EAMIElement.cs" />
+    <Compile Include="Common\EAMIEnumerations.cs" />
+    <Compile Include="DataEntity\ClaimSchedule.cs" />
+    <Compile Include="DataEntity\ExclusivePmtType.cs" />
+    <Compile Include="DataEntity\FacesheetValues.cs" />
+    <Compile Include="DataEntity\SCOProperty.cs" />
+    <Compile Include="DataEntity\Fund.cs" />
+    <Compile Include="DataEntity\ElectronicClaimSchedule.cs" />
+    <Compile Include="DataEntity\EntityGroup.cs" />
+    <Compile Include="DataEntity\EntityStatus.cs" />
+    <Compile Include="DataEntity\EftInfo.cs" />
+    <Compile Include="DataEntity\FundingSource.cs" />
+    <Compile Include="DataEntity\PaymentBase.cs" />
+    <Compile Include="DataEntity\PaymentFundingDetail.cs" />
+    <Compile Include="DataEntity\PaymentGroup.cs" />
+    <Compile Include="DataEntity\PaymentRec.cs" />
+    <Compile Include="DataEntity\PaymentExcEntityInfo.cs" />
+    <Compile Include="DataEntity\PaymentSuperGroup.cs" />
+    <Compile Include="DataEntity\RequestTransaction.cs" />
+    <Compile Include="DataEntity\SCOPropertyLookUp.cs" />
+    <Compile Include="DataEntity\WarrantRec.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefCodeEntity\ExclPmtType.cs" />
+    <Compile Include="RefCodeEntity\KvpDefinition.cs" />
+    <Compile Include="RefCodeEntity\PayeeEntity.cs" />
+    <Compile Include="RefCodeEntity\RefCode.cs" />
+    <Compile Include="RefCodeEntity\RefCodeBase.cs" />
+    <Compile Include="RefCodeEntity\RefCodeList.cs" />
+    <Compile Include="RefCodeEntity\RefCodeTableList.cs" />
+    <Compile Include="RefCodeEntity\SCOFileSetting.cs" />
+    <Compile Include="RefCodeEntity\SCOSetting.cs" />
+    <Compile Include="RefCodeEntity\SCOSettingList.cs" />
+    <Compile Include="RefCodeEntity\SystemProperty.cs" />
+    <Compile Include="RefCodeEntity\UserAcc.cs" />
+    <Compile Include="UIServiceContract\IEAMIWebUIDataService.cs" />
+    <Compile Include="Common\UserADProfileInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OHC.EAMI.Common\OHC.EAMI.Common.csproj">
+      <Project>{EB529390-B76E-4A27-9C7C-CA0915C7CFB8}</Project>
+      <Name>OHC.EAMI.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /I /Q /Y /R  "$(TargetPath)" "$(SolutionDir)Assemblies\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

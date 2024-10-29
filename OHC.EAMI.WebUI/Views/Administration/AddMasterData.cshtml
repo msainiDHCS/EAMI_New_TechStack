@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "Add New " + ViewBag.DataTypeM;
+}
+
+
+@using System.Web.Optimization;
+@model OHC.EAMI.CommonEntity.EAMIMasterData
+
+@using (Html.BeginForm("AddMasterData", "Administration", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmAddMasterData", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-lg-offset-0 col-lg-12" id="dvMainArea">
+        <div class="panel panel-default">
+            <div class="panel-heading" style="background-color: #17315a; color: white;">
+                <h3 class="panel-title"><i class="fa fa-user-plus">&nbsp;</i>Add New @ViewBag.DataTypeS</h3>
+            </div>
+            <div class="panel-body">
+                <div id="dvAddErrorHolder"></div>
+                <div class="form-group">
+                    <div class="col-xs-4">
+                        @Html.HiddenFor(input => input.DataType)
+                        @Html.HiddenFor(input => input.ID)
+                        <label for="Code" class="control-label">Code</label><span style="color:red;font-weight:bold">&nbsp;*</span>
+                        @Html.TextBoxFor(input => input.Code, new { @class = "form-control input-sm", maxlength = "200" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-4">
+                        <label for="Name" class="control-label">Name</label><span style="color:red;font-weight:bold">&nbsp;*</span>
+                        @Html.TextBoxFor(input => input.Name, new { @class = "form-control input-sm", maxlength = "200" })
+                    </div>
+                </div>
+                <div class="form-group" id="dvAssociatedData">
+                    <div class="col-xs-3">
+                        @Html.Label("Permissions(s)", "Associated Permissions", new { @class = "control-label" })
+                        @for (int idx = 0; idx < Model.AssociatedData.Count; idx++)
+                        {
+                            <div style="">
+                                @Html.HiddenFor(x => Model.AssociatedData[idx].ID)
+                                @Html.CheckBoxFor(x => Model.AssociatedData[idx].IsSelected)
+                                @Html.DisplayFor(x => Model.AssociatedData[idx].Code)
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div style="clear:both"></div>
+                <div class="form-group" style="margin-top:20px;">
+                    <div class="col-xs-4">
+                        <button type="button" onclick="return AddNewMasterData();" class="btn btn-dhcs-secondary btn-sm" id="btnAddNewMasterData">Add New @ViewBag.DataTypeS</button>&nbsp;
+                        <button type="button" onclick="return AddNewMasterDataReset();" class="btn btn-dhcs-secondary btn-sm" id="btnAddNewMasterDataReset">Reset</button>&nbsp;
+                        <button type="button" onclick="return AddNewMasterDataCancel();" class="btn btn-dhcs-secondary btn-sm" id="btnAddNewMasterDataCancel" style="float:none">Back</button>&nbsp;
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+<script type="text/javascript">
+
+    var frmValidator = $("#frmAddMasterData").validate({
+        errorElement: 'span',
+        ignore: ".ignore",
+        rules: {
+            Code: {
+                required: true,
+            },
+            Name: {
+                required: true,
+            },
+        },
+
+        // Messages for form validation
+        messages: {
+            Code: {
+                required: 'Please enter code',
+            },
+            Name: {
+                required: 'Please enter name',
+            },
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        }
+
+    });
+
+    function AddNewMasterData() {
+
+        HideFormStatusMessage('frmAddMasterData', 'dvAddErrorHolder');
+
+        var isSuccess = false;
+        if (!ajaxValidateAddNewMasterData()) {
+
+            //$("#UserName").rules("remove","usernamecheck");
+            return false;
+        }
+        else {
+
+            var isCodeValid = false;
+            try {
+                var response = getUrlJsonSync(getEAMIAbsoluteUrl('~/Administration/CheckIfMasterDataExists?datatype=' + DataTypeS + '&dataTypecode=' +
+                    $('#Code').val()));
+
+                if (response.valid == 'OK') {
+                    if (response.data == 'True') {
+                        isCodeValid = true;
+                    }
+                }
+            }
+            catch (e)
+            { }
+
+            if (!isCodeValid) {
+                setFormStatusMessage('frmAddMasterData', 'dvAddErrorHolder', false, DataTypeS + ' already registered', 4);
+                return false;
+            }
+
+            $.ajax({
+                url: getEAMIAbsoluteUrl('~/Administration/AddMasterData2'),
+                type: 'POST',
+                datatype: "html",
+                cache: false,
+                data: $("#frmAddMasterData").serialize(),
+                success: function (data) {
+                    if (data != null) {
+
+                        var status = data.status;
+                        var message = data.message;
+
+                        wasItAAsuccess = (status == "OK");
+
+                        if (wasItAAsuccess) {
+                            setFormStatusMessage('frmAddMasterData', 'dvAddErrorHolder', true, 'New ' + DataTypeS + ' successfully created', 4);
+                        }
+                        else {
+                            setFormStatusMessage('frmAddMasterData', 'dvAddErrorHolder', false, message);
+                        }
+                    }
+                }
+
+            });
+        }
+
+        return false;
+    }
+
+    // Edit user validation rules
+    function ajaxValidateAddNewMasterData() {
+        return frmValidator.form();
+    }
+
+    function AddNewMasterDataReset() {
+
+        Clear_Form('frmAddMasterData');
+        frmValidator.resetForm();
+
+        HideFormStatusMessage('frmAddMasterData', 'dvAddErrorHolder');
+
+        return false;
+    }
+
+    function AddNewMasterDataCancel() {
+        // Start Loading... Animation
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        $("#dvActionArea").slideUp(250, function () {
+            // Animation complete.
+            //EAMIShowAjaxLoadingContent('dvgridArea');
+            $('#dvMainArea').slideDown(250);
+            $('#dvgridArea').load(getEAMIAbsoluteUrl('~/Administration/ManageMasterDataList?datatype=' + DataTypeO));
+            $('#dvActionArea').html('');
+
+            // End Loading... Animation
+            $('#divLoadingAnimation_Inner').empty();
+            $('#divLoadingAnimation').css("display", "none");
+        });
+
+        return false;
+    }
+
+    $(document).ready(function () {
+
+        var DataTypeM = '@(ViewBag.DataTypeM)';
+        var DataTypeS = '@(ViewBag.DataTypeS)';
+        var DataTypeO = '@(ViewBag.DataTypeO)';
+
+
+        if (DataTypeO != "R") {
+            $('#dvAssociatedData').hide();
+        }
+        else {
+            $('#dvAssociatedData').show();
+        }
+    });
+
+</script>

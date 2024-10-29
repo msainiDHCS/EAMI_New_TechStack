@@ -1,0 +1,87 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.Common.Test", "OHC.EAMI.Common.Test\OHC.EAMI.Common.Test.csproj", "{8E8E8C3A-F832-4960-A096-2CA536D4F5D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.SCO.Test", "OHC.EAMI.SCO.Test\OHC.EAMI.SCO.Test.csproj", "{FBFD047F-AD8F-4C36-A01C-989708D35467}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.NLog.Test", "OHC.EAMI.NLog.Test\OHC.EAMI.NLog.Test.csproj", "{0AAD14D3-057B-4A78-A6E7-58D9D30389D3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{61E10986-6932-46C4-BF9F-84BCD304AC7A}"
+	ProjectSection(SolutionItems) = preProject
+		AllTestSolution.vsmdi = AllTestSolution.vsmdi
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.WebUI.Test", "OHC.EAMI.WebUI.Test\OHC.EAMI.WebUI.Test.csproj", "{78C36230-A057-4AD9-ABAC-81ECCE4827CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.DataAccess.Test", "OHC.EAMI.DataAccess.Test\OHC.EAMI.DataAccess.Test.csproj", "{63607114-E311-437D-9614-1058430DB2FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.Util.Test", "OHC.EAMI.Util.Test\OHC.EAMI.Util.Test.csproj", "{4BB103A8-0D37-4561-A087-950B1D8DE5FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.WebUIService.Test", "EAMIWebUIDataService.Test\OHC.EAMI.WebUIService.Test.csproj", "{D292F5C5-B358-4EFC-AF5E-12265B71ADE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.AppServiceManager.Test", "OHC.EAMI.AppServiceManager.Test\OHC.EAMI.AppServiceManager.Test.csproj", "{FA9F431C-6A35-4532-9673-ED1FA202BE6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.FTSASTaskActions.Test", "OHC.EAMI.FTSASTaskActions.Test\OHC.EAMI.FTSASTaskActions.Test.csproj", "{EFC7D3BD-3F43-4BE3-86CC-D3552268669A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.DataServiceManager.Test", "OHC.EAMI.DataServiceManager.Test\OHC.EAMI.DataServiceManager.Test.csproj", "{CC572033-EAA8-4558-810D-7C5C1E9150CC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E8E8C3A-F832-4960-A096-2CA536D4F5D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E8E8C3A-F832-4960-A096-2CA536D4F5D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E8E8C3A-F832-4960-A096-2CA536D4F5D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E8E8C3A-F832-4960-A096-2CA536D4F5D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBFD047F-AD8F-4C36-A01C-989708D35467}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBFD047F-AD8F-4C36-A01C-989708D35467}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBFD047F-AD8F-4C36-A01C-989708D35467}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBFD047F-AD8F-4C36-A01C-989708D35467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AAD14D3-057B-4A78-A6E7-58D9D30389D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AAD14D3-057B-4A78-A6E7-58D9D30389D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AAD14D3-057B-4A78-A6E7-58D9D30389D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AAD14D3-057B-4A78-A6E7-58D9D30389D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78C36230-A057-4AD9-ABAC-81ECCE4827CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78C36230-A057-4AD9-ABAC-81ECCE4827CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78C36230-A057-4AD9-ABAC-81ECCE4827CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78C36230-A057-4AD9-ABAC-81ECCE4827CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63607114-E311-437D-9614-1058430DB2FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63607114-E311-437D-9614-1058430DB2FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63607114-E311-437D-9614-1058430DB2FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63607114-E311-437D-9614-1058430DB2FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BB103A8-0D37-4561-A087-950B1D8DE5FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BB103A8-0D37-4561-A087-950B1D8DE5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BB103A8-0D37-4561-A087-950B1D8DE5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BB103A8-0D37-4561-A087-950B1D8DE5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D292F5C5-B358-4EFC-AF5E-12265B71ADE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D292F5C5-B358-4EFC-AF5E-12265B71ADE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D292F5C5-B358-4EFC-AF5E-12265B71ADE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D292F5C5-B358-4EFC-AF5E-12265B71ADE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA9F431C-6A35-4532-9673-ED1FA202BE6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA9F431C-6A35-4532-9673-ED1FA202BE6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA9F431C-6A35-4532-9673-ED1FA202BE6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA9F431C-6A35-4532-9673-ED1FA202BE6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFC7D3BD-3F43-4BE3-86CC-D3552268669A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFC7D3BD-3F43-4BE3-86CC-D3552268669A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFC7D3BD-3F43-4BE3-86CC-D3552268669A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFC7D3BD-3F43-4BE3-86CC-D3552268669A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC572033-EAA8-4558-810D-7C5C1E9150CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC572033-EAA8-4558-810D-7C5C1E9150CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC572033-EAA8-4558-810D-7C5C1E9150CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC572033-EAA8-4558-810D-7C5C1E9150CC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {12BFF960-EACB-4C47-95F9-C8511A2CF685}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = AllTestSolution.vsmdi
+	EndGlobalSection
+EndGlobal

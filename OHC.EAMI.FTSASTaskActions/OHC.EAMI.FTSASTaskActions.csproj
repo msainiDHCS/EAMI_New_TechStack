@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A4154C12-3FF1-4977-A6C4-C91396636237}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OHC.EAMI.FTSASTaskActions</RootNamespace>
+    <AssemblyName>OHC.EAMI.FTSASTaskActions</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EAMI.EFTPreNote.ServiceContract">
+      <HintPath>..\Assemblies\ThirdParty\EAMI.EFTPreNote.ServiceContract.dll</HintPath>
+    </Reference>
+    <Reference Include="FTSAS.Integration">
+      <HintPath>..\Assemblies\ThirdParty\FTSAS.Integration.dll</HintPath>
+    </Reference>
+    <Reference Include="OHC.EAMI.Common">
+      <HintPath>..\Assemblies\OHC.EAMI.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="OHC.EAMI.CommonEntity">
+      <HintPath>..\Assemblies\OHC.EAMI.CommonEntity.dll</HintPath>
+    </Reference>
+    <Reference Include="OHC.EAMI.DataAccess">
+      <HintPath>..\Assemblies\OHC.EAMI.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="OHC.EAMI.SCO">
+      <HintPath>..\Assemblies\OHC.EAMI.SCO.dll</HintPath>
+    </Reference>
+    <Reference Include="OHC.EAMI.ServiceContract">
+      <HintPath>..\Assemblies\OHC.EAMI.ServiceContract.dll</HintPath>
+    </Reference>
+    <Reference Include="OHC.EAMI.ServiceManager">
+      <HintPath>..\Assemblies\OHC.EAMI.ServiceManager.dll</HintPath>
+    </Reference>
+    <Reference Include="OHC.EAMI.Util">
+      <HintPath>..\Assemblies\OHC.EAMI.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActionAuditFileMove.cs" />
+    <Compile Include="ActionDeterminePEE_EFT_SIM.cs" />
+    <Compile Include="ActionDeterminePEE_EFT.cs" />
+    <Compile Include="ActionDeterminePEE_EFT_withNotification.cs" />
+    <Compile Include="ActionDexFileDownload.cs" />
+    <Compile Include="ActionDexFileReconcile.cs" />
+    <Compile Include="ActionEcsFileUpload.cs" />
+    <Compile Include="ActionEftFileGenerate.cs" />
+    <Compile Include="ActionEftFileUpload.cs" />
+    <Compile Include="ActionGenerateAndTransportECS.cs" />
+    <Compile Include="ActionGenerateAndTransportECS_SIM.cs" />
+    <Compile Include="ActionImportPaymentFile.cs" />
+    <Compile Include="ActionNotifications.cs" />
+    <Compile Include="ActionProcessDexFile.cs" />
+    <Compile Include="ActionProcessDexFile_SIM.cs" />
+    <Compile Include="ActionWarrantFileGenerate.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /I /Q /Y /R  "$(TargetPath)" "$(SolutionDir)Assemblies\"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

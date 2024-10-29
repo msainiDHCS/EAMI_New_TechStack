@@ -1,0 +1,324 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model PaymentProcessingFilters
+
+
+<link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/PaymentProcessing/invoice-proccessing-grid.css" />
+
+<div id="dvSearchCriteria" style="display:none;">
+    <div>
+        <div class="form-group">
+            <div class="col-xs-2">
+                @Html.Label("System", "System", new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownList("Systems", new SelectList(Model.Systems, "Value", "Text"), new { @class = "form-control input-sm selectpicker", id = "ddlSystems" })
+            </div>
+            <div class="col-xs-2" style="max-width: 270px;">
+                @Html.Label("Payee", "Payee", new { @class = "control-label" })
+                @Html.DropDownList("Payee", new SelectList(Model.PayeeNames, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPayees", multiple = "true", disabled = "disabled" })
+            </div>
+            <div class="col-xs-2">
+                @Html.Label("PaymentTypes", "Payment Types", new { @class = "control-label" })
+                @Html.DropDownList("PaymentTypes", new SelectList(Model.PaymentTypes, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlPaymentTypes", multiple = "true", disabled = "disabled" })
+
+            </div>
+            <div class="col-xs-2">
+                @Html.Label("Contract#", "Contract#", new { @class = "control-label" })
+                @Html.DropDownList("Contract#", new SelectList(Model.ContractNumbers, "Value", "Text"), new { @class = "form-control input-sm", id = "ddlContractNumbers", multiple = "true", disabled = "disabled" })
+            </div>
+            <div class="col-xs-4" style="margin-top:25px;">
+                <button type="button" onclick="javascript: return PPSearch();" class="btn btn-dhcs-secondary btn-md" id="btnSearch">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                </button>&nbsp;
+                <button type="button" onclick="javascript: return PPReset();" class="btn btn-dhcs-secondary btn-md" id="btnReset">
+                    <span class="glyphicon glyphicon-refresh"></span> Reset
+                </button>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <hr style="border-top:1px solid #eeeeee;margin-left:20px;margin-right:20px;" />
+        <div class="clearfix"></div>
+        <div class="form-group" style="margin-top:30px;">
+            <div class="col-xs-12" style="text-align:right;">
+                <button type="button" onclick="AddToCS()" class="btn btn-dhcs-secondary btn-md" id="btnAddToCS">
+                    <span class="glyphicon glyphicon-plus-sign"></span>&nbsp;Add to CS
+                </button>&nbsp;
+                <button type="button" onclick="showHoldModal()" class="btn btn-dhcs-secondary btn-md" id="btnPRHold">
+                    <span class="glyphicon glyphicon-pause"></span>&nbsp;Hold/Unhold
+                </button>&nbsp;                
+                <button type="button" onclick="showReturnModal()" class="btn btn-dhcs-secondary btn-md" id="btnPRReturn">
+                    <span class="glyphicon glyphicon-share-alt"></span>&nbsp;Return
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="panel panel-dhcs-primary" style="margin-left:15px;margin-top:10px;margin-right:15px; border-top:0.1px solid;">
+        <div class="panel-heading">
+            <div class="container-fluid">
+                <div class="row" style="font-weight: bold;">
+                    <div class="col-md-6" style="cursor:default;">Search Results</div>
+                    <div class="col-md-6 text-right">
+                        <span class="wrapperDefinitions" title='<span class="fa fa-book EAMI_Text_White"></span> Definitions'
+                              data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                              data-content='<p><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;&nbsp;indicates when Payee-PaymentType groupings include Payment Sets with any of the following operational statuses:</p>
+                                <p>
+                                <ul>
+                                    <li><span class="deniedText">RETURN DENIED</span> - indicates when Payment Set is Denied as a Pending Return at the Approvals Screen.&nbsp;&nbsp;Hovering over this flag shows details of the last time this Payment Set was denied.</li>
+                                    <li><span class="holdText">HOLD</span> - indicates when Payment Set is On Hold.&nbsp;&nbsp;Hovering over this flag shows details of the last time this Payment Set was put on hold.</li>
+                                </ul>
+                                </p>
+                                <p><i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>&nbsp;&nbsp;indicates when Payee-PaymentType groupings include Payment Sets with any of the following exclusive payment types:</p>
+                                <p>
+                                    <ul>
+                                        @foreach (var refCode in ViewBag.ExclusivePaymentTypesRefCodeList)
+                                        {
+                                            <li><span class="EAMI_Text_AlertWarning">@Html.Raw(refCode.Code)</span> - @Html.Raw(refCode.Description)</li>
+                                        }
+                                    </ul>
+                                 </p>
+                                 @if (ViewBag.ProcessWarrants == true)
+                                 {
+				                    <p>Additional features:</p>
+					                    <p>
+                                            <ul>
+                                                @*<li><img src="../images/MCEFT_Warrant_Indicator_24.png"> - indicates Warrant Payment</li>*@
+                                                <li><img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.6em;vertical-align:top;"> - indicates Warrant Payment</li>
+                                            </ul>
+                                        </p>
+                                 } ' data-html="true">
+                         <span class="fa fa-book EAMI_Text_White"></span> <span class="EAMI_Text_White">Definitions <span style="font-weight:normal;">(hover over to display)</span></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body" id="dvMasterGridHolder" style="visibility:hidden;">
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvAddToClaimScheduleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document" style="width:40%;">
+            <div class="modal-content" style="overflow:visible;">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Add to Claim Schedule</h4>
+                </div>
+                <div class="modal-body" id="modalBodyAddToCS" style="margin-top:20px;overflow:visible;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvReturnModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Return to Supervisor</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <form id="frmReturn">
+                            <div class="col-xs-12">
+                                <p>
+                                    <strong>
+                                        Return Payment Set "<label id="lbReturnPaymentSetId"></label>"  to Supervisor?
+                                    </strong>
+                                </p>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                            <div class="col-xs-8">
+                                <div class="form-group">
+                                    <label for="txtReturnNote">Note:</label>
+                                    <textarea class="form-control" rows="4" id="txtReturnNote" name="txtReturnNote" maxlength="200" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                        </form>
+                    </div>
+                    <div style="clear:both;margin-bottom:10px;"></div>
+                    <div id="dvReturnStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvReturnErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmPaymentRecordReturn()">Return</button>
+                        <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvMixedHoldUnHoldModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="alert alert-warning" style="margin-top: 10px;">
+                            <p>To Hold, please ensure that ONLY Payment Records NOT flagged as <span class='holdText'>HOLD</span> are checked.</p>
+                            <p>To UnHold, please ensure that ONLY Payment Records flagged as <span class='holdText'>HOLD</span> are checked.</p>
+                        </div>
+                        @*<div style="clear:both;margin-bottom:10px;"></div>*@
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvHoldModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Hold Payment Set</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <form id="frmHold">
+                            <div class="col-xs-12">
+                                <p>
+                                    <strong>
+                                        Hold Payment set
+                                <p>"<label id="lbHoldPaymentSetId"></label>"?</p>
+                                </strong>
+                                </p>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                            <div class="col-xs-8">
+                                <div class="form-group">
+                                    <label for="txtHoldNote">Note:</label>
+                                    <textarea class="form-control" rows="4" id="txtHoldNote" name="txtHoldNote" maxlength="200" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                        </form>
+                    </div>
+                    <div style="clear:both;margin-bottom:10px;"></div>
+                    <div id="dvHoldStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvHoldErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmHoldRecord()">Hold</button>
+                        <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="dvUnholdModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Unhold Payment Set</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p>
+                                <strong>
+                                    Unhold Payment set
+                            <p>"<label id="lbUnholdPaymentSetId"></label>"?</p>
+                            </strong>
+                            </p>
+                        </div>
+                        <div class="col-xs-2">&nbsp;</div>
+                        <div class="col-xs-8">
+                            <div class="form-group">
+                                <label for="txtUnholdNote">Note:</label>
+                                <textarea class="form-control" rows="4" id="txtUnholdNote" maxlength="200"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">&nbsp;</div>
+                    </div>
+                    <div style="clear:both;margin-bottom:10px;"></div>
+                    <div id="dvUnholdStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvUnholdErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmUnholdRecord()">Unhold</button>
+                        <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvNoPaymentSelection" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="alert alert-warning" style="margin-top: 10px;">
+                            Payee-PaymentType row must be expanded and Payment Sets checked before proceeding.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Selected Payment Groups Exceed Limit -->
+    <div class="modal fade" id="modalWrapperForSelectedPaymentGroupsExceedLimit" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForSelectedPaymentGroupsExceedLimit" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modalHeaderForSelectedPaymentGroupsExceedLimit"></h4>
+                </div>
+                <div class="modal-body" id="modalBodyForSelectedPaymentGroupsExceedLimit">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForSelectedPaymentGroupsExceedLimit_CloseBtn" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    @if (ViewBag.PaymentRecordCount != null)
+    {
+
+        <text>
+    $('#spPaymentRecordCount').empty();
+    $('#spPaymentRecordCount').append("(" + @ViewBag.PaymentRecordCount + ")");
+    </text>
+    }
+    else
+    {
+        <text>
+    $('#spPaymentRecordCount').empty();
+    </text>
+    }
+
+    @if(ViewBag.ClaimScheduleCount != null)
+     {
+
+         <text>
+    $('#spClaimScheduleCount').empty();
+    $('#spClaimScheduleCount').append("(" + @ViewBag.ClaimScheduleCount + ")");
+    </text>
+     }
+     else
+     {
+         <text>
+    $('#spClaimScheduleCount').empty();
+    </text>
+     }
+</script>
+<script type="text/javascript" src="~/Scripts/App/PaymentProcessing/InvoiceProcessing/invoice-processing-assignment.js"></script>

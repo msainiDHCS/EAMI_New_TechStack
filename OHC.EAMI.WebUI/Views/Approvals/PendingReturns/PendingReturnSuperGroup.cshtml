@@ -1,0 +1,92 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model PaymentProcessingSearchResults
+
+
+@if (Model != null && Model.masterDataList != null && Model.masterDataList.Count > 0)
+{
+    <table id="grdPRsByPayeeAndPaymentType" class="table table-hover table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%;">
+        <thead>
+            <tr>
+                <th class="EAMITableTDBorders text-center" style="width:25px;"><span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders">Vendor Name - Model Type <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Contract # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Fiscal Year <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_PR_totalAmountSuperGroup" style="padding-right:150px !important;">Total <span class="sort-icon"></span></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.masterDataList)
+            {
+                <tr data-id="@Html.DisplayFor(modelItem => item.GroupIdentifier)" id="tr_grdPRsByPayeeAndPaymentType_@Html.DisplayFor(modelItem => item.GroupIdentifier)" data-groupname="@Html.DisplayFor(modelItem => item.GroupName)" style="font-weight: bold; cursor: default;">
+                    @if (item.HasExclusivePaymentType)
+                    {
+                        <td class="EAMITableTDBorders" style="text-align:center; padding-left:10.5px;">
+                            <span class="outtermostFlag">
+                                <i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>
+                            </span>
+                            <label style="display:none;">1</label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="EAMITableTDBorders">
+                            <span class="noFlaggedSuperGroup">
+                                &nbsp;
+                                <label style="display:none;">0</label>
+                            </span>
+                        </td>
+                    }
+
+
+
+
+
+                    <td style="width: 0.5em;" class="EAMITableTDBorders">
+                        <button type="button" class="btn btn-default btn-xs btnPayeePaymentType" style="color:#fff;background-color:#333;border-color:#333;" id="@Html.DisplayFor(modelItem => item.GroupIdentifier)">
+                            <span class="glyphicon glyphicon-plus" style="font-size:12px;padding-right:0.5px;padding-left:0.5px;"></span>
+                        </button>
+                    </td>
+                    <td class="EAMITableTDBorders">
+                        <span class="EAMI_Text_BlueSteel">
+                            @item.GroupName.Substring(0, item.GroupName.IndexOf(")") + 1)
+                        </span> -
+                        <span class="EAMI_Text_Purple">
+                            @item.GroupName.Substring(item.GroupName.IndexOf(")") + 3)
+                        </span>
+                    </td>
+                    <td class="EAMITableTDBorders A_PR_contractNumberSuperGroup"><span style="font-weight:bold;"></span>@Html.DisplayFor(modelItem => item.ContractNumber)</td>
+                    <td class="EAMITableTDBorders A_PR_sfySuperGroup"><span style="font-weight:bold;"></span>@Html.DisplayFor(modelItem => item.FiscalYear)</td>
+                    <td class="EAMITableTDBorders A_PR_totalAmountSuperGroup" style="padding-right:150px !important;"><span class="amount-prefix" style="font-weight:bold;"></span><span>@Html.DisplayFor(modelItem => item.TotalPaymentDollars)</span></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="dvFundingDetailModal_A_PR" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-customSize" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="lblFundingModal_A_PR"></h4>
+                </div>
+                <div class="modal-body" id="modalBodyFundingDetail_A_PR" style="margin-top:20px;max-height:650px;overflow-y:scroll;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row text-center">
+        <div class="col-xs-12">
+            <strong>No pending return records found for the supervisor.</strong>
+        </div>
+    </div>
+}
+
+<script type="text/javascript" src="~/Scripts/App/Approvals/PendingReturns/pendingreturns-supergroup.js"></script>

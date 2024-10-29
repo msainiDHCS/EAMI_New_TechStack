@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Funds";
+}
+
+@using System.Web.Optimization;
+@model IList<OHC.EAMI.CommonEntity.FacesheetValues>
+
+@using (Html.BeginForm("ViewFacesheetValues", "ManageSystems", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmFacesheetData", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @*<div class="panel panel-default">*@
+<div class="row" style="margin-bottom:20px;margin-top:20px;">
+    <input type="hidden" id="hdnSystemId" value="@ViewBag.SystemId" />
+    <input type="hidden" id="hdnSystemCode" value="@ViewBag.SystemCode" />
+    <div class="col-xs-12">
+        <button type="button" onclick="javascript: return AddFacesheetValue();" class="btn btn-dhcs-secondary btn-md" id="btnAddFacesheetValue" style="float:right;margin-right:10px;">Add New</button>
+    </div>
+</div>
+    <table id="grdFunds" class="table table-striped table-bordered" cellspacing="0" style="width:100%;">
+        <thead>
+            <tr>
+                <th>Fund Code</th>
+                <th>Fund Name</th>
+                <th>Agency Number</th>
+                <th>Agency Name</th>
+                <th>Stat Year</th>
+                <th>Reference/Item</th>
+                @*<th>Fiscal Year</th>*@
+                <th>Chapter Value</th>
+                <th>Element</th>
+                <th>Program</th>
+                <th>Description</th>
+                <th>Create Date</th>
+                <th>Created By</th>
+                <th>Update Date</th>
+                <th>Updated By</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Fund_Code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Fund_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Agency_Number)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Agency_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Stat_Year)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Reference_Item)</td>
+                    @*<td>@Html.DisplayFor(modelItem => item.Fiscal_Year)</td>*@
+                    <td>@Html.DisplayFor(modelItem => item.Chapter)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Element)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Program)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@item.CreateDate.ToString("MM'/'dd'/'yyyy")</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                    <td>@(item.UpdateDate.HasValue ? item.UpdateDate.Value.ToString("MM/dd/yyyy") : "")</td>
+                    <td>@Html.DisplayFor(modelItem => item.UpdatedBy)</td>
+                    <td><a href="#" target="_self" onclick="return EditFacesheetValue(@Html.DisplayFor(modelItem => item.Facesheet_ID), @ViewBag.SystemId, true);">Edit</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script type="text/javascript">
+    var systemId = document.getElementById('hdnSystemId').value;
+    var systemCode = document.getElementById('hdnSystemCode').value;
+
+    function AddFacesheetValue() {
+       
+        $('#divLoadingAnimation').css("display", "block");
+        $('#header').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab5').load(getEAMIAbsoluteUrl('~/ManageSystems/AddNewFacesheet?systemId=' + systemId + '&systemCode=' + systemCode));
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    function EditFacesheetValue(fsID, systemId, isActive) {
+        $('#divLoadingAnimation').css("display", "block");
+        $('#header').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            //EAMIShowAjaxLoadingContent('dvActionArea');
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab5').load(getEAMIAbsoluteUrl('~/ManageSystems/EditFacesheetValues?fsID=' + fsID + '&systemID=' + systemId));
+
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+</script>

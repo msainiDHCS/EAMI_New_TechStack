@@ -1,0 +1,25 @@
+﻿{
+  "data": [
+
+
+["1",
+"2",
+"InvoiceNumber 3",
+"PaymentRecordID 4",
+"InvoiceType 5",
+"new DateTime(2009, 5, 7)",
+"1.01m"
+],
+
+["5",
+"6",
+"InvoiceNumber 3",
+"PaymentRecordID 4",
+"InvoiceType 5",
+"new DateTime(2009, 5, 7)",
+"1.01m"
+]
+
+
+  ]
+}

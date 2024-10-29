@@ -1,0 +1,86 @@
+﻿@model IEnumerable<OHC.EAMI.WebUI.ViewModels.AssignPaymentRecordsViewModel>
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+
+<table id="tblPayeePaymentType" class="table table-hover" cellspacing="0" width="100%">
+    @*<thead style="display:none;">*@
+    <thead>
+        @*<tr class="EAMI_Text_White EAMI_BgColor_BlueSteel" style="border-color:#344864;">*@
+        <tr class="" style="border-color:#344864;">
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>Vendor Name - Model Type</th>
+            <th>Contract #</th>
+            <th>Fiscal Year</th>
+            <th class="totalAmountSuperGroup" style="padding-right:200px !important;">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var assignPaymentRecordsViewModel in Model)
+        {
+            <tr id="trPayeePaymentType_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentSuperGroup_UniqueKey)" style="font-weight: bold; cursor: default;">
+                @if (!assignPaymentRecordsViewModel.HasItemsOnHold)
+                {
+                    <td id="tdPayeePaymentTypeFlag_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentSuperGroup_UniqueKey)" class="onHoldIconSuperGroup flagIcon iconColumn" style="text-align:center;">
+                        <span class="noOnHoldSuperGroup">&nbsp;</span>  @*The inner &nbsp; needed to differentiate from flagged span below for sorting purposes.*@
+                    </td>
+                }
+                else
+                {
+                    <td id="tdPayeePaymentTypeFlag_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentSuperGroup_UniqueKey)" class="onHoldIconSuperGroup flagIcon iconColumn" style="text-align:center;">
+                        <span class="glyphicon glyphicon-ban-circle wrapperOnHold outtermostFlag"></span>
+                    </td>
+                }
+                @if (!assignPaymentRecordsViewModel.HasExclusivePaymentType)
+                {
+                    <td id="tdPayeePaymentTypeFlagged_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentSuperGroup_UniqueKey)" class="flaggedIconSuperGroup iconColumn">
+                        <span class="noFlaggedSuperGroup">&nbsp;</span>
+                    </td>
+                }
+                else
+                {
+                    <td id="tdPayeePaymentTypeFlagged_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentSuperGroup_UniqueKey)" class="flaggedIconSuperGroup iconColumn iconColumnPSG" style="text-align:center; padding-left:10.5px;">
+                        <span class="outtermostFlag">
+                            <i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>
+                        </span>
+                    </td>
+                }
+                <td id="tdPayeePaymentType_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentSuperGroup_UniqueKey)" class="plusMinusIconSuperGroup iconColumn">
+                    <button type="button" class="btn btn-default btn-xs btnInTdPayeePaymentType">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </td>
+                <td class="payeeNameSuperGroup">
+                    <span class="EAMI_Text_BlueSteel"><span class="PayeeName">@Html.DisplayFor(m => assignPaymentRecordsViewModel.PayeeName)</span>
+                        (<span id="PayeeFullCode">@Html.DisplayFor(m => assignPaymentRecordsViewModel.PayeeFullCode)</span>)
+                    </span> -
+                    <span class="EAMI_Text_Purple PaymentTypeName" id="PaymentTypeName">@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentTypeName)</span>
+                </td>
+                <td class="contractNumberSuperGroup"><span id="ContractNumber" class="ContractNumber">@Html.DisplayFor(m => assignPaymentRecordsViewModel.ContractNumber)</span></td>
+                <td class="sfySuperGroup"><span id="SFY">@Html.DisplayFor(m => assignPaymentRecordsViewModel.SFY)</span></td>
+                @if (@assignPaymentRecordsViewModel.TotalAmount < 0)
+                {
+                    <td class="PayeePaymentTypeTotalAmount totalAmountSuperGroup"><span class="EAMI_Text_Danger">@Html.DisplayFor(m => assignPaymentRecordsViewModel.TotalAmount)</span></td>
+                }
+                else
+                {
+                    <td class="PayeePaymentTypeTotalAmount totalAmountSuperGroup">@Html.DisplayFor(m => assignPaymentRecordsViewModel.TotalAmount)</td>
+                }
+            </tr>
+        }
+
+        @if (Model.Count() == 0)
+        {
+            <tr class="EAMI_BgColor_White noModel">
+                <td></td>
+                <td style="width:100%;text-align:center;"><br />Please Select Search Criteria And Then Press Search.</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>

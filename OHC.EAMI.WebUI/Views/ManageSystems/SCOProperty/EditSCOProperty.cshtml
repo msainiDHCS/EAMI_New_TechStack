@@ -1,0 +1,383 @@
+﻿@{
+    ViewBag.Title = "Edit SCO Properties";
+}
+
+@using System.Web.Optimization;
+@model OHC.EAMI.WebUI.Models.SCOPropertyModel
+
+@using (Html.BeginForm("UpdateSCOProperty", "ManageSystems", FormMethod.Post, new { @class = "form-horizontal", role = "form", ID = "frmEditSCOProperty", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+<div class="panel-body">
+    <div id="dvEditErrorHolder"></div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.HiddenFor(input => input.System_ID, new { id = "hdnSystemId" })
+            @Html.HiddenFor(input => input.System_Code, new { id = "hdnSystemCode" })
+            @Html.HiddenFor(input => input.SCO_Property_ID, new { id = "hdnScoPropertyId" })
+            @Html.HiddenFor(input => input.SCO_Property_Enum_ID, new { id = "hdnScoPropertyEnumID" })
+            @Html.HiddenFor(input => input.Description, new { id = "hdnDescription" })
+            @Html.HiddenFor(input => input.SCO_Property_Type_ID, new { id = "hdnPropertyTypeId" })
+            @Html.HiddenFor(input => input.Fund_ID, new { id = "hdnFundId" })
+            @Html.HiddenFor(input => input.PaymentTypeID, new { id = "hdnPaymentType" })
+            @Html.HiddenFor(input => input.EnvironmentID, new { id = "hdnEvironment" })
+            @Html.HiddenFor(input => input.SCO_Property_Name, new {id= "hdnSCOPropertyName" })
+
+            <input type="hidden" id="hdnPrptyValue" value="@Model.SCO_Property_Value" />
+        </div>
+    </div>
+     <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.System_Code, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;</span>
+                @Html.TextBoxFor(input => input.System_Code, new { @class = "form-control input-sm", id = "txtSystemCode", maxlength = "10", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.SelectedSCOPropertyTypesLookUp, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownListFor(input => input.SCO_Property_Type_ID, new SelectList(Model.SelectedSCOPropertyTypesLookUp, "Value", "Text", Model.SCO_Property_Type_ID), new { @class = "form-control input-sm", id = "ddlPrptyTypes", @disabled = "disabled", @onchange = "CallChangefunc(this.value)" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.SelectedSCOPropertiesEnumsLookUp, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownListFor(input => input.SCO_Property_Enum_ID, new SelectList(Model.SelectedSCOPropertiesEnumsLookUp, "Value", "Text", Model.SCO_Property_Enum_ID), new { @class = "form-control input-sm", id = "ddlPropertyEnumName" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.SelectedFund, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownListFor(input => input.Fund_ID, new SelectList(Model.SelectedFund, "Value", "Text", Model.Fund_ID), new { @class = "form-control input-sm", id = "ddlFund" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.SelectedPaymentType, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownListFor(input => input.PaymentTypeID, new SelectList(Model.SelectedPaymentType, "Value", "Text", Model.PaymentTypeID), new { @class = "form-control input-sm", id = "ddlPaymentType" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-xs-4">
+                @Html.LabelFor(input => input.SelectedEnvironment, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+                @Html.DropDownListFor(input => input.EnvironmentID, new SelectList(Model.SelectedEnvironment, "Value", "Text", Model.EnvironmentID), new { @class = "form-control input-sm", id = "ddlEnvironment" })
+            </div>
+        </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.SCO_Property_Value, new { @class = "control-label" })<span style="color:red;font-weight:bold">&nbsp;*</span>
+            @Html.TextBoxFor(input => input.SCO_Property_Value, new { @class = "form-control input-sm", id = "txtPropertyValue", maxlength = "100" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-4">
+            @Html.LabelFor(input => input.Description, new { @class = "control-label" })<span style="color:red;font-weight:bold"></span>
+            @Html.TextBoxFor(input => input.Description, new { @class = "form-control input-sm", id = "txtPropertyDescription", maxlength = "100" })
+        </div>
+    </div>
+</div>
+    <input type="checkbox" checked="@Model.IsActive" style="visibility:hidden" id="chkIsPropertyActive" />
+
+    <div class="modal fade" id="modalSCOPropertyDeleteConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog text-center" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Delete SCO Property : @Model.SCO_Property_Name</h4>
+                </div>
+                <div class="modal-body" style="margin: 10px;">
+                    <p>
+                        <strong>
+                            Are you sure you want to delete this SCO Property <label id="lblDeleteSCOPropertyId"></label>?
+                        </strong>
+                    </p>
+                </div>
+                <div style="clear:both;margin-bottom:20px;"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="ConfirmDeleteSCOProperty()">Delete</button>
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="CloseDeleteSCOPropertyModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="clear:both"></div>
+    <div class="form-group" style="margin-top:20px;" id="dvActive">
+        <div class="col-xs-4">
+            <button type="button" onclick="return UpdateSCOProperty();" class="btn btn-dhcs-secondary btn-sm" id="btnUpdateSCOProperty">Update</button>&nbsp;
+            <button type="button" onclick="return EditSCOPropertyReset();" class="btn btn-dhcs-secondary btn-sm" id="btnEditSCOPropertyReset">Reset</button>&nbsp;
+            <button type="button" onclick="return EditSCOPropertyBack();" class="btn btn-dhcs-secondary btn-sm" id="btnEditSCOPropertyBack" style="float:none">Back</button>&nbsp;
+            <button type="button" onclick="return DeleteSCOProperty();" class="btn btn-dhcs-secondary btn-sm" id="btnSCOPropertyDelete" style="float:none">Delete</button>&nbsp;
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    var systemId = document.getElementById('hdnSystemId').value;
+
+    var frmValidator = $("#frmEditSCOProperty").validate({
+        errorElement: 'span',
+        ignore: ".ignore",
+        rules: {
+            SCO_Property_Value: {
+                required: true,
+            }
+        },
+
+        // Messages for form validation
+        messages: {
+            SCO_Property_Value: {
+                required: 'Please enter SCO Property Value',
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        }
+    });
+
+    function ajaxValidateSCOProperty()
+    {
+        var flag = frmValidator.form();
+        return flag;
+    }
+
+    function UpdateSCOProperty() {
+        if (!ajaxValidateSCOProperty()) {
+            return false;
+        }
+        else {
+            $('#header').css("display", "block");
+            HideFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder');
+
+            var postData = {
+                SCO_Property_ID: document.getElementById("hdnScoPropertyId").value,
+                SCO_Property_Type_ID: $("#ddlPrptyTypes").val(),
+                SCO_Property_Enum_ID: $("#ddlPropertyEnumName option:selected").val(),
+                SCO_Property_Name: $("#ddlPropertyEnumName option:selected").text(),
+                Fund_ID: $("#ddlFund option:selected").val(),
+                Fund_Code: $("#ddlFund option:selected").text(),
+                SCO_Property_Value: document.getElementById("txtPropertyValue").value,
+                Description: document.getElementById("txtPropertyDescription").value,
+                EnvironmentID: $("#ddlEnvironment option:selected").val(),
+                EnvironmentText: $("#ddlEnvironment option:selected").text(),
+                PaymentTypeID: $("#ddlPaymentType option:selected").val(),
+                PaymentTypeText: $("#ddlPaymentType option:selected").text(),
+                System_ID: document.getElementById("hdnSystemId").value,
+                System_Code: document.getElementById("hdnSystemCode").value
+            }
+            var dataToBeUpdated = $.param(postData);
+            $.ajax({
+                url: getEAMIAbsoluteUrl('~/ManageSystems/UpdateSCOProperty?' + dataToBeUpdated + '&isActive=' + true),
+                type: 'POST',
+                datatype: "html",
+                cache: false,
+                success: function (data) {
+                    var message = "";
+                    var status = "";
+                    if (data != null) {
+                        //undefined in case of some exception. for ex: Session override error
+                        if (data.message == undefined || data.status == undefined) {
+                            message = "An error occured. Please refresh the screen and try again.";
+                            status = false;
+                        }
+                        else {
+                            message = data.message;
+                            status = data.status;
+                        }
+
+                        wasItAAsuccess = (status == "OK");
+
+                        if (wasItAAsuccess) {
+
+                            setFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder', true, 'SCO Property successfully updated', 4);
+                            //update hidden fields because it's used in reset later
+                            document.getElementById("hdnPrptyValue").value = document.getElementById("txtPropertyValue").value;
+                            document.getElementById("hdnDescription").value = document.getElementById("txtPropertyDescription").value;
+                            document.getElementById("hdnPropertyTypeId").value = $("#ddlPrptyTypes").val();
+                            document.getElementById("hdnScoPropertyEnumID").value = $("#ddlPropertyEnumName").val();
+                            document.getElementById("hdnFundId").value = $("#ddlFund").val();
+                            document.getElementById("hdnPaymentType").value = $("#ddlPaymentType").val();
+                            document.getElementById("hdnEvironment").value = $("#ddlEnvironment").val();
+                            //$("#ddlPropertyEnumName option:selected").text()
+
+                            document.getElementById("hdnSCOPropertyName").value = $("#ddlPropertyEnumName").val();
+                        }
+                        else {
+                            setFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder', false, message, 5);
+                        }
+                    }
+                    else { setFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder', false, message, 5); }
+                },
+                error: function () {
+                    setFormStatusMessage('frmEditFund', 'dvEditErrorHolder', false, 'An error occured', 5);
+
+                }
+            });
+        }
+        return false;
+    }
+
+    function EditSCOPropertyReset() {
+        $('#header').css("display", "block");
+        HideFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder');
+
+        var getRequest = {
+            SCO_Property_ID: document.getElementById("hdnScoPropertyId").value,
+            SCO_Property_Type_ID: document.getElementById("hdnPropertyTypeId").value, 
+            SCO_Property_Enum_ID: document.getElementById("hdnScoPropertyEnumID").value, 
+            SCO_Property_Name: document.getElementById("hdnSCOPropertyName").value,
+            Fund_ID: document.getElementById("hdnFundId").value, 
+            SCO_Property_Value: document.getElementById("hdnPrptyValue").value,
+            Description: document.getElementById("hdnDescription").value,
+            EnvironmentID: document.getElementById("hdnEvironment").value, 
+            PaymentTypeID: document.getElementById("hdnPaymentType").value, 
+            System_ID: document.getElementById("hdnSystemId").value,
+            System_Code: document.getElementById("hdnSystemCode").value
+        }
+
+        var uri = $.param(getRequest);
+
+        $('#divLoadingAnimation').css("display", "block");
+        $('#header').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab6').load(getEAMIAbsoluteUrl('~/ManageSystems/EditSCOProperties?' + uri));
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    function EditSCOPropertyBack() {
+        $('#divLoadingAnimation').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+        var systemID = document.getElementById('hdnSystemId').value;
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab6').load(getEAMIAbsoluteUrl('~/ManageSystems/ViewSCOProperties?systemID=' + systemID + '&includeInactive=' + false));
+
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    function DeleteSCOProperty() {
+        $('#modalSCOPropertyDeleteConfirm').modal('show');
+    }
+
+    function ConfirmDeleteSCOProperty() {
+        $.ajax({
+            url: getEAMIAbsoluteUrl('~/ManageSystems/DeleteSCOProperty?isActive=' + false),
+            type: 'POST',
+            datatype: "html",
+            cache: false,
+            data: $("#frmEditSCOProperty").serialize(),
+            success: function (data) {
+                $('#modalSCOPropertyDeleteConfirm').modal('hide');
+                var message = "";
+                var status = "";
+                if (data != null) {
+                    //undefined in case of some exception. for ex: Session override error
+                    if (data.message == undefined || data.status == undefined) {
+                        message = "An error occured. Please refresh the screen and try again.";
+                        status = false;
+                    }
+                    else {
+                        message = data.message;
+                        status = data.status;
+                    }
+
+                    document.getElementById('btnUpdateSCOProperty').disabled = true;
+                    document.getElementById('btnEditSCOPropertyReset').disabled = true;
+
+                    wasItAAsuccess = (status == "OK");
+                    if (wasItAAsuccess) {
+                        document.getElementById('btnSCOPropertyDelete').disabled = true;
+                        setFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder', true, message, 4);
+                    }
+                    else {
+                        document.getElementById('btnSCOPropertyDelete').disabled = false;
+                        setFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder', false, message, 5);
+                    }
+                }
+                else { setFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder', false, message, 5); }
+            },
+            error: function () {
+                setFormStatusMessage('frmEditSCOProperty', 'dvEditErrorHolder', false, 'An error occured. Please refresh the screen and try again', 5);
+            }
+        });
+    }
+
+    function CloseDeleteSCOPropertyModal() {
+        $('#modalSCOPropertyDeleteConfirm').modal('hide');
+        $('.has-error').remove();
+    }
+
+    //For dropdowns...
+    $(function () {
+        if ($("#ddlPrptyTypes").val() > 0) {
+            if (document.getElementById('hdnPropertyTypeId').value != 3) {
+                document.getElementById("ddlFund").disabled = true;
+                document.getElementById("ddlPaymentType").disabled = true;
+                document.getElementById("ddlEnvironment").disabled = true;
+            }
+        }
+        //Dropdownlist Selectedchange event
+        $('#ddlPrptyTypes').change(function () {
+            // Get Dropdownlist seleted item text
+            if ($("#ddlPrptyTypes").val() != 3) {
+                document.getElementById("ddlFund").disabled = true;
+                document.getElementById("ddlPaymentType").disabled = true;
+                document.getElementById("ddlEnvironment").disabled = true;
+            }
+            else {
+                document.getElementById("ddlFund").disabled = false;
+                document.getElementById("ddlPaymentType").disabled = false;
+                document.getElementById("ddlEnvironment").disabled = false;
+            }
+
+        })
+    })
+
+    function CallChangefunc(val) {
+        //when ddl value changes, call code behind to repopulate based on the Property Type id.
+        $.ajax({
+            type: "GET",
+
+            url: getEAMIAbsoluteUrl('~/ManageSystems/Dropdown_SelectedIndexChanged'),
+            data: { scoPropertyTypeId: val },
+
+            success: successFunc,
+            error: errorFunc
+        });
+
+        function successFunc(data) {
+            var select = $("#ddlPropertyEnumName");
+            select.empty();
+            $.each(data, function (index, itemData) {
+                select.append($('<option/>', {
+                    value: itemData.SCO_Property_Enum_ID, //.Value,
+                    text: itemData.Code //.Text
+                }));
+            });
+        }
+
+        function errorFunc() {
+            alert('error');
+        }
+    };
+
+    $(document).ready(function () {
+       // alert('ready!')
+    });
+
+</script>

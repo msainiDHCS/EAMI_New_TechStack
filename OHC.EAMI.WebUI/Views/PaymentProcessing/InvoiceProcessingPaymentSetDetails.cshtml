@@ -1,0 +1,59 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model List<PaymentProcessingRecord>
+
+@{
+
+    string grdPaymentRecord = ViewBag.gridPrefix + "_grdPaymentRecordsForPayeeAndPRTypeSet";
+}
+
+<link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/PaymentProcessing/invoice-proccessing-grid.css" />
+
+@if (Model != null && Model.Count > 0)
+{
+    <table id="@grdPaymentRecord" class="table table-hover table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%; margin:0px !important;border:none !important;" data-top-groupname="@ViewBag.PaymentGroupName">
+        <thead>
+            <tr class="alert-info">
+                <th class="EAMITableTDBorders PP_PaymentRecord_Shift"></th>
+                <th class="EAMITableTDBorders">Payment Record # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Payment Record Date <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders PP_PR_Amount" style="padding-right:6px !important;">Amount <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders"></th>
+            </tr>
+        </thead>
+        <tbody class="alert-info">
+            @foreach (var item in Model)
+            {
+                <tr style="cursor: default;">
+                    <td class="EAMITableTDBorders PP_PaymentRecord_Shift">&nbsp;</td>
+                    <td class="EAMITableTDBorders PP_PaymentRecord_UniqueNumber"><a style="color:#337ab7;" href="javascript:void(0)" onclick="return fdModal('@Html.DisplayFor(modelItem => item.PaymentRecID)','@Html.DisplayFor(modelItem => item.PaymentRecNumber)', '@Html.DisplayFor(modelItem => item.PaymentSetNumber)', '@ViewBag.TopGroupID')">@Html.DisplayFor(modelItem => item.PaymentRecNumber)</a></td>
+                    <td class="EAMITableTDBorders PP_PaymentDate">@string.Format("{0:MM/dd/yyyy}", item.PaymentRecordDate)</td>
+                    @if (item.Amount <= 0)
+                    {
+                        <td name="mytd" class="RowAmount EAMITableTDBorders PP_PR_Amount" style="padding-right:6px !important; color:red;">@Html.DisplayFor(modelItem => item.Amount)</td>
+                    }
+                    else
+                    {
+                        <td name="mytd" class="RowAmount EAMITableTDBorders PP_PR_Amount" style="padding-right:6px !important;">@Html.DisplayFor(modelItem => item.Amount)</td>
+                    }
+                    <td class="EAMITableTDBorders">&nbsp;</td>
+                    <td class="EAMITableTDBorders">&nbsp;</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <div class="alert alert-danger" style="margin:20px;">
+        An error occured while retriving the data.
+    </div>
+}
+<script type="text/javascript">
+    var grdPRNameThird = '@ViewBag.gridPrefix' + "_grdPaymentRecordsForPayeeAndPRTypeSet";    
+    var parentPaymentRecordSetNumber = '@ViewBag.ParentPaymentRecordSetNumber';
+</script>
+<script type="text/javascript" src="~/Scripts/App/PaymentProcessing/InvoiceProcessing/invoice-processing-payment-set.js"></script>

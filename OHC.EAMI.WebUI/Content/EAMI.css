@@ -1,0 +1,180 @@
+﻿html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#container {
+    display: table; /**/
+    /*min-height: 100%;*/
+    /*position: relative;*/
+    height: 100%;
+    width: 100%;
+}
+
+#body {
+    padding-bottom: 50px; /* Height of the footer */
+    display: table-row;
+    height: 100%;
+}
+
+#footer {
+    display: table-row;
+    /*position: absolute;*/
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 45px;
+    background-color: #f5f5f5;
+}
+
+.EAMIWizardSteps {
+    float: left;
+    height: 50px;
+    font-weight: bold;
+    color: #fff;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+    margin: 5px;
+    vertical-align: middle;
+    line-height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-width: 150px;
+}
+
+.EAMIInActiveWizardStep {
+    background-color: #9dc8e2;
+}
+
+.EAMIActiveWizardStep {
+    background-color: #2184be;
+}
+
+.EAMIdisabled {
+    opacity: 0.5;
+    color: grey;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.EAMINoBottomPadding {
+    margin-bottom: 0px !important;
+}
+
+.EAMIrow {
+    margin-bottom: 15px;
+    margin-right: -15px;
+    margin-left: -15px;
+    clear: both;
+}
+
+.EAMIError {
+    color: #a94442;
+}
+
+.EAMIControlError {
+    border-color: #843534;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+}
+
+span.has-error {
+    color: #b94a48;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.ajax-loading-animation {
+    font-size: 20px;
+    text-align: center;
+    margin-top: 70px;
+    float: left;
+}
+
+.ajax-loading-animation-small {
+    font-size: 12px;
+    text-align: center;
+    margin-top: 0px;
+    padding-top: 10px;
+    float: left;
+}
+
+.EAMIRight {
+    margin-right: 5px;
+    float: right;
+}
+
+/* Tooltip */
+.EAMIToolTips + .tooltip > .tooltip-inner {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid black;
+    padding: 15px;
+    font-size: 12px;
+}
+/* Tooltip on top */
+.EAMIToolTips + .tooltip.top > .tooltip-arrow {
+    border-top: 5px solid black;
+}
+
+.EAMIGridButtonHolder {
+    width: 100%;
+    padding: 5px;
+    background-color: #f5f5f5;
+    border-color: #ccc;
+    border-style: solid;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 0px;
+    text-align: right;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.EAMINoNewRow {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.EAMItblHeader td {
+    padding: 3px !important;
+    text-align: left;
+}
+
+#top-header {
+    background-color: #17315a;
+}
+
+.text-header {
+    font-family: impact;
+    font-size: 35px;
+    color: #FFF;
+}
+
+.enviornment-header {
+    font-family: Arial;
+    font-size: 20px;
+    color: #F9A71C;
+    padding-left: 0px;
+    margin: 0px 5px;
+}
+
+.user-info {
+    color: #FFF;
+    font-size: 12px;
+}
+
+.payDate-highlight {
+    background-color: greenyellow !important;
+}
+
+    .payDate-highlight a {
+        background-color: greenyellow !important;
+    }

@@ -1,0 +1,133 @@
+﻿@model OHC.EAMI.CommonEntity.PaymentGroup
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+<script type="text/javascript" src="~/Scripts/sum().js"></script>
+<script type="text/javascript" src="~/Scripts/currency.js"></script>
+
+<style type="text/css">
+        .no-padding {
+            padding: 0px !important;
+            margin: 0px !important;
+            border: none !important;
+        }
+
+        .rowDetails {
+            background-color: #fcf8e3 !important;
+        }
+
+        .col1-style {
+            width: 10px;
+        }
+
+        .col2-style {
+            width: 10px;
+        }
+
+        .col3-style {
+            width: 60px;
+        }
+
+        .col4-style {
+            width: 20px;
+        }
+
+        .borderLine {
+            border-top: 3px double #8c8b8b;
+        }
+
+
+        .modal-customSize {
+            width: 90%;
+        }
+
+        .tblPGFormatting {
+            background-color: #fcf8e3 !important; /*alert-warning color*/
+            color: #8a6d3b !important;
+            /*background-color:#dff0d8 !important;
+            color:#3c763d !important;
+            /*background-color:#d9edf7 !important;    /*alert-info color*/
+            color: #31708f !important;
+            /*background-color:#f2dede !important;    /*alert-danger color*/
+        }
+        /*background-color:#dff0d8;*/ /*alert-success*/
+        /*border-color:#d6e9c6;
+        color:#3c763d*/
+        /*background-color:#d9edf7;*/ /*alert-info*/
+        /*border-color:#bce8f1;
+        color:#31708f*/
+        /*background-color:#fcf8e3;*/ /*alert-warning*/
+        /*border-color:#faebcc;
+        color:#8a6d3b*/
+        /*background-color:#f2dede;*/ /*alert-danger*/
+        /*border-color:#ebccd1;
+        color:#a94442*/
+</style>
+
+<table id="tblPR_@Model.UniqueNumber.Replace('.', '-')" class="table table-hover" style="margin-top:0px !important; margin-bottom:0px !important;" cellspacing="0" width="100%">
+        <thead class="no-padding alert-info" style="margin-top: 0px !important; margin-bottom: 0px !important; border: none !important;">
+            <tr style="margin-top: 0px !important; margin-bottom: 0px !important; border: none !important;">
+                <th style="border:1px !important;" class="PaymentRecord_Shift"></th>
+                <th style="border:1px !important;">Payment Record #</th>
+                <th style="border:1px !important;">Payment Record Date</th>
+                <th class="PR_Amount" style="border:1px !important;padding-right:200px !important;">Amount</th>
+            </tr>
+        </thead>
+        <tbody class="no-padding alert-info" style="margin-top: 0px !important; margin-bottom: 0px !important; border: none !important;">
+            @foreach (var PaymentRecord in Model.PaymentRecordList)
+            {
+                <tr id="trPR_@Html.DisplayFor(m => m.UniqueNumber)" style="cursor: default;">
+                    <td></td>
+                    <td class="PaymentRecord_UniqueNumber" style="cursor: default;">
+                        @*<a style="color:#337ab7;" href="javascript:void(0)"*@
+                           @*onclick="var prid = '@Html.DisplayFor(m => PaymentRecord.PrimaryKeyID)'; prnumber = '@Html.DisplayFor(m => PaymentRecord.UniqueNumber)';
+                                    var topGroupId = '@Model.PaymentSuperGroupKey'; var parentPaymentRecordSetNumber = '@Model.UniqueNumber';
+                                    return fdModal(prid,prnumber,topGroupId,parentPaymentRecordSetNumber)">*@
+                            @Html.DisplayFor(m => PaymentRecord.UniqueNumber)
+                        @*</a>*@
+                    </td>
+                    @if (@PaymentRecord.PaymentDate == null)
+                    {
+                        <td class="PaymentDate">--------------------</td>
+                    }
+                    else
+                    {
+                        <td class="PaymentDate">@string.Format("{0:MM/dd/yyyy}", PaymentRecord.PaymentDate)</td>
+                    }
+                    @if (@PaymentRecord.Amount <= 0)
+                    {
+                        <td class="PR_Amount"><span class="EAMI_Text_Danger">@Html.DisplayFor(m => PaymentRecord.Amount)</span></td>
+                    }
+                    else
+                    {
+                        <td class="PR_Amount">@Html.DisplayFor(m => PaymentRecord.Amount)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+<script type="text/javascript" src="~/Scripts/App/PaymentRecord/Assign_Common.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var datatableTblPR = new Map();
+        var pg_UniqueNumber = '@Model.UniqueNumber.Replace('.', '-')';
+        datatableTblPR.set(pg_UniqueNumber, rebindDtPaymentRecord(pg_UniqueNumber)); // first call to rebindDtPaymentRecord() so sets sessionStorage.
+
+        datatableTblPR.get(pg_UniqueNumber).columns().iterator('column', function (ctx, idx) {
+
+            if (!$(datatableTblPR.get(pg_UniqueNumber).column(idx).header()).find('span').hasClass("sort-icon")) {
+                 $(datatableTblPR.get(pg_UniqueNumber).column(idx).header()).append('&nbsp;&nbsp;').append('<span class="sort-icon"/>');
+            }
+
+        });
+
+    });
+</script>

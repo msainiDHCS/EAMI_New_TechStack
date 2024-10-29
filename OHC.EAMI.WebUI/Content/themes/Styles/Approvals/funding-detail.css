@@ -1,0 +1,46 @@
+﻿ .no-padding {
+        padding: 0px !important;
+        margin: 0px !important;
+        border: none !important;
+    }
+
+    .rowDetails {
+        background-color: #fcf8e3 !important;
+        /*border-radius: 25px;*/
+    }
+
+    .col1-style {
+        width: 10px;
+    }
+
+    .col2-style {
+        width: 10px;
+    }
+
+    .col3-style {
+        width: 60px;
+    }
+
+    .col4-style {
+        width: 20px;
+    }
+
+    .borderLine {
+        border-top: 3px double #8c8b8b;
+    }
+
+    .modal-customSize {
+        width: 90%;
+    }
+
+    caption {
+        font-weight: bold !important;
+        color: #000;
+        text-align: center;
+    }
+
+    #tblPaymentRecordDetails_TopHeaders th {
+        border: none;
+        padding-top: 0;
+        /*padding-bottom:0;*/
+    }

@@ -1,0 +1,182 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model RemittanceCSModel
+
+<div class="clearfix">&nbsp;</div>
+<table id="raTable" class="table table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%;border-left-width: 0px !important; border-right: 0px !important;">
+    <tr>
+        <td colspan="2" class="text-left;" style="border-left-width: 0px !important; border-right: 0px !important;">
+            <div class="row">
+                <div class="col-md-3">
+                    <strong>REMITTANCE ADVICE</strong>
+                </div>
+                <div class="col-md-6">&nbsp;</div>
+                <div class="col-md-3 text-right" style="font-size: 10px;">
+                    <strong>STATE OF CALIFORNIA</strong>
+                </div>
+                <div class="col-md-4 text-left" style="font-size: 10px;">
+                    <strong>STD 404C (REV. 4-95)</strong>
+                </div>
+                <div class="col-md-8 text-right" style="font-size: 10px;">
+                    <strong>THE ENCLOSED WARRANT IS IN PAYMENT OF THE PAYMENT SETS SHOWN BELOW</strong>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="width:50%;border-left-width: 0px !important;">
+            <table class="table EAMITableNoBorder">
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-8" style="border-right: 1px solid #ddd; overflow-wrap: break-word;">
+                                <span style="font-size:10px;"><strong>DEPARTMENT NAME</strong></span>
+                                <br />
+                                @Model.remittanceAdviceDetail.DepartmentName
+                            </div>
+                            <div class="col-md-4">
+                                <span style="font-size:10px;"><strong>ORG CODE</strong></span>
+                                <br />
+                                @Model.remittanceAdviceDetail.OrgranizationCode
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-8" style="border-right: 1px solid #ddd; overflow-wrap: break-word;">
+                                <span style="font-size:10px;"><strong>DEPARTMENT ADDRESS</strong></span>
+                                <br />
+                                @Model.remittanceAdviceDetail.DepartmentAddress
+                                <br />
+                                @Model.remittanceAdviceDetail.DepartmentAddressCSZ
+                                <br />
+                                PAYMENT INQUIRIES:&nbsp;&nbsp;@Model.remittanceAdviceDetail.Agency_Inquiries_Phone_Number
+                                <br />
+                                CONTRACT NO.&nbsp;&nbsp;@Model.claimSchedule.ContractNumber
+                            </div>
+                            <div class="col-md-4">
+                                <span style="font-size:10px;"><strong>CLAIM SCHED NO.</strong></span>
+                                <br />
+                                <span style="font-size: 11px;"> @Model.claimSchedule.UniqueNumber</span>
+                                <input type="hidden" id="hdnCSID" value="@Model.claimSchedule.PrimaryKeyID" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span style="font-size:10px;"><strong>VENDOR</strong></span>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2">&nbsp;</div>
+                                    <div class="col-md-8 text-left">
+                                        @*Note:  ViewBag used as temporary way to display PEE_Name until
+                                            we have time to create UI equivalent Models of all Server Side Models.
+                                        *@
+                                        @*@Model.claimSchedule.PayeeInfo.PEE_Name*@
+                                        @ViewBag.PEE_Name
+                                        <br />
+                                        (@Model.claimSchedule.PayeeInfo.PEE.Code)
+                                        @*(@Model.claimSchedule.PayeeInfo.PEE.Code-@Model.claimSchedule.PayeeInfo.PEE_IdSfx)*@
+                                        <br />
+                                        @Model.claimSchedule.PayeeInfo.PEE_AddressLine1
+                                        @if (Model.claimSchedule.PayeeInfo.PEE_AddressLine2 != "")
+                                        {
+                                            <br />
+                                            @Model.claimSchedule.PayeeInfo.PEE_AddressLine2
+                                        }
+                                        @if (Model.claimSchedule.PayeeInfo.PEE_AddressLine3 != "")
+                                        {
+                                            <br />
+                                            @Model.claimSchedule.PayeeInfo.PEE_AddressLine3
+                                        }
+                                        <br />
+                                        @Model.claimSchedule.PayeeInfo.PEE_AddressCSZ
+
+                                        @if (Model.claimSchedule.PaymentMethodType.Code.Equals("EFT"))
+                                        {
+                                            <br />
+                                            <span style="font-size:12px;"><strong>BANK ROUTING #</strong>@Model.claimSchedule.PayeeInfo.PEE_EftInfo.FIRoutingNumber </span>
+                                            <br />
+                                            <span style="font-size:12px;"><strong>BANK ACCOUNT #</strong>@Model.claimSchedule.PayeeInfo.PEE_EftInfo.PrvAccountNo </span>
+                                            <br />
+                                        }
+                                    </div>
+                                    <div class="col-md-2">&nbsp;</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+        <td style="width:50%">
+            <table class="table">
+                <thead>
+                    <tr style="font-size:10px;">
+                        <th>SET DATE</th>
+                        <th>PAYMENT SET#</th>
+                        <th style="text-align:right;">AMOUNT</th>
+                        <th style="padding-left:30px !important;text-align:center;">RPI</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.claimSchedule.PaymentGroupList)
+                    {
+                        <tr style="font-size:10px;">
+                            <td>@item.PaymentDate.ToString("MMMM dd, yyyy")</td>
+                            <td>@item.UniqueNumber</td>
+                            @if (@item.AmountSetAtPgLevel <= 0)
+                            {
+                                <td style="text-align:right;color:red;">@item.AmountSetAtPgLevel.ToString("C")</td>
+                            }
+                            else
+                            {
+                                <td style="text-align:right;">@item.AmountSetAtPgLevel.ToString("C")</td>
+                            }
+                            <td style="padding-left:30px !important;text-align:center;">(@item.PaymentRecordList.FirstOrDefault().RPICode)</td>
+                        </tr>
+                    }
+                    <tr style="font-size:12px;">
+                        <td><strong>TOTAL PAYMENT</strong></td>
+                        <td></td>
+                        @if (@Model.claimSchedule.AmountSetAtPgLevel <= 0)
+                        {
+                            <td style="text-align:right;color:red;"><strong>@Model.claimSchedule.AmountSetAtPgLevel.ToString("C")</strong></td>
+                        }
+                        else
+                        {
+                            <td style="text-align:right;"><strong>@Model.claimSchedule.AmountSetAtPgLevel.ToString("C")</strong></td>
+                        }
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" style="border-left-width: 0px !important;">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="txtHoldNote">Optional Comments:</label>
+                        <textarea class="form-control" rows="5" id="txtOptionalComments" name="txtOptionalComments" placeholder="Enter optional comments here" maxlength="200">@Model.claimSchedule.RemittanceAdviceNote</textarea>
+                    </div>
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+<div style="clear:both;margin-bottom:20px;"></div>
+<div id="dvSaveNoteStatus" style="display:none;margin:10px;">
+    <div id="dvSaveNoteErrorMessage" class="alert alert-danger"></div>
+</div>
+
+
+<script type="text/javascript" src="~/Scripts/App/PaymentProcessing/ClaimSchedule/claim-schedule-remittance.js"></script>
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>

@@ -1,0 +1,68 @@
+﻿@using System.Web.Optimization;
+@using System.Globalization;
+@using OHC.EAMI.WebUI.ViewModels
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "EAMI STO Report";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    CultureInfo culture = CultureInfo.CreateSpecificCulture("en-US");
+    culture.NumberFormat.CurrencyNegativePattern = 1;
+
+}
+
+
+<script type="text/javascript" src="~/Scripts/DataTablePlugins/moment.js"></script>
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+
+
+
+
+<table id="tbl_EAMISTOReport" class="table table-striped" style="width:100%">
+    <thead>
+        <tr style="cursor: pointer;">
+            <th>Entity Name</th>
+            <th>Payment type</th>
+            <th>Claim Schedule Number</th>
+            <th>Claim Schedule Pay date</th>
+            <th>Fiscal Year</th>
+            <th>Claim Schedule Amount</th>
+            <th>Claim Schedule FFP Amount</th>
+            <th>Claim Schedule SGF Amount</th>           
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eSTOReportTuple in Model.listOfSTOReportTuples)
+        {
+            <tr style="cursor: default;">
+                <td>
+                    @eSTOReportTuple.Item1
+                </td>
+                <td>
+                    @eSTOReportTuple.Item2
+                </td>
+                <td>
+                    @eSTOReportTuple.Item3
+                </td>
+                <td>
+                    @eSTOReportTuple.Item4
+                </td>
+                <td>
+                    @eSTOReportTuple.Item5
+                </td>
+                <td>
+                    @string.Format(culture,"{0:C}", eSTOReportTuple.Item6)
+                </td>
+                <td>
+                    @string.Format(culture,"{0:C}", eSTOReportTuple.Item7)
+                </td>
+                <td>
+                    @string.Format(culture,"{0:C}", eSTOReportTuple.Rest.Item1)
+                </td>
+            </tr>
+        }
+        
+    </tbody>
+
+    <tfoot>
+    </tfoot>
+</table>

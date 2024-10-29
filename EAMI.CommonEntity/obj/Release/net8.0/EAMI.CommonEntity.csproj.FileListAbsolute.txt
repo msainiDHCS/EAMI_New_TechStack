@@ -1,0 +1,11 @@
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\bin\Release\net8.0\EAMI.CommonEntity.deps.json
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\bin\Release\net8.0\EAMI.CommonEntity.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\bin\Release\net8.0\EAMI.CommonEntity.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\EAMI.CommonEntity.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\EAMI.CommonEntity.AssemblyInfoInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\EAMI.CommonEntity.AssemblyInfo.cs
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\EAMI.CommonEntity.csproj.CoreCompileInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\EAMI.CommonEntity.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\refint\EAMI.CommonEntity.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\EAMI.CommonEntity.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.CommonEntity\obj\Release\net8.0\ref\EAMI.CommonEntity.dll

@@ -1,0 +1,187 @@
+﻿.td {
+    font-family: "Times New Roman", Times, serif;
+    width: 20%;
+    padding-left: 20px;
+    padding-right: 20px;
+    border:none;
+}
+
+thead.HeaderRowsHeight > tr > td {
+    height:20px !important;
+}
+
+tbody.BodyRowsHeight > tr > td {
+    height:34px !important;
+}
+
+.ExtraLeftPadding {
+    padding-left: 60px;
+}
+
+
+.NoBorder {
+    border: none !important;
+}
+
+.NoBorderTop {
+    border-top:none;
+}
+
+.NoBorderBottom{
+    border-bottom:none;
+}
+
+tr.NoBorderBottom td {
+    border-bottom:none;
+}
+
+.NoBorderLeft {
+    border-left:none;
+}
+
+.NoBorderRight {
+    border-right:none;
+}
+
+.RightBorder {
+    border-right: 1px solid #808080 !important;
+}
+
+.LeftBorder {
+    border-left: 1px solid #808080;
+}
+
+.BottomBorder {
+    border-bottom: 1px solid #808080 !important;
+}
+
+.DashedBorderRight {
+    border-right: 1px dashed #808080;
+}
+
+.DashedBorderBottom {
+    border-bottom: 1px dashed #808080;
+}
+
+.DoubleLineBottomBorder {
+    border-bottom: 4px double #808080;
+}
+
+.DoubleLineTopBorder {
+    border-top: 4px double #808080;
+}
+
+.XSmallHeaderText {
+    font-size:9px !important;
+}
+
+.SmallHeaderText {
+    font-size:10px;
+    font-weight:bold;
+    padding-left:10px;
+}
+
+.Small-MediumText {
+    /*font-size:11.5px;*/
+    font-size:12px;
+}
+
+.MediumHeaderText{
+    font-size:14px;
+    font-weight:bold;
+}
+
+tr.MediumText td{
+    font-size:14px;
+}
+
+.LargeHeaderText {
+    font-size:17px;
+    font-weight:bold;
+}
+
+.XLargeHeaderText {
+    font-size:19px;
+    font-weight:bold;
+}
+
+.InputText {
+    font-size:17px !important;
+    padding-left:10px;
+    color:blue;
+}
+
+.InputText_Medium {
+    font-size:14px !important;
+    color:blue;
+}
+
+.GrayBg {
+    background-color: rgba(128, 128, 128, 0.4);
+}
+
+tr.CenterText td {
+    text-align: center;
+}
+
+td.CenterText {
+    text-align: center;
+}
+
+tr.RightText td {
+    text-align: right;
+}
+
+td.RightText {
+    text-align: right;
+}
+
+.BoldText {
+    font-weight:bold;
+}
+
+.NormalWeightText {
+    font-weight:normal !important;
+}
+
+.RightMostPanel {
+    width: 150px !important;
+    height: 40px !important;
+    padding-left: 10px;
+    border-right:none;
+}
+
+.HalfOfRightMostPanel {
+    width: 75px !important;
+    height: 40px !important;
+    padding-left: 10px;
+}
+
+.NoLeftPadding {
+    padding-left: 0px;
+}
+
+.LeftPaddingStandard {
+    padding-left: 10px;
+}
+
+.RightPaddingStandard {
+    padding-right: 10px;
+}
+
+.VerticalAlignText_Bottom {
+    vertical-align: bottom;
+}
+
+.VerticalAlignText_Top{
+    vertical-align: top;
+}
+
+.DraftWatermark {
+    background-image: url("../../../images/Draft.PNG");
+    background-repeat: repeat;
+}
+.TestWatermark {
+    background-image: url("../../../images/Test.png");
+    background-repeat: repeat;
+}

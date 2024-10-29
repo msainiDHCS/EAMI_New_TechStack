@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A123D63C-0ADC-453A-B1CA-788262DCE211}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OHC.EAMI.Database</RootNamespace>
+    <AssemblyName>OHC.EAMI.Database</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EAMI.DB.RELEASE.SCRIPT.SQL" />
+    <Content Include="Functions\dbo.fn_FitData.UserDefinedFunction.sql" />
+    <Content Include="Functions\dbo.fn_GetConcatenatedRolePermissionIDs.UserDefinedFunction.sql" />
+    <Content Include="Functions\dbo.fn_GetConcatenatedRolePermissions.UserDefinedFunction.sql" />
+    <Content Include="Functions\dbo.fn_GetConcatenatedRoles.UserDefinedFunction.sql" />
+    <Content Include="Functions\dbo.fn_GetConcatenatedSystems.UserDefinedFunction.sql" />
+    <Content Include="Functions\dbo.fn_GetCSNegativeFundingIndicator.UserDefinedFunction.sql" />
+    <Content Include="Functions\dbo.fn_ParseAddress.UserDefinedFunction.sql" />
+    <Content Include="Procedures\dbo.AddSCOProperty.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.AddExclusivePmtType.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.AddFacesheetValues.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.AddFundingSource.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetSCOPropertiesList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetExclusivePaymentTypeList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetFacesheetList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetFundingSourceList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetSCOPropertiesLookUp.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetFundList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateExclusivePmtType.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateFacesheetValues.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateScoProperty.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateFundingSource.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateFund.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.CheckDuplicatePaymentRecords.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.CheckDuplicatePaymentSetNumbers.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.CheckDuplicateTransaction.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.CheckReceivedPaymentRecords.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeleteClaimSchedule.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeleteClaimScheduleByUser.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeleteClaimScheduleRemitAdviceNote.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeleteDrawdate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeleteElectronicClaimSchedule.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeletePaydate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeletePaymentClaimSchedule.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.DeletePaymentPaydate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetAuditFilesForNotification.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetAvailableAuditFilePayDates.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetClaimSchedulesByID.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetClaimSchedulesByStatusType.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetClaimSchedulesByUser.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPaymentRecordsByUser.sql" />
+    <Content Include="Procedures\dbo.GetDexFileNameList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetDrawSummaryReportData.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetEAMICounts.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetECSByDateRangeStatusType.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetECSFileNameIncrement.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetECSReportData.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetFaceSheetDataByECSID.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetFundingDetailsForPaymentRec.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetFundingSummaryForMultipleCS.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetHoldReportData.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPaymentRecordIDsByPaymentSetNumbers.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPaymentRecordsAssignedByUser.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPaymentRecordsByPaymentSetNumbers.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPaymentRecordsByStatus.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetDataSummaryReportData.sql" />
+    <Content Include="Procedures\dbo.GetPaymentRecordsByStatusAndTransaction.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPaymentRecStatusList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPymtOnHoldNotification.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetPymtSubmissionTransForNotification.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetReferenceTableData.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetRejectedPaymentRecStatusList.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetRemittanceAdviceDataByCSID.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetReturnToSORReportData.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetSTOReportData.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetTransferLetterDataByECSID.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.GetUnresolvedEcsNotification.sql" />
+    <Content Include="Procedures\dbo.GetUserListWithAssignedPaymentCount.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertAuditFile.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertClaimSchedule.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertClaimScheduleRemitAdviceNote.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertClaimScheduleStatus.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertClaimScheduleStatusMultiple.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertClaimScheduleUserAssignment.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertDrawdate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.AddFund.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertEFTInfo.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertElectronicClaimSchedule.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertFundingDetail.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertFundingDetailKvp.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaydate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaymentClaimSchedule.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaymentExchangeEntityInfo.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaymentKvp.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaymentPaydate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaymentRecord.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaymentStatus.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertPaymentUserAssignment.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertRequest.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertResponse.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertTracePayment.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertTraceTransaction.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.InsertTransaction.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.ReconcileCS.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.ReconcileECS.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.RollbackECSStatus.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateAuditFileNotifiedDate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateClaimScheduleAmount.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateClaimScheduleDate.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateClaimScheduleNumber.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateElectronicClaimScheduleDexFileName.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateElectronicClaimScheduleFileName.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateElectronicClaimScheduleStatus.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateElectronicClaimScheduleTaskNumber.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdatePymtSubmissionTransNotificationFlag.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.UpdateTransactionPaymentsStatus.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_AddUpdateDataByType.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_AddUpdateEAMIUser.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_CheckUserValidity.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_GetAllDataByType.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_GetAllEAMIUsers.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_GetCalendarByYear.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_GetEAMILookUps.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_GetEAMIUser.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_GetEAMIUserByID.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_GetGivenDataByType.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.usp_UpdateYearlyCalendarEntry.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.ValidateClaimScheduleStatus.StoredProcedure.sql" />
+    <Content Include="Procedures\dbo.ValidatePaymentStatus.StoredProcedure.sql" />
+    <Content Include="Scripts\EAMI-DNTL.DB.INTEGRATION.SCRIPT.POPULATE-CLEAR-REF-TABLES.sql" />
+    <Content Include="Scripts\EAMI-M1.DB.INTEGRATION.SCRIPT.CLEAR-TRAN-TABLES.sql" />
+    <Content Include="Scripts\EAMI-RX.DB.INTEGRATION.SCRIPT.POPULATE-CLEAR-REF-TABLES.sql" />
+    <Content Include="Scripts\EAMI.DeactivateEAMIUsers.sql" />
+    <Content Include="Scripts\Release.1.0.2.0.sql" />
+    <Content Include="Scripts\Release.1.1.0.0.sql" />
+    <Content Include="Scripts\Release.1.2.0.0.sql" />
+    <Content Include="Scripts\Release.1.3.0.0.sql" />
+    <Content Include="Scripts\Release.1.3.2.0.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Baseline\" />
+    <Folder Include="RefData\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

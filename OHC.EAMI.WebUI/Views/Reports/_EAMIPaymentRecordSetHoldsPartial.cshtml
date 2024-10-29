@@ -1,0 +1,78 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.ViewModels
+@model PRSetHoldsReportDetails
+
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "EAMI Payment Set Holds";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="~/Scripts/DataTablePlugins/moment.js"></script>
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+
+<table id="tbl_EAMIPaymentRecordSetHolds" class="table table-striped" style="width:100%">
+    <thead>
+        <tr style="cursor: pointer;">
+            <th style="width:110px;">Hold Date</th>
+            <th>Payment Set#</th>
+            <th>Hold Notes</th>
+            <th>User</th>
+            <th>Vendor - Model</th>
+            <th>Vendor#</th>
+            <th>Contract#</th>
+            <th>SFY</th>
+            <th style="text-align:right;">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pRSetTuple in Model.listOfPRSetTuples)
+        {
+                <tr style="cursor: default;">
+                    <td>
+                        @pRSetTuple.Item1
+                    </td>
+                    <td>
+                        @pRSetTuple.Item2
+                    </td>
+                    <td>
+                        @pRSetTuple.Item3
+                    </td>
+                    <td>
+                        @pRSetTuple.Item4
+                    </td>
+                    <td>
+                        @pRSetTuple.Item5 - @pRSetTuple.Item6
+                    </td>
+                    <td>
+                        @pRSetTuple.Item7
+                    </td>
+                    <td>
+                        @pRSetTuple.Rest.Item1
+                    </td>
+                    <td>
+                        @pRSetTuple.Rest.Item2
+                    </td>
+                    @if (pRSetTuple.Rest.Item3 <= 0)
+                    {
+                        <td class="EAMI_Text_Danger" style="text-align:right;">
+                            @string.Format("{0:C}", pRSetTuple.Rest.Item3)
+                        </td>
+                    }
+                    else
+                    {
+                        <td style="text-align:right;">
+                            @string.Format("{0:C}", pRSetTuple.Rest.Item3)
+                        </td>
+                    }
+                </tr>
+        }
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+
+
+
+
+

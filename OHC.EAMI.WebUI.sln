@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.WebUI", "OHC.EAMI.WebUI\OHC.EAMI.WebUI.csproj", "{D9C24497-4A7E-43BD-9F4B-E7FD6374401C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.WebAPI", "OHC.EAMI.WebAPI\OHC.EAMI.WebAPI.csproj", "{416196B3-1300-4A99-AA31-23C8B47A9EEB}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 3
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfs.intra.dhcs.ca.gov:8080/tfs/tfsprojects
+		SccProjectUniqueName0 = OHC.EAMI.WebUI\\OHC.EAMI.WebUI.csproj
+		SccProjectName0 = OHC.EAMI.WebUI
+		SccLocalPath0 = OHC.EAMI.WebUI
+		SccProjectUniqueName1 = OHC.EAMI.WebAPI\\OHC.EAMI.WebAPI.csproj
+		SccProjectName1 = OHC.EAMI.WebAPI
+		SccLocalPath1 = OHC.EAMI.WebAPI
+		SccLocalPath2 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D9C24497-4A7E-43BD-9F4B-E7FD6374401C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9C24497-4A7E-43BD-9F4B-E7FD6374401C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9C24497-4A7E-43BD-9F4B-E7FD6374401C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9C24497-4A7E-43BD-9F4B-E7FD6374401C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{416196B3-1300-4A99-AA31-23C8B47A9EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{416196B3-1300-4A99-AA31-23C8B47A9EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{416196B3-1300-4A99-AA31-23C8B47A9EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{416196B3-1300-4A99-AA31-23C8B47A9EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

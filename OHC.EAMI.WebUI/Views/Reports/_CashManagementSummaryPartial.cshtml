@@ -1,0 +1,363 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.ViewModels
+@model CMSumReportDetails
+
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "Cash Management Summary";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link type="text/css" rel="stylesheet" href="~/Scripts/App/Reports/CashManagementSummary.css" />
+
+
+
+@*<form class="form-horizontal" role="form" method="get" action="#">
+    <div class="panel panel-dhcs-primary" style="border-right:none;border-bottom:none;border-left:none;border-top:none;">
+        <div class="panel-heading" style="border-radius:4px 4px 4px 4px;overflow:no-display;">
+            <div class="form-group" style="padding-top:16px;">
+                <label for="CMSumDatepicker" class="col-sm-4 control-label">Select a Date:</label>
+                <div class="col-sm-2">
+                    <input type="text" id="CMSumDatepicker" class="form-control" style="width:165px;" />
+                </div>
+                <div class="col-sm-4">
+                    <button type="button" class="btn btn-dhcs-secondary btn-md" id="btnGenerateReport2">
+                        <span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;Generate Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>*@
+
+
+@*<table id="tbl_CashManagementSummary_Funding" cellspacing="0" style="width:100%;" class="@(Model.Current_ECS_Status_Type_ID <= 1 ? "DraftWatermark" : "")">*@
+<table id="tbl_CashManagementSummary_Funding" cellspacing="0" style="width:100%;" class="@(0 <= 1 ? "DraftWatermark" : "")">
+    <thead class="HeaderRowsHeight">
+        <tr>
+            <td class="GrayBg">
+                <span class="MediumHeaderText">0912 Fund</span>
+            </td>
+            <td colspan="3" class="GrayBg">
+                <span class="MediumHeaderText">Bi-Weekly Draw Summary for @Model.currentDate.ToString("MMMM d, yyyy")</span>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="5">
+            </td>
+        </tr>
+        <tr class="GrayBg CenterText">
+            <td>
+                <span class="MediumHeaderText"></span>
+            </td>
+            <td>
+                <span class="MediumHeaderText">Debit</span>
+            </td>
+            <td>
+                <span class="MediumHeaderText">Credit</span>
+            </td>
+            <td>
+                <span class="MediumHeaderText">To Calculate Draws</span>
+            </td>
+            <td>
+                <span class="MediumHeaderText">Amt of Federal Draw<br />Local Assist to 0912</span>
+            </td>
+        </tr>
+    </thead>
+    <tbody class="BodyRowsHeight">
+        <tr>
+            <td>
+                <span class="MediumHeaderText DoubleLineBottomBorder">State Share PFA's</span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var fundingTuple in Model.listOfFundingTuples)
+        {
+            if (fundingTuple.Item6 == "State Share PFA's")
+            {
+                <tr class="State_Share_PFA">
+                    <td>
+                        <span class="InputText">@fundingTuple.Item1</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="InputText">@(fundingTuple.Item2 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item2))</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="InputText">@(fundingTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item3))</span>
+                    </td>
+                </tr>
+            }
+        }
+        @foreach (var fundingTotalsTuple in Model.listOfFundingTotalsTuples)
+        {
+            if (fundingTotalsTuple.Item6 == "State Share PFA's")
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="TopBorder"></td>
+                    <td class="RightText">
+                        <span class="LargeHeaderText">@(fundingTotalsTuple.Item4 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item4))</span>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td>
+                <span class="MediumHeaderText DoubleLineBottomBorder">Federal Share</span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var fundingTuple in Model.listOfFundingTuples)
+        {
+            if (fundingTuple.Item6 == "Federal Share")
+            {
+                <tr class="Federal_Share">
+                    <td>
+                        <span class="InputText">@fundingTuple.Item1</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="InputText">@(fundingTuple.Item2 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item2))</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="InputText">@(fundingTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item3))</span>
+                    </td>
+                </tr>
+            }
+        }
+        @foreach (var fundingTotalsTuple in Model.listOfFundingTotalsTuples)
+        {
+            if (fundingTotalsTuple.Item6 == "Federal Share")
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="TopBorder"></td>
+                    <td class="RightText">
+                        <span class="LargeHeaderText">@(fundingTotalsTuple.Item4 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item4))</span>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td>
+                <span class="MediumHeaderText DoubleLineBottomBorder">Federal Cash (Including Cash Receipts)**</span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var fundingTuple in Model.listOfFundingTuples)
+        {
+            if (fundingTuple.Item6 == "Federal Cash (Including Cash Receipts)**")
+            {
+                <tr class="Federal_Cash">
+                    <td>
+                        <span class="InputText">@fundingTuple.Item1</span>
+                    </td>
+                    <td class="RightText GrayBg">
+                        <span class="InputText">@(fundingTuple.Item2 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item2))</span>
+                    </td>
+                    <td class="RightText GrayBg">
+                        <span class="InputText">@(fundingTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item3))</span>
+                    </td>
+                    <td class="GrayBg">
+                    </td>
+                    <td class="GrayBg">
+                    </td>
+                </tr>
+            }
+        }
+        @foreach (var fundingTotalsTuple in Model.listOfFundingTotalsTuples)
+        {
+            if (fundingTotalsTuple.Item6 == "Federal Cash (Including Cash Receipts)**")
+            {
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="RightText">
+                        <span class="LargeHeaderText">@(fundingTotalsTuple.Item4 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item4))</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="LargeHeaderText">@(fundingTotalsTuple.Item5 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item5))</span>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td>
+                <span class="MediumHeaderText DoubleLineBottomBorder">Other</span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        @foreach (var fundingTuple in Model.listOfFundingTuples)
+        {
+            if (fundingTuple.Item6 == "Other")
+            {
+                <tr class="Other">
+                    <td>
+                        <span class="InputText">@fundingTuple.Item1</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="InputText">@(fundingTuple.Item2 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item2))</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="InputText">@(fundingTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item3))</span>
+                    </td>
+                </tr>
+            }
+        }
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+        @foreach (var fundingTotalsTuple in Model.listOfFundingTotalsTuples)
+        {
+            if (fundingTotalsTuple.Item6 == "Total Incoming to cover schedules - before")
+            {
+                <tr>
+                    <td>
+                        <span class="MediumHeaderText">Total Incoming to cover schedules</span>
+                    </td>
+                    <td class="TopBorder"></td>
+                    <td class="RightText TopBorder">
+                        <span class="LargeHeaderText">@(fundingTotalsTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item3))</span>
+                    </td>
+                    <td class="TopBorder"></td>
+                    <td></td>
+                </tr>
+            }
+        }
+        @foreach (var fundingTotalsTuple in Model.listOfFundingTotalsTuples)
+        {
+            if (fundingTotalsTuple.Item6 == "Less Total Debits")
+            {
+                <tr>
+                    <td>
+                        <span class="MediumHeaderText">Less Total Debits</span>
+                    </td>
+                    <td class="RightText">
+                        <span class="LargeHeaderText">@(fundingTotalsTuple.Item2 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item2))</span>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        }
+        @foreach (var fundingTotalsTuple in Model.listOfFundingTotalsTuples)
+        {
+            if (fundingTotalsTuple.Item6 == "Total Incoming to cover schedules - after")
+            {
+                <tr>
+                    <td>
+                        <span class="MediumHeaderText">Total Incoming to cover schedules</span>
+                    </td>
+                    <td class="TopBorder"></td>
+                    <td class="RightText TopBorder">
+                        <span class="LargeHeaderText">@(fundingTotalsTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item3))</span>
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            }
+        }
+        <tr>
+            <td colspan="5"></td>
+        </tr>
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+
+<table id="tbl_CashManagementSummary_Schedule" cellspacing="0" style="width:100%;" class="@(0 <= 1 ? "DraftWatermark" : "")">
+    <thead class="HeaderRowsHeight">
+        <tr class="GrayBg">
+            <td class="CenterText">
+                <span class="MediumHeaderText">Schedule Number</span>
+            </td>
+            <td class="RightText">
+                <span class="MediumHeaderText">Schedule Amount</span>
+            </td>
+            <td class="RightText">
+                <span class="MediumHeaderText">Total Incoming</span>
+            </td>
+            <td class="RightText">
+                <span class="MediumHeaderText">Difference</span>
+            </td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody class="BodyRowsHeight">
+        @foreach (var scheduleTuple in Model.listOfScheduleTuples)
+        {
+            <tr>
+                <td>
+                    <span class="InputText">@scheduleTuple.Item1</span>
+                </td>
+                <td class="RightText">
+                    <span class="InputText">@(scheduleTuple.Item2 == 0 ? "" : string.Format("{0:C}", scheduleTuple.Item2))</span>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+        @foreach (var scheduleTotalsTuple in Model.listOfScheduleTotalsTuples)
+        {
+            <tr>
+                <td></td>
+                <td class="RightText TopBorder">
+                    <span class="LargeHeaderText">@(scheduleTotalsTuple.Item2 == 0 ? "" : string.Format("{0:C}", scheduleTotalsTuple.Item2))</span>
+                </td>
+                <td class="RightText TopBorder">
+                    <span class="LargeHeaderText">@(scheduleTotalsTuple.Item3 == 0 ? "" : string.Format("{0:C}", scheduleTotalsTuple.Item3))</span>
+                </td>
+                <td class="RightText TopBorder">
+                    <span class="LargeHeaderText">@(scheduleTotalsTuple.Item4 == 0 ? "" : string.Format("{0:C}", scheduleTotalsTuple.Item4))</span>
+                </td>
+                <td></td>
+            </tr>
+        }
+        <tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="" style="">
+                <p class="Small-MediumText">
+                    **The controller’s receipts equal the total of the state and federal share of the cash receipts.
+                    Only the federal portion of the cash receipts transfer letter affect the funding of the claim schedules.
+                </p>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        @*<tr>
+            <td colspan="5">&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="" style="">
+                <p class="Small-MediumText">
+                    **The controller’s receipts equal the total of the state and federal share of the cash receipts.
+                    Only the federal portion of the cash receipts transfer letter affect the funding of the claim schedules.
+                </p>
+            </td>
+        </tr>*@
+    </tfoot>
+</table>
+
+

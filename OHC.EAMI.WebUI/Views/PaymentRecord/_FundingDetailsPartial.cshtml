@@ -1,0 +1,64 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model IPFundingDetails
+
+@if (Model != null && Model.FundingDataGroups.Count > 0)
+{
+    <link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/PaymentProcessing/funding-detail.css" />
+    using (Html.BeginForm("AssignPaymentRecords_GetFundingDetails", "PaymentRecord", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmFundingDetails", autocomplete = "off" }))
+    {
+        <div class="container-fluid">
+            <table class="table" id="tblPaymentRecordDetails_TopHeaders">
+                <thead>
+                    <tr>
+                        <th>SFY: @Model.SFY</th>
+                        <th>Index: @Model.Index</th>
+                    </tr>
+                    <tr>
+                        <th>Vendor Code: @Model.VendorCode</th>
+                        <th>Object: @Model.Object</th>
+                    </tr>
+                    <tr>
+                        <th>Contract Term: @Model.ContractTerm</th>
+                        <th>PCA Code: @Model.PCACode</th>
+                    </tr>
+                    <tr>
+                        <th>Contract#: @Model.ContractNumber</th>
+                        <th>FFY: @Model.FFY</th>
+                    </tr>
+                </thead>
+            </table>
+            @{
+                foreach (IPFundingListGroup ipfg in Model.FundingDataGroups)
+                {
+                    <table class="table table-hover table-bordered" style="margin-bottom:25px;">
+                        <caption>@ipfg.FundingListGroupIdentifierHeader</caption>
+                        <thead class="EAMI_BgColor_BlueSteel EAMI_Text_White">
+                            <tr>
+                                <th>Funding Source</th>
+                                <th>FFP Amount</th>
+                                <th>SGF Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (IPFundingDetail ipfd in ipfg.FundingData)
+                            {
+                                <tr>
+                                    <td>@ipfd.FundingSource</td>
+                                    <td>@ipfd.FFPAmount</td>
+                                    <td>@ipfd.SGFAmount</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            }
+        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-danger" style="margin:20px;">
+                        An error occured while retriving the data.
+                    </div>
+                }

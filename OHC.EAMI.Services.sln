@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.Service", "OHC.EAMI.Service\OHC.EAMI.Service.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.ServiceHost", "OHC.EAMI.ServiceHost\OHC.EAMI.ServiceHost.csproj", "{ACC19CFB-3910-46C9-BF24-32BF2309706D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.ServiceContract", "OHC.EAMI.ServiceContract\OHC.EAMI.ServiceContract.csproj", "{68818AEE-B85E-4192-8A5D-F408216B0D96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.ServiceManager", "OHC.EAMI.ServiceManager\OHC.EAMI.ServiceManager.csproj", "{CD37FB6B-F6A3-472C-836E-6AF7305322FC}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfs.intra.dhcs.ca.gov:8080/tfs/tfsprojects
+		SccProjectUniqueName0 = OHC.EAMI.Service\\OHC.EAMI.Service.csproj
+		SccProjectName0 = OHC.EAMI.Service
+		SccLocalPath0 = OHC.EAMI.Service
+		SccProjectUniqueName1 = OHC.EAMI.ServiceHost\\OHC.EAMI.ServiceHost.csproj
+		SccProjectName1 = OHC.EAMI.ServiceHost
+		SccLocalPath1 = OHC.EAMI.ServiceHost
+		SccProjectUniqueName2 = OHC.EAMI.ServiceContract\\OHC.EAMI.ServiceContract.csproj
+		SccProjectName2 = OHC.EAMI.ServiceContract
+		SccLocalPath2 = OHC.EAMI.ServiceContract
+		SccProjectUniqueName3 = OHC.EAMI.ServiceManager\\OHC.EAMI.ServiceManager.csproj
+		SccProjectName3 = OHC.EAMI.ServiceManager
+		SccLocalPath3 = OHC.EAMI.ServiceManager
+		SccLocalPath4 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACC19CFB-3910-46C9-BF24-32BF2309706D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACC19CFB-3910-46C9-BF24-32BF2309706D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACC19CFB-3910-46C9-BF24-32BF2309706D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACC19CFB-3910-46C9-BF24-32BF2309706D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68818AEE-B85E-4192-8A5D-F408216B0D96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68818AEE-B85E-4192-8A5D-F408216B0D96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68818AEE-B85E-4192-8A5D-F408216B0D96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68818AEE-B85E-4192-8A5D-F408216B0D96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,137 @@
+﻿<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+
+<table id="tblInv">
+    <thead>
+        <tr>
+            <th></th>
+            @*<th></th>
+            <th></th>
+            <th></th>
+            <th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td></td>
+            <td>1 Ferrari F138</td>
+            <td>1 Ferrari F138</td>
+            <td>1 000€</td>
+            <td>1 200€</td>
+            <td>Model monopostu stajne Scuderia Ferrari pre sezónu 2013</td>
+            <td>1</td>
+            <td>F138</td>
+            <td>Klik pre detaily</td>
+        </tr>
+        @*<tr>
+            <td></td>
+            <td>2 Ferrari F138</td>
+            <td>2 Ferrari F138</td>
+            <td>1 000€</td>
+            <td>1 200€</td>
+            <td>Model monopostu stajne Scuderia Ferrari pre sezónu 2013</td>
+            <td>1</td>
+            <td>F138</td>
+            <td>Klik pre detaily</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>3 Ferrari F138</td>
+            <td>3 Ferrari F138</td>
+            <td>1 000€</td>
+            <td>1 200€</td>
+            <td>Model monopostu stajne Scuderia Ferrari pre sezónu 2013</td>
+            <td>1</td>
+            <td>F138</td>
+            <td>Klik pre detaily</td>
+        </tr>*@
+    </tbody>
+</table>
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        // DataTable Initialization ***********************************************************************************
+        var datatableTblInv = $('#tblInv').DataTable({
+            "paging": false,
+            //"info": false,
+            //var datatableInvSubTbl = $('#invoices').DataTable({
+            "lengthChange": false,
+            "filter": false, // this is for disable filter (search box)
+
+            //Set column definition initialisation properties.
+            "columnDefs": [
+            {
+                "targets": 0,
+                //"class": "details-control",
+                "orderable": false,
+                "data": null,
+                "defaultContent": ""
+            }
+
+            ,
+            {
+                "targets": 0,
+                "class": "checkbox-td",
+                //"data": "Invoices.0.PayDate",
+                "checkboxes": {
+                    "selectRow": true
+                }
+            }
+            //,
+            //{
+            //    "name": "Amount",
+            //    "targets": 9
+            //}
+            ],
+
+            //"select":
+            //{
+            //    "style": "os"
+            //    ,
+            //    "selector": "td:nth-child(2) input:checkbox"
+
+            //},
+
+            "order": [[2, "asc"]]
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    } );
+
+
+
+
+
+
+
+
+
+
+</script>
+
+

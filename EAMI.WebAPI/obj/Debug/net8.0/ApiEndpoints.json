@@ -1,0 +1,44 @@
+[
+  {
+    "ContainingType": "EAMI.Controllers.AccountController",
+    "Method": "GetEAMIUser",
+    "RelativePath": "api/Account",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EAMI.Controllers.ProgramChoiceController",
+    "Method": "ProgramChoice",
+    "RelativePath": "api/ProgramChoice",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "prgId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "EAMI.Controllers.LandingController",
+    "Method": "Index",
+    "RelativePath": "Landing",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

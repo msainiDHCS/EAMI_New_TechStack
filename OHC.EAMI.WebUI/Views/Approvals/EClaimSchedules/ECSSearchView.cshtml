@@ -1,0 +1,258 @@
+﻿
+
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@using System.Security.Claims;
+@using System.Security.Principal;
+
+@model ECSSearchResults
+
+@{
+
+    ClaimsIdentity uid = null;
+    uid = (ClaimsIdentity)HttpContext.Current.User.Identity;
+    var rolearray = uid.Claims.Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value);
+
+    bool IsAdmin = rolearray.Contains("ADMIN");
+}
+
+
+@if (Model != null && Model.masterDataList != null && Model.masterDataList.Count > 0)
+{
+    <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+    <table id="grdECS" class="table table-hover table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%;">
+        <thead>
+            <tr>
+                <th class="EAMITableTDBorders text-center" style="width:25px;"><span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders">Electronic Claim Schedule # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Transfer Date <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Created By <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Approved By <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_totalAmountSuperGroup" style="padding-right:150px !important;">Total <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.masterDataList)
+            {
+                <tr data-id="@Html.DisplayFor(modelItem => item.EcsId)" id="@Html.DisplayFor(modelItem => item.EcsId)" style="font-weight: bold; cursor: default;">
+                    @if (item.HasExclusivePaymentType)
+                    {
+                        <td class="EAMITableTDBorders" style="text-align:center; padding-left:10.5px;">
+                            <span class="outtermostFlag">
+                                <i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>
+                            </span>
+                            <label style="display:none;">1</label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="EAMITableTDBorders">
+                            <span class="noFlaggedSuperGroup">
+                                &nbsp;
+                                <label style="display:none;">0</label>
+                            </span>
+                        </td>
+                    }
+                    <td style="width: 0.5em;" class="EAMITableTDBorders">
+                        <button type="button" class="btn btn-default btn-xs btnPayeePaymentType" style="color:#fff;background-color:#333;border-color:#333;" id="@Html.DisplayFor(modelItem => item.EcsId)">
+                            <span class="glyphicon glyphicon-plus" style="font-size:12px;padding-right:0.5px;padding-left:0.5px;"></span>
+                        </button>
+                    </td>
+                    <td class="EAMITableTDBorders">
+                        <strong>@Html.DisplayFor(modelItem => item.EcsNumber)</strong>&nbsp;
+                        @if (item.PaymentMethodType.Code.Equals("WARRANT"))
+                        {
+                            <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;">
+                        }
+                    </td>
+
+
+                    <td class="EAMITableTDBorders">@string.Format("{0:MM/dd/yyyy}", item.TransferDate)</td>
+                    <td class="EAMITableTDBorders"><strong>@Html.DisplayFor(modelItem => item.CreatedBy)</strong></td>
+                    <td class="EAMITableTDBorders"><strong>@(item.ApprovedBy == "" ? "--------------------" : item.ApprovedBy)</strong></td>
+                    <td class="EAMITableTDBorders A_ECS_totalAmountSuperGroup" style="padding-right:150px !important;">@Html.DisplayFor(modelItem => item.TotalPayment)</td>
+                    <td class="EAMITableTDBorders" style="height:25px !important;">
+
+                        @if (item.canApproveOrDelete)
+                        {
+                            <button class="btn btn-dhcs-secondary btn-xs" onclick="showApproveECSModal('@item.EcsNumber', '@item.EcsId')">Approve</button>
+                            <text>
+                                &nbsp; &nbsp;
+                            </text>
+                            <button class="btn btn-dhcs-secondary btn-xs" onclick="showDeleteECSModal('@item.EcsNumber', '@item.EcsId')">Delete</button>
+
+                        }
+                        @if (item.canSenttoSCO && !IsAdmin)
+                        {
+                            <button class="btn btn-dhcs-secondary btn-xs" disabled="disabled">Approve</button>
+                            <text>
+                                &nbsp; &nbsp;
+                            </text>
+                            <button class="btn btn-dhcs-secondary btn-xs" disabled="disabled" onclick="showModifyECSModal('@item.EcsNumber', '@item.EcsId')">Delete</button>
+
+                        }
+
+                        @if (item.canSenttoSCO && IsAdmin)
+                        {
+                            <button class="btn btn-dhcs-secondary btn-xs" disabled="disabled">Approve</button>
+                            <text>
+                                &nbsp; &nbsp;
+                            </text>
+                            <button class="btn btn-dhcs-secondary btn-xs" onclick="showModifyECSModal('@item.EcsNumber', '@item.EcsId')">Delete</button>
+
+                        }
+
+                        @if (!(item.canApproveOrDelete) && !(item.canSenttoSCO))
+                        {
+                            <button class="btn btn-dhcs-secondary btn-xs" disabled="disabled">Approve</button>
+                            <text>
+                                &nbsp; &nbsp;
+                            </text>
+                            <button class="btn btn-dhcs-secondary btn-xs" disabled="disabled">Delete</button>
+                        }
+                        &nbsp; &nbsp;
+                        <span title="" data-toggle="popover" data-placement="top" data-trigger="hover"
+                              data-content="FaceSheet" data-html="true">
+                            <button class="btn btn-dhcs-secondary btn-xs" onclick="generateFaceSheet('FaceSheet', '@item.EcsId')">FS</button>
+                        </span>
+                        &nbsp; &nbsp;
+                        <span title="" data-toggle="popover" data-placement="top" data-trigger="hover"
+                              data-content="Transfer Letter" data-html="true">
+                            <button class="btn btn-dhcs-secondary btn-xs" onclick="generateTransferLetter('Transfer Letter', '@item.EcsId')">TL</button>
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="dvECSApproveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Approve ECS</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p>
+                                <strong>
+                                    Approve Electronic Claim Schedule# "<label id="lbApproveECSId"></label>"?
+                                </strong>
+                            </p>
+                        </div>
+                        <input type="hidden" id="hdnApproveECSId" />
+                    </div>
+                    <div id="dvECSApproveStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvECSApproveErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnConfirmApprove" type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmECSApprove()">Approve</button>
+                        <button id="btnCancelECSApproval" type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvECSDeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Delete ECS</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p>
+                                <strong>
+                                    Delete Electronic Claim Schedule# "<label id="lbDeleteECSId"></label>"?
+                                </strong>
+                            </p>
+                        </div>
+                        <input type="hidden" id="hdnDeleteECSId" />
+                    </div>
+                    <div id="dvECSDeleteStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvECSDeleteErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmECSDelete()">Delete</button>
+                        <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvECSModifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-center">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Modify ECS</h4>
+                </div>
+                <div class="modal-body" style="margin-top:10px;">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <p>
+                                <strong>
+                                    Modify Electronic Claim Schedule# "<label id="lbModifyECSId"></label>"?
+                                </strong>
+                            </p>
+                        </div>
+                        <input type="hidden" id="hdnModifyECSId" />
+                    </div>
+                    <div id="dvECSModifyStatus" class="text-left" style="display:none;margin:10px;">
+                        <h5><strong>Errors:</strong></h5>
+                        <div id="dvECSModifyErrorMessage" class="alert alert-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnECSModify" type="button" class="btn btn-dhcs-secondary" style="margin-right:5px;" onclick="confirmECSModify()">Modify</button>
+                        <button id="btnCancelECSModify" type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Reports Code Begins-->
+    <div class="modal fade" id="dvReportModal" tabindex="-1" role="dialog" aria-labelledby="FaceSheet-TransferLetter" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document" style="width:1200px;">
+            <div class="modal-content" id="dvReportModalContent">
+                <div class="modal-body" id="modalBodyReport" style="margin:15px; max-height:650px;overflow-y:auto;overflow-x:auto;">
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="hdnReportECSId" />
+                    <a id="lnkPDF" class="btn btn-dhcs-secondary" style="color:white !important;" href=""></a>
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Reports Code End-->
+
+    <div class="modal fade" id="dvRemittanceModal_A_ECS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_A_ECS" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="dvRemittanceModalContent_A_ECS">
+                <div class="modal-body" id="modalBodyRemittanceAdvice_A_ECS" style="margin:15px; max-height:600px;overflow-y:auto;overflow-x:auto;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row text-center">
+        <div class="col-xs-12">
+            <strong>No Electronic Claim Schedules found.</strong>
+        </div>
+    </div>
+}
+
+<script type="text/javascript" src="~/Scripts/App/Approvals/EClaimSchedules/eclaimschedule-supergroup.js"></script>

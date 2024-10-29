@@ -1,0 +1,61 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model List<PaymentProcessingRecordChild>
+
+@{
+
+    string grdName = ViewBag.ID + "_grdCSPaymentRecordSetsForPayeeAndPRType";
+}
+
+@if (Model != null && Model.Count > 0)
+{
+    <table id="@grdName" class="table table-hover table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%; margin:0px !important;border:none !important;" data-cs-unique-number="@ViewBag.ID" data-top-groupname="@ViewBag.paymentGroupName">
+        <thead>
+            <tr class="alert-warning">
+                <th class="EAMITableTDBorders A_PCS_PaymentGroup_Shift"></th>
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders A_PCS_PaymentGroup_UniqueNumber" style="padding-left:3px !important;">Payment Set # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_PCS_PG_PayDate">Pay Date <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Assigned To <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_PCS_PG_Amount" style="padding-right:332px !important;">Payment Set Amount <span class="sort-icon"></span></th>                
+            </tr>
+        </thead>
+        <tbody class="alert-warning">
+            @foreach (var item in Model)
+            {
+                <tr data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" id="tr_@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)" data-top-group-id="@Html.DisplayFor(modelItem => item.PaymentSuperGroupKey)" style="cursor: default;">
+                    <td class="EAMITableTDBorders A_PCS_PaymentGroup_Shift">&nbsp;</td>
+                    <td style="width: 0.5em;" class="EAMITableTDBorders">
+                        <button type="button" class="btn btn-default btn-xs btnPRSet" style="color:#fff;background-color:#8a6d3b;border-color:#8a6d3b;" id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)">
+                            <span class="glyphicon glyphicon-plus" style="font-size:12px;padding-right:0.5px;padding-left:0.5px;"></span>
+                        </button>
+                    </td>
+                    <td class="EAMITableTDBorders" style="padding-left:3px !important;" data-id="@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)">@Html.DisplayFor(modelItem => item.PaymentRecNumberSetNumber)</td>
+                    <td class="EAMITableTDBorders A_PCS_PG_PayDate">@string.Format("{0:MM/dd/yyyy}", item.AssignedPaymentDate)</td>
+                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.AssignedUser)</td>
+                    @if (item.PaymentSetTotalAmount <= 0)
+                    {
+                        <td class="RowAmount EAMITableTDBorders A_PCS_PG_Amount" style="padding-right:332px !important;color:red;">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+
+                    }
+                    else
+                    {
+                        <td class="RowAmount EAMITableTDBorders A_PCS_PG_Amount" style="padding-right:332px !important;">@Html.DisplayFor(modelItem => item.PaymentSetTotalAmount)</td>
+                    }                    
+                </tr>
+            }
+        </tbody>
+    </table>    
+}
+else
+{
+    <div class="alert alert-danger">
+        An error occured while retriving the data.
+    </div>
+}
+
+<script type="text/javascript">
+    var gridName = '@ViewBag.ID' + "_grdCSPaymentRecordSetsForPayeeAndPRType";
+</script>
+<script type="text/javascript" src="~/Scripts/App/Approvals/PendingClaimSchedules/pendingcs-paymentgroup.js"></script>

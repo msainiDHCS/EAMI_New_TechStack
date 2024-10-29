@@ -1,0 +1,13 @@
+﻿@{    
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_Layout.cshtml";    
+}
+
+<div class="panel panel-default"
+     style="width:97%;min-height:250px;margin-left:20px;margin-right:20px;" id="divuuppanel">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-warning">&nbsp;</i>Error</h3>
+    </div>
+    <div class="panel-body" style="text-align:center;vertical-align:central;line-height:250px;">
+        <p class="bg-danger"><b>EAMI resource not found.</b></p>
+    </div>
+</div>

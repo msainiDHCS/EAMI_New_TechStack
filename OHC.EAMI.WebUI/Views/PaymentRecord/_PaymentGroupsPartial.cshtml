@@ -1,0 +1,294 @@
+﻿@model OHC.EAMI.WebUI.ViewModels.AssignPaymentRecordsViewModel
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+<script type="text/javascript" src="~/Scripts/sum().js"></script>
+
+<style type="text/css">
+    /*background-color:#dff0d8;*/   /*alert-success*/
+    /*border-color:#d6e9c6;
+    color:#3c763d*/
+    /*background-color:#d9edf7;*/   /*alert-info*/
+    /*border-color:#bce8f1;
+    color:#31708f*/
+    /*background-color:#fcf8e3;*/   /*alert-warning*/
+    /*border-color:#faebcc;
+    color:#8a6d3b*/
+    /*background-color:#f2dede;*/   /*alert-danger*/
+    /*border-color:#ebccd1;
+    color:#a94442*/
+</style>
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+
+<table id="tblPG_@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)" class="table table-hover" style="margin-top:0px !important; margin-bottom:0px !important;" cellspacing="0" width="100%">
+    <thead class="no-padding alert-warning" style="margin-top: 0px !important; margin-bottom: 0px !important; border: none !important;">
+        <tr style="margin-top: 0px !important; margin-bottom: 0px !important; border: none !important;">
+            <th style="border:1px !important;"></th>
+            <th style="border:1px !important; padding-left:3px !important;"></th>
+            <th style="border:1px !important;"></th>
+            <th style="border:1px !important;"></th>  @*This column gets auto-replaced by checkboxes.  Needs to be repeat of FiscalYear to work for some reason.*@
+            <th style="border:1px !important;">Payment Set #</th>
+            <th style="border:1px !important;">Pay Date</th>
+            <th style="border:1px !important;">SOR Approver</th>
+            <th style="border:1px !important;">Assigned To</th>
+            <th class="PG_Amount" style="border:1px !important;padding-right:200px !important;">Payment Set Amount</th>
+        </tr>
+    </thead>
+    <tbody class="no-padding alert-warning" style="margin-top: 0px !important; margin-bottom: 0px !important; border: none !important;">
+        @foreach (var PaymentGroup in Model.PaymentGroups)
+        {
+                <tr id="trPG_@PaymentGroup.UniqueNumber.Replace('.', '-')" style="cursor: default;">
+                    <td class="PaymentGroup_Shift"></td>
+                    @if (!PaymentGroup.ExclusivePaymentType.Code.Equals("NONE"))
+                    {
+                        <td id="tdPGIcon_@PaymentGroup.UniqueNumber.Replace('.', '-')" class="PGIcon iconColumn iconColumnRect">
+                            <span class="wrapperIconColumnRect secondLevelFlag">
+                                <span>@PaymentGroup.ExclusivePaymentType.Code</span>
+                            </span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td id="tdPGIcon_@PaymentGroup.UniqueNumber.Replace('.', '-')" class="PGIcon iconColumn iconColumnRect">
+                            <span class="noIconColumnRect">&nbsp;</span>
+                        </td>
+                    }
+                    <td id="tdPGPlusMinus_@PaymentGroup.UniqueNumber.Replace('.', '-')" class="iconColumn">
+                        <button type="button" class="btn btn-default btn-xs btnInTdPGPlusMinus">
+                            <span class="glyphicon glyphicon-plus"></span>
+                        </button>
+                    </td>
+                    <td data-name="cbxPG" id="cbxPG_@PaymentGroup.UniqueNumber.Replace('.', '-')" class="iconColumn">@Html.DisplayFor(m => PaymentGroup.UniqueNumber)</td>     @*This column gets auto-replaced by checkboxes.  Needs to be repeat of FiscalYear to work for some reason.*@
+                   
+                   
+                    @if (PaymentGroup.OnHoldFlagStatus == null)
+                    {
+                    <td class="PaymentGroup_UniqueNumber flagIcon" data-order="&nbsp; - @PaymentGroup.UniqueNumber">
+                        <span class="PRSNumber">@Html.DisplayFor(m => PaymentGroup.UniqueNumber)</span>&nbsp;
+                        @if (PaymentGroup.PaymentMethodType.Code.Equals("WARRANT"))
+                        {
+                            <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;">
+                        }
+                        <span class="noFlag"></span>
+                    </td>
+                    }
+                    else
+                    {
+                <td class="PaymentGroup_UniqueNumber flagIcon" data-order="HOLD - @PaymentGroup.UniqueNumber">
+                    <span class="PRSNumber">@Html.DisplayFor(m => PaymentGroup.UniqueNumber)</span>&nbsp;
+                    @if (PaymentGroup.PaymentMethodType.Code.Equals("WARRANT"))
+                    {
+                        <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;">
+                    }
+                    <span class="holdText wrapperOnHold" title="Hold Date:  @Html.DisplayFor(m =>PaymentGroup.OnHoldFlagStatus.StatusDate)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            Hold Issuer:  @Html.DisplayFor(m => PaymentGroup.OnHoldFlagStatus.CreatedBy)"
+                          data-toggle="popover" data-placement="right" data-trigger="hover"
+                          data-content="Hold Comment:  <br />@Html.DisplayFor(m => PaymentGroup.OnHoldFlagStatus.StatusNote)" data-html="true">
+                        &nbsp;(HOLD)
+                    </span>
+                </td>
+                    }
+                    @if (@PaymentGroup.PayDate == null)
+                    {
+                        <td class="PayDate">--------------------</td>
+                    }
+                    else
+                    {
+                        <td class="PayDate">
+                            @string.Format("{0:MM/dd/yyyy}", Convert.ToDateTime(Html.DisplayFor(m => PaymentGroup.PayDate.Code).ToString()))
+                        </td>
+                    }
+                    @if (@PaymentGroup.ApprovedBy == null)
+                    {
+                        <td class="ApprovedBy">@Html.HiddenFor(m => PaymentGroup.ApprovedBy)<span>--------------------</span></td>
+                    }
+                    else
+                    {
+                        <td class="ApprovedBy">@Html.HiddenFor(m => PaymentGroup.ApprovedBy)<span>@PaymentGroup.ApprovedBy.Substring(@PaymentGroup.ApprovedBy.ToString().IndexOf("\\") + 1)</span></td>
+                    }
+                    @if (@PaymentGroup.AssignedUser == null)
+                    {
+                        <td class="AssignedTo">@Html.HiddenFor(m => PaymentGroup.AssignedUser.User_ID)<span>--------------------</span></td>
+                    }
+                    else
+                    {
+                        <td class="AssignedTo">@Html.HiddenFor(m => PaymentGroup.AssignedUser.User_ID)<span>@Html.DisplayFor(m => PaymentGroup.AssignedUser.User_Name)</span></td>
+                    }
+                    @if (@PaymentGroup.Amount <= 0)
+                    {
+                        <td class="PG_Amount"><span class="EAMI_Text_Danger">@Html.DisplayFor(m => PaymentGroup.Amount)</span></td>
+                    }
+                    else
+                    {
+                        <td class="PG_Amount">@Html.DisplayFor(m => PaymentGroup.Amount)</td>
+                    }
+                </tr>
+            }
+    </tbody>
+</table>
+
+
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+<script type="text/javascript" src="~/Scripts/App/PaymentRecord/Assign_Common.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var outterMostTableId = "tblPayeePaymentType";
+
+
+        var datatableTblPG = new Map();
+        var psg_UniqueKey = '@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)';
+        datatableTblPG.set(psg_UniqueKey, rebindDtPaymentGroupBasedOnFlags(psg_UniqueKey)); // first call to rebindDtPaymentGroupBasedOnFlags() so sets sessionStorage.
+
+        // Appropriately position sort icons ------------------------------------------------------------------------------------------------------------------
+        datatableTblPG.get('@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)').columns().iterator('column', function (ctx, idx) {
+            var currentTh = $(datatableTblPG.get('@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)').column(idx).header());
+            if ([1].indexOf(idx) >= 0) {
+                currentTh.append('&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;').append('<span class="sort-icon"/>');
+            }
+            else if (!currentTh.find('span').hasClass("sort-icon") && !currentTh.hasClass("dt-checkboxes-select-all") && !currentTh.hasClass("flagIcon"))
+            {
+                currentTh.append('&nbsp;&nbsp;').append('<span class="sort-icon"/>');
+            }
+            else if (!currentTh.find('span').hasClass("sort-icon") && !currentTh.hasClass("dt-checkboxes-select-all") && currentTh.hasClass("flagIcon"))
+            {
+                currentTh.append('&nbsp;').append('<span class="sort-icon"/>');
+            }
+        });
+        // ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+        // 2nd Level Table Total Amount Calculation Section Begin **********************************************************************************************************************
+        var colIndex_PG_Amount = $('#tblPG_@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)').find("td.PG_Amount").first().index();
+        datatableTblPG.get('@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)').on('select', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                var numSelectedRowsAmount = getSelectedRowsAmount(datatableTblPG.get('@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)'), colIndex_PG_Amount);
+                var negativeNumberDecorationClass = numSelectedRowsAmount <= 0 ? "EAMI_Text_Danger" : "";
+                $('#tblPayeePaymentType').find('#trPayeePaymentType_@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)')
+                                         .find('.PayeePaymentTypeTotalAmount').html('<span class="' + negativeNumberDecorationClass + '">' +
+                                          numeral(numSelectedRowsAmount).format('($0,0.00)') + '</span>');
+            }
+        });
+
+        datatableTblPG.get('@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)').on('deselect', function (e, dt, type, indexes) {
+            if (type === 'row') {
+                var numSelectedRowsAmount = getSelectedRowsAmount(datatableTblPG.get('@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)'), colIndex_PG_Amount);
+                var negativeNumberDecorationClass = numSelectedRowsAmount <= 0 ? "EAMI_Text_Danger" : "";
+                $('#tblPayeePaymentType').find('#trPayeePaymentType_@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)')
+                                            .find('.PayeePaymentTypeTotalAmount').html('<span class="' + negativeNumberDecorationClass + '">' +
+                                            numeral(numSelectedRowsAmount).format('($0,0.00)') + '</span>');
+            }
+
+        });
+
+        function getSelectedRowsAmount(datatableOfInterest, columnNumberToSum) {
+            var retTotalAmount = 0;
+            var selectedRowsData = datatableOfInterest.rows('.selected').data();
+            $.each(selectedRowsData, function (index, value) {
+                retTotalAmount += numeral(this[columnNumberToSum].replace('<span class="EAMI_Text_Danger">', '')
+                                                                    .replace('</span>', '')).value();
+            });
+            return retTotalAmount;
+        }
+        // 2nd Level Table Total Amount Calculation Section End ************************************************************************************************************************
+        // Remove previous binding of onclick event to 2nd level +/- button from previous load of _PaymentGroupsPartial.cshtml.
+        // This prevents additional onclick events from being generated each time, ensuring only one onclick gets call per click below.
+        $('#' + 'tblPG_@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)' + ' > tbody > tr > td button.btnInTdPGPlusMinus').prop("onclick", null);
+        // Add event listener for 2nd level opening and closing details (+/- button)********************************************
+        $('#' + 'tblPG_@Html.DisplayFor(m => m.PaymentSuperGroup_UniqueKey)' + ' > tbody > tr > td').on('click', 'button.btnInTdPGPlusMinus', function () {
+            $(this).find("span").toggleClass('glyphicon-plus');
+            $(this).find("span").toggleClass('glyphicon-minus');
+            var trPSG = $(this).parents('tr.level2').prev('tr.shown');
+            var trPayeePaymentType_id = trPSG.attr('id');
+            var paymentSuperGroup_UniqueKey = trPayeePaymentType_id.replace("trPayeePaymentType_", "");
+
+            var tdPGPlusMinus_id = $(this).parent().attr('id');
+            var trPG_id = tdPGPlusMinus_id.replace("tdPGPlusMinus_", "trPG_");
+            var paymentGroup_UniqueNumber = $(this).parent('td').siblings('td.PaymentGroup_UniqueNumber').find('.PRSNumber').html();
+            var trPG = $(this).parent('td').parent('tr');
+            var divChildOfTrPG_id = trPG_id.replace("trPG_", "divChildOfTrPG_");
+            var dtPG = datatableTblPG.get(paymentSuperGroup_UniqueKey);
+            var rowPG = dtPG.row(trPG);
+
+            if (trPG.hasClass('shown')) {
+                $('#' + divChildOfTrPG_id, rowPG.child()).delay(0).slideUp(250);
+                trPG.removeClass('shown');
+            }
+            else {
+                var strPayeeFullCode = trPSG.find('span[id="PayeeFullCode"]').html();
+                var strPaymentTypeName = trPSG.find('span[id="PaymentTypeName"]').html();
+                var strContractNumber = trPSG.find('span[id="ContractNumber"]').html();
+                var strSFY = trPSG.find('span[id="SFY"]').html();
+
+                // Open this row
+                ajaxGetPaymentRecs(rowPG, trPG, divChildOfTrPG_id, paymentSuperGroup_UniqueKey,
+                    strPayeeFullCode, strPaymentTypeName, strContractNumber, strSFY, paymentGroup_UniqueNumber, dtPG);
+            }
+        });
+
+        // 2nd Level (+/-) Button Section Begin ****************************************************************************************************************************************
+        // 2nd Level (+/-) Button AJAX Functions Subsection (populates 3rd Level -- PaymentRecords Level) --------------------------------------------------------------------
+        function ajaxGetPaymentRecs(rowPG, trPG, divChildOfTrPG_id, paymentSuperGroup_UniqueKey,
+                     strPayeeFullCode, strPaymentTypeName, strContractNumber, strSFY, paymentGroup_UniqueNumber, dtPG) {
+            var jsonObject = {
+                "PaymentSuperGroup_UniqueKey": paymentSuperGroup_UniqueKey,
+                "PayeeFullCode": strPayeeFullCode,
+                "PaymentTypeName": strPaymentTypeName,
+                "ContractNumber": strContractNumber,
+                "SFY": strSFY
+            };
+
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AssignPaymentRecords_GetPaymentRecs")",
+                data: JSON.stringify(jsonObject),
+            data: "{ " +
+                    "aprvm: " + JSON.stringify(jsonObject) + "," +
+                    "paymentGroup_UniqueNumber: " + JSON.stringify(paymentGroup_UniqueNumber) +
+                  " }",
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (returnPaymentRecs) {
+                    ajaxGetPaymentRecs_SuccessCallBack(returnPaymentRecs, dtPG);
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+            function ajaxGetPaymentRecs_SuccessCallBack(returnPaymentRecs, dtPG) {
+                var retHtmlPaymentRecs = '' +
+                            '<div class="collapse no-padding" id="' + divChildOfTrPG_id + '">' +
+                                returnPaymentRecs +
+                            '</div>';
+                rowPG.child(retHtmlPaymentRecs, 'no-padding level3').show();
+
+                $('#' + divChildOfTrPG_id).parent('td').parent('tr').append('<td style="display: none;"></td>').append('<td style="display: none;"></td>')
+                                                                    .append('<td style="display: none;"></td>').append('<td style="display: none;"></td>')
+                                                                    .append('<td style="display: none;"></td>').append('<td style="display: none;"></td>')
+                                                                    .append('<td style="display: none;"></td>').append('<td style="display: none;"></td>');
+
+                //The delay(0) forces child table to fully load and initialize complete before sliding down.
+                $('#' + divChildOfTrPG_id, rowPG.child()).delay(0).slideDown(250);
+                trPG.addClass('shown');
+            }
+        }
+        // 2nd Level (+/-) Button Section End ******************************************************************************************************************************************
+
+        // Initialize Popovers Section Begin *******************************************************************************************************************************************
+        $('[data-toggle="popover"]').popover();
+        // Initialize Popovers Section End *********************************************************************************************************************************************
+    });
+</script>

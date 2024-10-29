@@ -1,0 +1,54 @@
+﻿@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "Forms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-top:25px;"></div>
+<input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+
+<div class="col-lg-offset-0 col-lg-12" id="dvMainArea">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="background-color: #17315a; color: white;">
+            <h3 class="panel-title"><i class="fa fa-files-o">&nbsp;</i>Forms</h3>
+        </div>
+        <div class="panel-body">
+            <div id="dvErrorHolder"></div>
+            <div style="clear:both"></div>
+            <hr />
+            <div id="dvgridArea">
+                <a href="~/Files/EAMI_Access_Request_Form.pdf" target="_blank"><i class="fa fa-file-pdf" style="color:red;">&nbsp;&nbsp;</i>EAMI Access Request Form</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dvActionArea">
+</div>
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+<script type="text/javascript">
+    // Start Loading... Animation
+    $('#divLoadingAnimation').css("display", "block");
+    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        // End Loading... Animation
+        $('#divLoadingAnimation_Inner').empty();
+        $('#divLoadingAnimation').css("display", "none");
+    });
+</script>

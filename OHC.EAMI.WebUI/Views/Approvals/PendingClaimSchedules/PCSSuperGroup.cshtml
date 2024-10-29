@@ -1,0 +1,248 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model ClaimScheduleResults
+
+
+@if (Model.csRecordMasterList != null && Model.csRecordMasterList.Count > 0)
+{
+    <table id="grdCS" class="table table-hover table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%;">
+        <thead>
+            <tr>
+                <th class="EAMITableTDBorders text-center" style="width:25px;"><span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders"><input type="checkbox" class="chkPCS" onclick="selectAllChkPCS()" /></th>
+                <th class="EAMITableTDBorders"></th>
+                <th class="EAMITableTDBorders">Claim Schedule # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Vendor Name-Model Type <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Contract # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders">Fiscal Year <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_PCS_totalAmountSuperGroup" style="padding-right:50px !important;">Payment Total <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders" style="text-align:center;cursor:default;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.csRecordMasterList)
+                {
+                    var checkbox = "chk_" + item.UniqueNumber + "_" + item.CSPrimaryKeyId + "_" + item.IsLinked;
+                <tr data-id="@Html.DisplayFor(modelItem => item.UniqueNumber)" id="tr_grdCS_@Html.DisplayFor(modelItem => item.UniqueNumber)" data-groupname="@Html.DisplayFor(modelItem => item.GroupName)" style="font-weight: bold; cursor: default;">
+                    @if (!item.ExclusivePaymentType_Code.Equals("NONE"))
+                    {
+                        <td class="EAMITableTDBorders iconColumn iconColumnRect">
+                            <span class="wrapperIconColumnRect EAMI_Text_AlertWarning">
+                                <span>@item.ExclusivePaymentType_Code</span>
+                            </span>
+                            <label style="display:none;">1</label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="EAMITableTDBorders PGIcon iconColumn iconColumnRect">
+                            <span class="noIconColumnRect">&nbsp;</span>
+                            <label style="display:none;">0</label>
+                        </td>
+                    }
+                    <td class="EAMITableTDBorders"><input name="@checkbox" type="checkbox" class="chkPCS rowselectors" onclick="chkPCSSuperGroup(this)" /></td>
+                    <td style="width: 0.5em;" class="EAMITableTDBorders">
+                        <button type="button" class="btn btn-default btn-xs btnPayeeCSPaymentType" style="color:#fff;background-color:#333;border-color:#333;" id="@Html.DisplayFor(modelItem => item.UniqueNumber)">
+                            <span class="glyphicon glyphicon-plus" style="font-size:12px;padding-right:0.5px;padding-left:0.5px;"></span>
+                        </button>
+                    </td>
+                    @{ if (item.hasNegativeFundingSource)
+                        {
+                            var flagNote = item.CurrentStatus.StatusNote + "<br />" + item.CurrentStatus.StatusDate;
+                                        <td class="EAMITableTDBorders">
+                                            <button class="btn btn-xs btn-warning btnRemittanceAdvice" id="@Html.DisplayFor(modelItem => item.UniqueNumber)"><span class="glyphicon glyphicon-list-alt"></span></button>
+                                            <input type="hidden" id="hdnCSPrimaryKeyId" name="hdnCSPrimaryKeyId" value="@Html.DisplayFor(modelItem => item.CSPrimaryKeyId)" />
+                                            &nbsp;
+                                            <span style="font-weight:bold; color:#ff0000;" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="Claim Schedule has negative aggregated funding source" data-html="true">
+                                                @Html.DisplayFor(modelItem => item.UniqueNumber)
+                                            </span>&nbsp;
+                                            @if (item.PaymentMethodType.Code.Equals("WARRANT"))
+                                            {
+                                                <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;">
+                                            }
+                                        </td>
+                        }
+                        else
+                        {
+                <td class="EAMITableTDBorders">
+                    <button class="btn btn-xs btn-warning btnRemittanceAdvice" id="@Html.DisplayFor(modelItem => item.UniqueNumber)"><span class="glyphicon glyphicon-list-alt"></span></button>
+                    <input type="hidden" id="hdnCSPrimaryKeyId" name="hdnCSPrimaryKeyId" value="@Html.DisplayFor(modelItem => item.CSPrimaryKeyId)" />
+                    &nbsp;
+                    @Html.DisplayFor(modelItem => item.UniqueNumber)&nbsp;
+                    @if (item.PaymentMethodType.Code.Equals("WARRANT"))
+                    {
+                        <img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.4em;vertical-align:top;">
+                    }
+                </td>
+                        }
+                    }
+                    <td class="EAMITableTDBorders">
+                        <span class="EAMI_Text_BlueSteel">
+                            @item.GroupName.Substring(0, item.GroupName.IndexOf(")") + 1)
+                        </span> -
+                        <span class="EAMI_Text_Purple">
+                            @item.GroupName.Substring(item.GroupName.IndexOf(")") + 3)
+                        </span>
+                    </td>
+                    <td class="EAMITableTDBorders A_PCS_contractNumberSuperGroup"><span style="font-weight:bold;"></span>@Html.DisplayFor(modelItem => item.ContractNumber)</td>
+                    <td class="EAMITableTDBorders A_PCS_sfySuperGroup"><span style="font-weight:bold;"></span>@Html.DisplayFor(modelItem => item.FiscalYear)</td>
+                    <td class="EAMITableTDBorders A_PCS_totalAmountSuperGroup" style="padding-right:50px !important;"><span class="amount-prefix" style="font-weight:bold;"></span><span>@Html.DisplayFor(modelItem => item.TotalPaymentDollars)</span></td>
+                    <td class="EAMITableTDBorders text-center"><button class="btn btn-xs btn-danger btnDeleteCS" id="delete_@Html.DisplayFor(modelItem => item.UniqueNumber)_@Html.DisplayFor(modelItem => item.CSPrimaryKeyId)_@Html.DisplayTextFor(modelItem => item.IsLinked)_@Html.DisplayTextFor(modelItem => item.LinkedCSSets)">Deny&nbsp;<span class="fa fa-times"></span></button></td>
+                </tr>
+                        }
+
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="modalCSDeleteConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Deny Claim Schedule</h4>
+                </div>
+
+                <div class="modal-body" style="margin: 10px;">
+                    <div id="dvDenyLinked" class="text-center" style="display:none;margin:15px;color:red;font-weight:bold;">
+                        Claim schedule '<label id="lblDenyMainCSId"></label>' is part of a linked split claim schedule.
+                        <br />
+                        This action will also be performed on Claim Schedule(s)  <label id="lblDenyLinkedCSId"></label>.
+                    </div>
+                    <div class="row text-center">
+                        <form id="frmDenyCSValidator">
+                            <div class="col-xs-12">
+                                <p>
+                                    <strong>
+                                        Are you sure you want to delete Claim Schedule <label id="lblDeleteCSId"></label>?
+                                    </strong>
+                                    <input type="hidden" id="hdnDeleteCSPId" />
+                                </p>
+                            </div>
+                            <div class="col-xs-offset-2 col-xs-8">
+                                <div class="form-group">
+                                    <label for="txtDenyCS">Comment:</label>
+                                    <textarea class="form-control" rows="4" id="txtDenyCS" name="txtDenyCS" maxlength="200" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">&nbsp;</div>
+                        </form>
+                    </div>
+                </div>
+                <div style="clear:both;margin-bottom:20px;"></div>
+                <div id="dvDeleteStatus" style="display:none;margin:10px;">
+                    <div id="dvDeleteErrorMessage" class="alert alert-danger"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="confirmDeleteCS()">Deny</button>
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="closeDeleteCSModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalCSSubmitConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog text-center" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Approve Claim Schedule(s)</h4>
+                </div>
+                <div class="modal-body" style="margin: 10px;">
+                    <div class="row">
+                        <form id="frmApproveCSValidator">
+                            <div class="col-xs-12">
+                                <strong>
+                                    <span style="font-size:16px;">Approve Claim Schedules for pay date <label id="lblSubmitCSId"></label>?</span>
+                                </strong>
+                                <input type="hidden" id="hdnSubmitCSPId" />
+                                <input type="checkbox" id="chkShowWarning" name="chkShowWarning" style="display:none" />
+                            </div>
+                            <div id="dvLinkWarning" class="col-xs-12 text-center" style="margin:10px 0;">
+                                <div class="text-center" style="padding:5px 0;box-sizing:border-box;border: 1px solid #000000;color:#ff0000;">
+                                    <strong>Your selection includes one or more 'Linked' claim schedule(s).</strong>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">&nbsp;</div>
+                            <div class="col-xs-6 csPaydateWarn" style="display:none;">
+                                <div class="text-left">
+                                    <label class="form-check-label" style="color: #ff0000;font-style:italic;">
+                                        This Claim Schedule(s) have Pay Date(s) less than the required 3 days.
+                                    </label>
+                                </div>
+                                <input class="form-check-input" type="checkbox" value="1" name="chkPaydateWarn" id="chkPaydateWarn" required>
+                                <br />
+                                <div class="text-left">
+                                    <label class="form-check-label" for="chkPaydateWarn" style="color: #ff0000;">
+                                        By clicking this you acknowledge you want to continue.
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-3">&nbsp;</div>
+                        </form>
+                    </div>
+                </div>
+                <div style="clear:both;margin-bottom:20px;"></div>
+                <div id="dvSubmitStatus" style="display:none;margin:10px;">
+                    <div id="dvSubmitErrorMessage" class="alert alert-danger"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="confirmSubmitCS()">Approve</button>
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="closeSubmitCSModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvRemittanceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content" id="dvRemittanceModalContent">
+                <div class="modal-body" id="modalBodyRemittanceAdvice" style="margin:15px; max-height:600px;overflow-y:auto;overflow-x:auto;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" onclick="saveRemittanceNote()">Accept</button>
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>       
+
+    <div class="modal fade" id="dvFundingSummaryModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-customSize" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Funding Summary</h4>
+                </div>
+                <div class="modal-body" id="modalBodyFundingSummary" style="margin-top:10px;max-height:650px;overflow-y:scroll;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dvFundingDetailModal_A_PCS" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:100px;">
+        <div class="modal-dialog modal-customSize" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="lblModalFunding_A_PCS"></h4>
+                </div>
+                <div class="modal-body" id="modalBodyFundingDetail_A_PCS" style="margin-top:20px;max-height:650px;overflow-y:scroll;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+    else
+    {
+        <div class="row text-center">
+            <div class="col-xs-12">
+                <strong>No pending claims schedules found for supervisor.</strong>
+            </div>
+        </div>
+    }
+
+
+<script type="text/javascript" src="~/Scripts/App/Approvals/PendingClaimSchedules/pendingcs-supergroup.js"></script>
+

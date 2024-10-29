@@ -1,0 +1,49 @@
+﻿@model List<EAMI.RuleEngine.UserProfileModelRE>
+
+<br />
+<br />
+
+
+<div>
+<table class="table">
+    <tdead>
+        <tr>
+                <th>User_ID</th>
+                <th>User_Name C</th>
+                <th>User_EmailAddr F</th>
+                <th>Domain_Name</th>
+                <th>Display_Name</th>
+        </tr>
+    </tdead>
+    <tbody>
+        EAMI USER DETAILS
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.User_ID</td>
+                <td>@item.User_Name</td>
+                <td>@item.User_EmailAddr</td>
+                <td>@item.Domain_Name</td>
+                <td>@item.Display_Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+
+<script type="text/javascript">
+    //// Start Loading... Animation
+    $('#divLoadingAnimation').css("display", "block");
+    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                // xhr.setRequestHeader('ProgramChoiceId', prgId);
+                // xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+</script>
+

@@ -1,0 +1,137 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.ViewModels
+@model EClaimScheduleReportDetails
+
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "E-Claim Schedule";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript" src="~/Scripts/DataTablePlugins/moment.js"></script>
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+
+<table id="tbl_EAMIEClaimSchedule" class="table table-striped" style="width:100%">
+    <thead>
+        <tr style="cursor: pointer;">
+            <th>ECS#</th>
+            <th>ECS_Sent_Date</th>
+            <th>ECS_Status</th>
+            <th>ECS_Approver</th>
+            <th>Entity_Name</th>
+            <th>Payment_Type</th>
+            <th>VendorCode</th>
+            <th>Contract#</th>
+            <th>X_Type</th>
+            <th style="text-align:right;">ECS_Amount</th>
+            <th>CS#</th>
+            <th>CS_PayDate</th>
+            <th>FY</th>
+            <th style="text-align:right;">CS_Amount</th>
+            <th>CS_Approver</th>
+            <th>WarrantDate</th>
+            <th>Warrant#</th>
+            <th style="text-align:right;">WarrantAmount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eClaimScheduleSetTuple in Model.listOfEClaimScheduleSetTuples)
+        {
+            <tr style="cursor: default;">
+                <td>
+                    @eClaimScheduleSetTuple.Item1
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Item2
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Item3
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Item4
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Item5
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Item6
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Item7
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Item1
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Item2
+                </td>
+                @if (eClaimScheduleSetTuple.Rest.Item3 <= 0)
+                {
+                    <td class="EAMI_Text_Danger" style="text-align:right;">
+                        @string.Format("{0:C}", eClaimScheduleSetTuple.Rest.Item3)
+                    </td>
+                }
+                else
+                {
+                    <td style="text-align:right;">
+                        @string.Format("{0:C}", eClaimScheduleSetTuple.Rest.Item3)
+                    </td>
+                }
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Item4
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Item5
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Item6
+                </td>
+                @if (eClaimScheduleSetTuple.Rest.Item7 <= 0)
+                {
+                    <td class="EAMI_Text_Danger" style="text-align:right;">
+                        @string.Format("{0:C}", eClaimScheduleSetTuple.Rest.Item7)
+                    </td>
+                }
+                else
+                {
+                    <td style="text-align:right;">
+                        @string.Format("{0:C}", eClaimScheduleSetTuple.Rest.Item7)
+                    </td>
+                }
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Rest.Item1
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Rest.Item2
+                </td>
+                <td>
+                    @eClaimScheduleSetTuple.Rest.Rest.Item3
+                </td>
+                @if (@eClaimScheduleSetTuple.Rest.Rest.Item2 == "" && @eClaimScheduleSetTuple.Rest.Rest.Item3 == "")
+                {
+                    <td class="EAMI_Text_Danger" style="text-align:right;">
+                    </td>
+                }
+                else if (eClaimScheduleSetTuple.Rest.Rest.Item4 <= 0)
+                {
+                    <td class="EAMI_Text_Danger" style="text-align:right;">
+                        @string.Format("{0:C}", eClaimScheduleSetTuple.Rest.Rest.Item4)
+                    </td>
+                }
+                else
+                {
+                    <td style="text-align:right;">
+                        @string.Format("{0:C}", eClaimScheduleSetTuple.Rest.Rest.Item4)
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+    </tfoot>
+</table>
+
+
+
+
+

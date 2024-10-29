@@ -1,0 +1,117 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+@*<script src="~/Scripts/ajax/libs/jszip/3.1.3/jszip.min.js"></script>*@
+<script src="~/Scripts/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+<script src="~/Scripts/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script src="~/Scripts/DataTables/buttons/1.5.1/js/buttons.html5.min.js"></script>
+
+@using OHC.EAMI.WebUI.Models
+@model ClaimScheduleResults
+
+<style>
+    div.dt-buttons {
+        position: relative;
+        float: right;
+    }
+</style>
+
+<div class="modal fade " id="processingModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header alert-info text-center"><h4>Pending Claim Schedule Report</h4></div>
+            <div class="modal-body" style="min-height: 50px;margin-top:10px;margin-bottom: 15px; min-width:90%;">               
+                @if (Model.csRecordMasterList != null && Model.csRecordMasterList.Count > 0)
+            {
+                    <table id="grdCS" class="table table-hover table-striped table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%;margin-top: 10px;">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Claim Schedule</th>
+                                <th class="text-center">Vendor Name-Model Type</th>
+                                <th class="text-center">Contract Number </th>
+                                <th class="text-center">Fiscal Year </th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.csRecordMasterList)
+                {
+                                <tr data-id="@Html.DisplayFor(modelItem => item.UniqueNumber)" id="tr_grdCS_@Html.DisplayFor(modelItem => item.UniqueNumber)" class="EAMITableRowBackground text-center" data-groupname="@Html.DisplayFor(modelItem => item.GroupName)">
+                                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.UniqueNumber)</td>
+                                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.GroupName)</td>
+                                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.ContractNumber)</td>
+                                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.FiscalYear)</td>
+                                    <td class="EAMITableTDBorders" style="color:red;">@Html.DisplayFor(modelItem => item.TotalPaymentDollars)</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="row text-center">
+                        <div class="col-xs-12">
+                            <strong>No pending claims schedules.</strong>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="clearfix">&nbsp;</div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>        
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12" style="margin-top:10px;">
+        <button class="btn btn-primary" onclick="showModal()">Generate Report</button>
+    </div>
+</div>
+
+<script>
+    function showModal() {
+        $('#processingModal').modal('show');
+    }
+    $(document).ready(function () {
+        var $table = $('#grdCS').DataTable(
+                {
+                    "searching": false,
+                    processing: false,
+                    "order": [[3, "desc"]],
+                    bPaginate: false,                    
+                    bInfo: false,
+                    dom: 'frtipB',
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            title: 'Export-Excel'
+                        },
+                        {
+                            extend: 'csvHtml5',
+                            title: 'Export-CSV'
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            title: 'Pending Claim Schedules'                            
+                        }
+                    ]
+                });
+
+        var excelBtn = $('.buttons-excel');
+        excelBtn.addClass('btn btn-success');
+
+        var csvButton = $('.buttons-csv');
+        csvButton.addClass('btn btn-success');
+
+        var pdfBtn = $('.buttons-pdf');
+        pdfBtn.addClass('btn btn-success');
+    });
+
+</script>
+
+

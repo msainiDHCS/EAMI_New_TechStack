@@ -1,0 +1,56 @@
+﻿@model IEnumerable<OHC.EAMI.WebUI.ViewModels.AssignPaymentRecordsViewModel>
+
+
+
+<table id="tblPayeePaymentType" class="table table-hover" cellspacing="0" width="100%">
+    <thead style="display:none;">
+        <tr class="EAMI_Text_White EAMI_BgColor_BlueSteel" style="border-color:#344864;">
+            <th></th>
+
+
+            <th></th>
+
+
+            <th>Search Results</th>
+            @*<th>@Html.DisplayNameFor(m => m.EntityName)</th>*@
+            @*<th>@Html.DisplayNameFor(m => m.ModelName)</th>*@
+            <th></th>
+            @*<th>@Html.DisplayNameFor(m => m.TotalAmount)</th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var assignPaymentRecordsViewModel in Model)
+        {
+            <tr id="trPayeePaymentType_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PayeeDisplayId)" style="font-weight: bold;">
+                <td id="tdPayeePaymentTypeFlag_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PayeeDisplayId)" style="width: 0.5em;">
+                    @Html.HiddenFor(m => assignPaymentRecordsViewModel.PayeeRefCode)
+                    <button type="button" class="btn btn-default btn-xs btnInTdPayeePaymentTypeFlag" style="background-color:gold;border-color:#333;" id="btnPayeePaymentTypeFlag_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PayeeDisplayId)">
+                        <span class="glyphicon glyphicon-flag wrapperSentBackFromProcessor"></span>
+                    </button>
+                </td>
+                <td id="tdPayeePaymentType_@Html.DisplayFor(m => assignPaymentRecordsViewModel.PayeeDisplayId)" style="width: 0.5em;">
+                    <button type="button" class="btn btn-default btn-xs btnInTdPayeePaymentType" style="color:#fff;background-color:#333;border-color:#333;">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </button>
+                </td>
+                <td>
+                    <span class="EAMI_Text_BlueSteel">@Html.DisplayFor(m => assignPaymentRecordsViewModel.PayeeName)</span> -
+                    <span class="EAMI_Text_Purple" id="PaymentTypeName">@Html.DisplayFor(m => assignPaymentRecordsViewModel.PaymentTypeName)</span>
+                </td>
+                @*<td>@Html.DisplayFor(m => assignPaymentRecordsViewModel.ModelName)</td>*@
+                <td class="PayeePaymentTypeTotalAmount" width="300em">Selected Payment Total: @Html.DisplayFor(m => assignPaymentRecordsViewModel.TotalAmount)</td>
+            </tr>
+        }
+
+        @if (Model.Count() == 0)
+        {
+            <tr class="EAMI_BgColor_White">
+                <td></td>
+                <td style="width:100%;text-align:center;"><br />Please Select Search Criteria And Then Press Search.</td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

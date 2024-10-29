@@ -1,0 +1,120 @@
+﻿
+@{
+    ViewBag.Title = "SCO Properties";
+}
+
+@using System.Web.Optimization;
+@model IList<OHC.EAMI.WebUI.Models.SCOPropertyModel>
+
+@using (Html.BeginForm("GetAllSCOProperties", "ManageSystems", FormMethod.Post, new { @class = "form-horizontal", role = "form", @ID = "frmSCOPropertiesData", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @*<div class="panel panel-default">*@
+    <div class="row" style="margin-bottom:20px;margin-top:20px;">
+        <input type="hidden" id="hdnSystemId" value="@ViewBag.SystemId" />
+        <input type="hidden" id="hdnSystemCode" value="@ViewBag.SystemCode" />
+        <div class="col-xs-12">
+            <button type="button" onclick="javascript: return AddSCOProperties();" class="btn btn-dhcs-secondary btn-md" id="btnAddSCOProperties" style="float:right;margin-right:10px;">Add New</button>
+        </div>
+    </div>
+    <table id="grdFunds" class="table table-striped table-bordered" cellspacing="0" style="width:100%;">
+        <thead>
+            <tr>
+                <th>Property Name</th>
+                <th>Property Value</th>
+                <th>Fund Code</th>
+                <th>Description</th>
+                <th>Create Date</th>
+                <th>Created By</th>
+                <th>Update Date</th>
+                <th>Updated By</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.SCO_Property_Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SCO_Property_Value)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Fund_Code)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                    <td>@item.CreateDate.ToString("MM'/'dd'/'yyyy")</td>
+                    <td>@Html.DisplayFor(modelItem => item.CreatedBy)</td>
+                    <td>@(item.UpdateDate.HasValue ? item.UpdateDate.Value.ToString("MM/dd/yyyy") : "")</td>
+                    <td>@Html.DisplayFor(modelItem => item.UpdatedBy)</td>
+                    <td>
+                        <a href="#" target="_self" onclick="return EditSCOProperty(@(item.SCO_Property_ID)
+                                                                                    ,@(item.SCO_Property_Enum_ID)
+                                                                                    ,'@(item.SCO_Property_Name)'
+                                                                                    ,'@(item.SCO_Property_Value)'
+                                                                                    , '@(item.Description)'
+                                                                                    , @(item.SCO_Property_Type_ID)
+                                                                                    , @(item.Fund_ID)
+                                                                                    ,'@(item.PaymentTypeText)'
+                                                                                    , '@(item.EnvironmentText)'
+                                                                                  );">Edit</a>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script type="text/javascript">
+    var systemId = document.getElementById('hdnSystemId').value;
+    var systemCode = document.getElementById('hdnSystemCode').value;
+
+    function AddSCOProperties() {
+
+        $('#divLoadingAnimation').css("display", "block");
+        $('#header').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner')
+
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab6').load(getEAMIAbsoluteUrl('~/ManageSystems/AddNewSCOProperty?systemId=' + systemId + '&systemCode=' + systemCode));
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+
+    //int scoPropertyId, int fundId,string pmtType,int propertyTypeId,string env, long systemId
+    function EditSCOProperty(scoPropertyId,scoPropertyEnumID, scoPropertyName, scoPropertyValue, description, propertyTypeId, fundId, paymentTypeText, environmentText) {
+        var getRequestData = {
+            SCO_Property_ID: scoPropertyId,
+            SCO_Property_Enum_ID: scoPropertyEnumID,
+            SCO_Property_Name: scoPropertyName,
+            SCO_Property_Value: scoPropertyValue,
+            Description: description,
+            SCO_Property_Type_ID: propertyTypeId,
+            Fund_ID: fundId,
+            PaymentTypeText: paymentTypeText,
+            EnvironmentText: environmentText,
+            System_ID: systemId,
+            System_Code: systemCode
+        }
+        var uriString = $.param(getRequestData);
+
+        $('#divLoadingAnimation').css("display", "block");
+        $('#header').css("display", "block");
+        EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+        $("#dvMainArea").slideUp(250, function () {
+            // Animation complete.
+            $('#dvActionArea').slideDown(250, function () {
+                $('#dvtab6').load(getEAMIAbsoluteUrl('~/ManageSystems/EditSCOProperties?' + uriString));
+                // End Loading... Animation
+                $('#divLoadingAnimation_Inner').empty();
+                $('#divLoadingAnimation').css("display", "none");
+            });
+        });
+
+        return false;
+    }
+</script>

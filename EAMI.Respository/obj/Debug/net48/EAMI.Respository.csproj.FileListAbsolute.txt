@@ -1,0 +1,13 @@
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Respository.csproj.AssemblyReference.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Respository.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Respository.AssemblyInfoInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Respository.AssemblyInfo.cs
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Respository.csproj.CoreCompileInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net48\EAMI.Respository.dll.config
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net48\EAMI.Respository.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net48\EAMI.Respository.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net48\EntityFramework.SqlServer.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net48\EntityFramework.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Res.50D2C771.Up2Date
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Respository.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net48\EAMI.Respository.pdb

@@ -1,0 +1,285 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.ViewModels
+@model CSReportDetails
+
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "Transfer Letter";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*Local box uses relative path but Server needs Absolute path, so perform check to see if request coming from
+    localhost.  Then use the appropriate link below.*@
+@if (HttpContext.Current.Request.IsLocal)
+{
+    <link type="text/css" rel="stylesheet" href="~/Scripts/App/Reports/transferletter.css" />
+}
+else
+{
+    if (ViewBag.ExportTransferLetterPdfActionTriggered == true)
+    {
+        <link type="text/css" href='@Server.MapPath("~/Scripts/App/Reports/transferletter.css")' rel="stylesheet" />
+        <link type="text/css" href='@Server.MapPath("~/Scripts/App/EAMI_Common.css")' rel="stylesheet" />
+    }
+    else
+    {
+        <link type="text/css" rel="stylesheet" href="~/Scripts/App/Reports/transferletter.css" />
+    }
+}
+
+<table id="tbl_TransferLetter" cellspacing="0" align="center" style="width:98%;" class="@(Model.Current_ECS_Status_Type_ID <= 1 ? "DraftWatermark" : "")">
+    <thead class="HeaderRowsHeight">
+        <tr>
+            <td>
+                <span class="MediumHeaderText"></span>
+            </td>
+            <td colspan="3" class="CenterText">
+                <span class="MediumHeaderText">California Department of Health Care Services</span>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <span class="MediumHeaderText">Fiscal Year</span>&emsp;<span class="InputText">@Model.Fiscal_Year</span>
+            </td>
+            <td colspan="3" class="CenterText">
+                <span class="MediumHeaderText">@Model.Fund_Name</span>
+            </td>
+            <td>
+                <span class="MediumHeaderText"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="" style="">
+                <span class="MediumHeaderText"></span>
+            </td>
+            <td colspan="3" class="CenterText">
+                <span class="MediumHeaderText">Transfer Letter</span>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <span class="MediumHeaderText">Month/Year</span>&emsp;<span class="InputText">@Model.Month_Year</span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="3" class="CenterText">
+                <span class="LargeHeaderText" style='font-family: "Times New Roman", Times, serif;'>@Model.Title_1 @Model.Title_2</span>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                <span class="MediumHeaderText">Preparer</span>&emsp;<span class="InputText">@Model.Preparer</span>
+            </td>
+            <td colspan="3" class="CenterText">
+                <span class="LargeHeaderText">@Model.Title_3</span>
+            </td>
+            <td>
+                <span class="MediumHeaderText ExtraLeftPadding"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <span class="MediumHeaderText"></span>
+            </td>
+            <td colspan="3" class="CenterText">
+                <span class="MediumHeaderText">@Model.Exclusive_Payment_Type_Description</span>
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <span class="MediumHeaderText">E-CS #:</span>&emsp;<span class="InputText">@Model.ECS_Number</span>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </thead>
+    <tbody class="BodyRowsHeight">
+        @foreach (var categoryTuple in Model.listOfCategories)
+        {
+            <tr class="VerticalAlignText_Bottom">
+                <td class="DoubleLineTopBorder BottomBorder">
+                    <span class="LargeHeaderText">Funding Source Name</span>
+                </td>
+                <td class="DoubleLineTopBorder BottomBorder RightText">
+                    <span class="LargeHeaderText">Title @categoryTuple.Item1</span>
+                </td>
+                <td class="DoubleLineTopBorder BottomBorder RightText">
+                    <span class="LargeHeaderText">Total</span>
+                </td>
+                <td class="DoubleLineTopBorder BottomBorder RightText">
+                    <span class="LargeHeaderText">Federal Share @categoryTuple.Item2</span>
+                </td>
+                <td class="DoubleLineTopBorder BottomBorder RightText">
+                    <span class="LargeHeaderText">State Share @categoryTuple.Item3</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="height:14px !important;"></td>
+                <td style="height:14px !important;"></td>
+                <td style="height:14px !important;"></td>
+                <td style="height:14px !important;"></td>
+                @*<td style="height:14px !important;"></td>*@
+            </tr>
+
+            foreach (var fundingTuple in Model.listOfFundingTuples)
+            {
+                if (categoryTuple.Item1.Equals(fundingTuple.Item1) && categoryTuple.Item2.Equals(fundingTuple.Item6) && categoryTuple.Item3.Equals(fundingTuple.Item7))
+                {
+                    <tr>
+                        <td>
+                            <span class="InputText_Medium">@fundingTuple.Item2</span>
+                        </td>
+                         <td>
+                            <span class=""></span>
+                        </td>
+                        <td class="RightText TotalAmount" style="width:18% !important;">
+                            <span class="InputText @(fundingTuple.Item3 <= 0? "EAMI_Text_Danger": "")">
+                                @(fundingTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item3))
+                            </span>
+                        </td>
+                        <td class="RightText FFPAmount" style="width:25% !important;">
+                            <span class="InputText @(fundingTuple.Item4 <= 0? "EAMI_Text_Danger": "")">
+                                @(fundingTuple.Item4 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item4))
+                            </span>
+                        </td>
+                        <td class="RightText SGFAmount" style="width:25% !important;">
+                            <span class="InputText @(fundingTuple.Item5 <= 0? "EAMI_Text_Danger": "")">
+                                @(fundingTuple.Item5 == 0 ? "" : string.Format("{0:C}", fundingTuple.Item5))
+                            </span>
+                        </td>
+                    </tr>
+                }
+            }
+
+            foreach (var fundingTotalsTuple in Model.listOfFundingTotalsTuples)
+            {
+                if (categoryTuple.Item1.Equals(fundingTotalsTuple.Item1) && categoryTuple.Item2.Equals(fundingTotalsTuple.Item6) && categoryTuple.Item3.Equals(fundingTotalsTuple.Item7))
+                {
+    <tr>
+        <td class="">
+            <span class="LargeHeaderText">@fundingTotalsTuple.Item2</span>
+        </td>
+        <td class="">
+            <span class=""></span>
+        </td>
+        <td class="RightText TotalAmount">
+            <span class="LargeHeaderText @(fundingTotalsTuple.Item3 <= 0? "EAMI_Text_Danger": "")">
+                @(fundingTotalsTuple.Item3 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item3))
+            </span>
+        </td>
+        <td class="RightText FFPAmount">
+            <span class="LargeHeaderText @(fundingTotalsTuple.Item4 <= 0? "EAMI_Text_Danger": "")">
+                @(fundingTotalsTuple.Item4 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item4))
+            </span>
+        </td>
+        <td class="RightText SGFAmount">
+            <span class="LargeHeaderText @(fundingTotalsTuple.Item5 <= 0? "EAMI_Text_Danger": "")">
+                @(fundingTotalsTuple.Item5 == 0 ? "" : string.Format("{0:C}", fundingTotalsTuple.Item5))
+            </span>
+        </td>
+    </tr>
+                }
+            }
+            <tr style="height:10px;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+
+    <tr id="Schedule_Total_Row">
+        <td class="DoubleLineTopBorder">
+            <span class="LargeHeaderText">@Model.fundingGrandTotalsTuple.Item1</span>
+        </td>
+        <td class="DoubleLineTopBorder">
+            <span class=""></span>
+        </td>
+        <td class="DoubleLineTopBorder RightText TotalAmount">
+            <span class="LargeHeaderText @(Model.fundingGrandTotalsTuple.Item2 <= 0? "EAMI_Text_Danger": "")">
+                @(Model.fundingGrandTotalsTuple.Item2 == 0 ? "" : string.Format("{0:C}", Model.fundingGrandTotalsTuple.Item2))
+            </span>
+        </td>
+        <td class="DoubleLineTopBorder RightText FFPAmount">
+            <span class="LargeHeaderText @(Model.fundingGrandTotalsTuple.Item3 <= 0? "EAMI_Text_Danger": "")">
+                @(Model.fundingGrandTotalsTuple.Item3 == 0 ? "" : string.Format("{0:C}", Model.fundingGrandTotalsTuple.Item3))
+            </span>
+        </td>
+        <td class="DoubleLineTopBorder RightText SGFAmount">
+            <span class="LargeHeaderText @(Model.fundingGrandTotalsTuple.Item4 <= 0? "EAMI_Text_Danger": "")">
+                @(Model.fundingGrandTotalsTuple.Item4 == 0 ? "" : string.Format("{0:C}", Model.fundingGrandTotalsTuple.Item4))
+            </span>
+        </td>
+    </tr>
+        <tr style="height:20px;">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr style="height:10px;">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td colspan="8" class="" style="">
+                <span class="Small-MediumText">
+                    I HEREBY CERTIFY THAT THIS TRANSFER IS IN ACCORDANCE WITH ALL APPLICABLE PROVISIONS OR RESTRICTIONS PERTAINING TO THE ABOVE APPROPRIATIONS.
+                </span>
+            </td>
+        </tr>
+        <tr class="VerticalAlignText_Bottom" style="height:50px;">
+            <td class="BottomBorder" colspan="2">
+                <span class="MediumHeaderText"></span>
+            </td>
+            <td class="BottomBorder">
+                <span class="MediumHeaderText"></span>
+            </td>
+            <td class="BottomBorder">
+                <span class="MediumHeaderText"></span>
+            </td>
+            <td class="BottomBorder CenterText" colspan="4">
+                <span class="InputText">@Model.Pay_Date</span>
+            </td>
+        </tr>
+        <tr class="CenterText">
+            <td colspan="2">
+                <span class="MediumHeaderText">Signed</span>
+            </td>
+            <td>
+                <span class="MediumHeaderText">(Title)</span>
+            </td>
+            <td>
+                <span class="MediumHeaderText">Date</span>
+            </td>
+            <td colspan="4">
+                <span class="MediumHeaderText">Requested Pay Date</span>
+            </td>
+        </tr>
+
+
+    </tfoot>
+</table>
+
+
+
+
+

@@ -1,0 +1,60 @@
+﻿@using OHC.EAMI.WebUI.Helpers
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/PaymentProcessing/payment-processing.css" />
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTablePlugins/moment.js"></script>
+<script src="~/Scripts/DataTablePlugins/datetime-moment.js"></script>
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+<link href="~/Content/bootstrap-select.min.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap-select.min.js"></script>
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+
+<div id="divLoadingAnimation" class="panel">
+    <div id="divLoadingAnimation_Inner">
+    </div>
+</div>
+<div style="margin-top:25px;"></div>
+<div class="col-lg-offset-0 col-lg-12" id="dvMainArea">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="background-color: #17315a; color: white;">
+            <h3 class="panel-title"><i class="fa fa-gears">&nbsp;</i>Payment Processing</h3>
+        </div>
+        <div class="panel-body">
+            <div id="tabs" style="padding-left:0px;padding-right:0px;padding-top:0px;">
+                <ul style="border-left-width:0px;border-right-width:0px;border-top-width:0px;padding-left:0px;padding-right:0px;padding-top:0px;list-style:none;">
+                    <li class="text-center" style="width:50%;margin-top:0px;margin-right:0px;border-top-width:0px;border-left-width:0px;border-right-width:0px;cursor:pointer;"><a href="#dvtab1" onclick="javascript: return loadIPTabs(1);" style="width:100%;">Assignments <span id="spPaymentRecordCount"></span></a></li>
+                    <li class="text-center" style="width:50%;margin-top:0px;margin-right:0px;border-top-width:0px;border-left-width:0px;border-right-width:0px;cursor:pointer;"><a href="#dvtab2" onclick="javascript: return loadIPTabs(2);" style="width:100%;">Claim Schedule Processing <span id="spClaimScheduleCount"></span></a></li>
+                </ul>
+                <div id="dvtab1" style="padding-left:0px;padding-right:0px;">
+                </div>
+                <div id="dvtab2" style="padding-left:0px;padding-right:0px;">
+                </div>
+                <input type="hidden" id="hdnPaymentRecordSetSelection" />
+                <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+            </div>
+        </div>
+    </div>    
+</div>
+<script>
+    var selectedPaymentGroupsLimit = '@System.Configuration.ConfigurationManager.AppSettings["SelectedPaymentGroupsLimit"]';
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+</script>
+<script type="text/javascript" src="~/Scripts/App/PaymentProcessing/Index/index-script.js" ></script>
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+

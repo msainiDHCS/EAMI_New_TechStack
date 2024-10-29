@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/OHC.EAMI.ServiceContract" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/OHC.EAMI.ServiceContract" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:8733/Design_Time_Addresses/OHC.EAMI.Service/EAMIServiceOperations/?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://localhost:8733/Design_Time_Addresses/OHC.EAMI.Service/EAMIServiceOperations/?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="PaymentSubmissionRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:EAMITransaction">
+        <xs:sequence>
+          <xs:element name="PaymentRecordCount" nillable="true" type="xs:string" />
+          <xs:element name="PaymentRecordTotalAmount" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PayerInfo" nillable="true" type="tns:PaymentExchangeEntity" />
+          <xs:element name="PaymentRecordList" nillable="true" type="tns:ArrayOfPaymentRecord" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentSubmissionRequest" nillable="true" type="tns:PaymentSubmissionRequest" />
+  <xs:complexType name="EAMITransaction">
+    <xs:sequence>
+      <xs:element name="SenderID" nillable="true" type="xs:string" />
+      <xs:element name="ReceiverID" nillable="true" type="xs:string" />
+      <xs:element name="TransactionID" nillable="true" type="xs:string" />
+      <xs:element name="TransactionType" type="tns:TransactionType" />
+      <xs:element name="TransactionVersion" nillable="true" type="xs:string" />
+      <xs:element name="TimeStamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="EAMITransaction" nillable="true" type="tns:EAMITransaction" />
+  <xs:simpleType name="TransactionType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PaymentSubmissionRequest">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="PaymentSubmissionResponse">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="StatusInquiryRequest">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="StatusInquiryResponse">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">5</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RejectedPaymentInquiryRequest">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">6</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="RejectedPaymentInquiryResponse">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="TransactionType" nillable="true" type="tns:TransactionType" />
+  <xs:complexType name="PaymentStatusInquiryRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:EAMITransaction">
+        <xs:sequence>
+          <xs:element name="PaymentRecordCount" nillable="true" type="xs:string" />
+          <xs:element name="PaymentRecordList" nillable="true" type="tns:ArrayOfBaseRecord" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentStatusInquiryRequest" nillable="true" type="tns:PaymentStatusInquiryRequest" />
+  <xs:complexType name="ArrayOfBaseRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BaseRecord" nillable="true" type="tns:BaseRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBaseRecord" nillable="true" type="tns:ArrayOfBaseRecord" />
+  <xs:complexType name="BaseRecord">
+    <xs:sequence>
+      <xs:element name="PaymentRecNumber" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GenericNameValueList" nillable="true" type="q1:ArrayOfKeyValueOfstringstring" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BaseRecord" nillable="true" type="tns:BaseRecord" />
+  <xs:complexType name="PaymentSubmissionResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PaymentStatusResponse">
+        <xs:sequence>
+          <xs:element name="PaymentRecordStatuList" nillable="true" type="tns:ArrayOfPaymentRecordStatus" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentSubmissionResponse" nillable="true" type="tns:PaymentSubmissionResponse" />
+  <xs:complexType name="PaymentStatusResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:EAMITransaction">
+        <xs:sequence>
+          <xs:element name="ResponseStatusCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ResponseMessage" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentStatusResponse" nillable="true" type="tns:PaymentStatusResponse" />
+  <xs:complexType name="PaymentStatusInquiryResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PaymentStatusResponse">
+        <xs:sequence>
+          <xs:element name="PaymentRecordStatuList" nillable="true" type="tns:ArrayOfPaymentRecordStatusPlus" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentStatusInquiryResponse" nillable="true" type="tns:PaymentStatusInquiryResponse" />
+  <xs:complexType name="ArrayOfPaymentRecordStatusPlus">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PaymentRecordStatusPlus" nillable="true" type="tns:PaymentRecordStatusPlus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPaymentRecordStatusPlus" nillable="true" type="tns:ArrayOfPaymentRecordStatusPlus" />
+  <xs:complexType name="PaymentRecordStatusPlus">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PaymentRecordStatus">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ClaimScheduleNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ClaimScheduleDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="WarrantNumber" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="WarrantAmount" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="WarrantDate" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentRecordStatusPlus" nillable="true" type="tns:PaymentRecordStatusPlus" />
+  <xs:complexType name="PaymentRecordStatus">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseRecord">
+        <xs:sequence>
+          <xs:element name="PaymentRecNumberExt" nillable="true" type="xs:string" />
+          <xs:element name="PaymentSetNumber" nillable="true" type="xs:string" />
+          <xs:element name="PaymentSetNumberExt" nillable="true" type="xs:string" />
+          <xs:element name="StatusCode" nillable="true" type="xs:string" />
+          <xs:element name="StatusDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StatusNote" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentRecordStatus" nillable="true" type="tns:PaymentRecordStatus" />
+  <xs:complexType name="ArrayOfPaymentRecordStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PaymentRecordStatus" nillable="true" type="tns:PaymentRecordStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPaymentRecordStatus" nillable="true" type="tns:ArrayOfPaymentRecordStatus" />
+  <xs:complexType name="PaymentExchangeEntity">
+    <xs:sequence>
+      <xs:element name="EntityID" nillable="true" type="xs:string" />
+      <xs:element name="EntityIDSuffix" nillable="true" type="xs:string" />
+      <xs:element name="EntityIDType" nillable="true" type="xs:string" />
+      <xs:element name="Name" nillable="true" type="xs:string" />
+      <xs:element name="AddressLine1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddressLine2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddressLine3" nillable="true" type="xs:string" />
+      <xs:element name="AddressCity" nillable="true" type="xs:string" />
+      <xs:element name="AddressState" nillable="true" type="xs:string" />
+      <xs:element name="AddressZip" nillable="true" type="xs:string" />
+      <xs:element name="EIN" nillable="true" type="xs:string" />
+      <xs:element name="VendorTypeCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PaymentExchangeEntity" nillable="true" type="tns:PaymentExchangeEntity" />
+  <xs:complexType name="ArrayOfPaymentRecord">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="PaymentRecord" nillable="true" type="tns:PaymentRecord" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfPaymentRecord" nillable="true" type="tns:ArrayOfPaymentRecord" />
+  <xs:complexType name="PaymentRecord">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:BaseRecord">
+        <xs:sequence>
+          <xs:element name="PaymentRecNumberExt" nillable="true" type="xs:string" />
+          <xs:element name="PaymentType" nillable="true" type="xs:string" />
+          <xs:element name="PaymentDate" type="xs:dateTime" />
+          <xs:element name="Amount" nillable="true" type="xs:string" />
+          <xs:element name="FiscalYear" nillable="true" type="xs:string" />
+          <xs:element name="PayeeInfo" nillable="true" type="tns:PaymentExchangeEntity" />
+          <xs:element name="IndexCode" nillable="true" type="xs:string" />
+          <xs:element name="ObjectDetailCode" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ObjectAgencyCode" nillable="true" type="xs:string" />
+          <xs:element name="PCACode" nillable="true" type="xs:string" />
+          <xs:element name="ApprovedBy" nillable="true" type="xs:string" />
+          <xs:element name="PaymentSetNumber" nillable="true" type="xs:string" />
+          <xs:element name="PaymentSetNumberExt" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Attachment" nillable="true" type="xs:base64Binary" />
+          <xs:element name="FundingDetailList" nillable="true" type="tns:ArrayOfFundingDetail" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PaymentRecord" nillable="true" type="tns:PaymentRecord" />
+  <xs:complexType name="ArrayOfFundingDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FundingDetail" nillable="true" type="tns:FundingDetail" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFundingDetail" nillable="true" type="tns:ArrayOfFundingDetail" />
+  <xs:complexType name="FundingDetail">
+    <xs:sequence>
+      <xs:element name="FundingSourceName" nillable="true" type="xs:string" />
+      <xs:element name="FFPAmount" nillable="true" type="xs:string" />
+      <xs:element name="SGFAmount" nillable="true" type="xs:string" />
+      <xs:element name="FiscalYear" nillable="true" type="xs:string" />
+      <xs:element name="FiscalQuarter" nillable="true" type="xs:string" />
+      <xs:element name="Title" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="GenericNameValueList" nillable="true" type="q2:ArrayOfKeyValueOfstringstring" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FundingDetail" nillable="true" type="tns:FundingDetail" />
+  <xs:complexType name="RejectedPaymentInquiryRequest">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:EAMITransaction">
+        <xs:sequence>
+          <xs:element name="RejectedDateFrom" type="xs:dateTime" />
+          <xs:element name="RejectedDateTo" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="RejectedPaymentInquiryRequest" nillable="true" type="tns:RejectedPaymentInquiryRequest" />
+  <xs:complexType name="RejectedPaymentInquiryResponse">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:PaymentStatusResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="PaymentRecordStatuList" nillable="true" type="tns:ArrayOfPaymentRecordStatus" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="RejectedPaymentInquiryResponse" nillable="true" type="tns:RejectedPaymentInquiryResponse" />
+  <xs:complexType name="PingRequest">
+    <xs:sequence>
+      <xs:element name="SenderID" nillable="true" type="xs:string" />
+      <xs:element name="ReceiverID" nillable="true" type="xs:string" />
+      <xs:element name="ClientTimeStamp" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PingRequest" nillable="true" type="tns:PingRequest" />
+  <xs:complexType name="PingResponse">
+    <xs:sequence>
+      <xs:element name="SenderID" nillable="true" type="xs:string" />
+      <xs:element name="ReceiverID" nillable="true" type="xs:string" />
+      <xs:element name="ServerTimeStamp" type="xs:dateTime" />
+      <xs:element name="ClientTimeStamp" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ResponseMessage" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PingResponse" nillable="true" type="tns:PingResponse" />
+</xs:schema>

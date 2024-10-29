@@ -1,0 +1,15 @@
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net8.0\EAMI.Respository.dll.config
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net8.0\EAMI.Respository.deps.json
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net8.0\EAMI.Respository.runtimeconfig.json
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net8.0\EAMI.Respository.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\bin\Debug\net8.0\EAMI.Respository.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.csproj.AssemblyReference.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.AssemblyInfoInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.AssemblyInfo.cs
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.csproj.CoreCompileInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\refint\EAMI.Respository.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\EAMI.Respository.genruntimeconfig.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Respository\obj\Debug\net8.0\ref\EAMI.Respository.dll

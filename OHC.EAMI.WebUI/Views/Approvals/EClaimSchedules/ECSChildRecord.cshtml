@@ -1,0 +1,90 @@
+﻿
+@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model List<ClaimScheduleRecordMaster>
+
+@{
+    string grdName = ViewBag.ID + "_grdECS";
+}
+
+<link type="text/css" rel="stylesheet" href="~/Content/themes/Styles/Approvals/approvals-grid.css" />
+
+@if (Model != null && Model.Count > 0)
+{
+    <table id="@grdName" class="table table-hover table-bordered EAMITableNoBorder" cellspacing="0" style="width:100%; margin:0px !important;border:none !important;">
+        <thead>
+            <tr class="alert-warning">
+                <th class="EAMITableTDBorders A_ECS_PaymentGroup_Shift"></th>
+                <th class="EAMITableTDBorders text-center"><span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_CSNumber">Claim Schedule # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_Vendor">Vendor Name-Model Type <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_ContractNumber">Contract # <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_FiscalYear">Fiscal Year <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_PayDate">PayDate <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_User">Processor <span class="sort-icon"></span></th>
+                <th class="EAMITableTDBorders A_ECS_Amount" style="padding-right:50px !important;">Payment Total <span class="sort-icon"></span></th>
+            </tr>
+        </thead>
+        <tbody class="alert-warning">
+            @foreach (var item in Model)
+            {
+                <tr data-id="@Html.DisplayFor(modelItem => item.UniqueNumber)" id="tr_grdECS_@Html.DisplayFor(modelItem => item.UniqueNumber)" data-groupname="@Html.DisplayFor(modelItem => item.GroupName)" style="cursor: default;">
+                    <td class="EAMITableTDBorders">
+                    </td>
+                    @if (!item.ExclusivePaymentType_Code.Equals("NONE"))
+                    {
+                        <td class="EAMITableTDBorders iconColumn iconColumnRect" style="width:50px !important;padding-left:0px !important;padding-right:0px !important;margin-left:0px !important;margin-right:0px !important;">
+                            <span class="wrapperIconColumnRect">
+                                <span>@item.ExclusivePaymentType_Code</span>
+                            </span>
+                            <label style="display:none;">1</label>
+                        </td>
+                    }
+                    else
+                    {
+                        <td class="EAMITableTDBorders PGIcon iconColumn iconColumnRect" style="width:50px !important;padding-left:0px !important;padding-right:0px !important;margin-left:0px !important;margin-right:0px !important;">
+                            <span class="noIconColumnRect"></span>
+                            <label style="display:none;">0</label>
+                        </td>
+                    }
+                    <td class="EAMITableTDBorders" data-order="@item.UniqueNumber">
+                        <button class="btn btn-xs btn-warning btnRemittanceAdvice" id="@Html.DisplayFor(modelItem => item.UniqueNumber)"><span class="glyphicon glyphicon-list-alt"></span></button>
+                        <input type="hidden" id="hdnCSPrimaryKeyId" name="hdnCSPrimaryKeyId" value="@Html.DisplayFor(modelItem => item.CSPrimaryKeyId)" />
+                        &nbsp;
+                        @Html.DisplayFor(modelItem => item.UniqueNumber)&nbsp;&nbsp;
+                        @if (item.WR_WARRANT_NUMBER != null)
+                        {
+                            <span title="Payment Date:  @string.Format("{0:MM/dd/yyyy}", item.WR_ISSUE_DATE)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Payment #:  @item.WR_WARRANT_NUMBER"
+                                  data-toggle="popover" data-placement="right" data-trigger="hover"
+                                  data-content="Payment Amount:&nbsp;&nbsp;@Html.DisplayFor(modelItem => item.WR_WARRANT_AMOUNT)" data-html="true">
+                                <i class="fas fa-money-check-alt" style="cursor: help !important;"></i>
+                            </span>
+                        }
+                    </td>
+                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.GroupName)</td>
+                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.ContractNumber)</td>
+                    <td class="EAMITableTDBorders A_ECS_FiscalYear">@Html.DisplayFor(modelItem => item.FiscalYear)</td>
+                    <td class="EAMITableTDBorders">@string.Format("{0:MM/dd/yyyy}", item.PayDate)</td>
+                    <td class="EAMITableTDBorders">@Html.DisplayFor(modelItem => item.AssignedUser)</td>
+                    <td class="EAMITableTDBorders A_ECS_Amount" style="padding-right:50px !important;">@Html.DisplayFor(modelItem => item.TotalPaymentDollars)</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        var gridName = '@ViewBag.ID' + "_grdECS";
+    </script>
+    <script type="text/javascript" src="~/Scripts/App/Approvals/EClaimSchedules/eclaimschedule-childrecord.js"></script>
+    <script type="text/javascript" src="~/Scripts/App/Common/common.js"></script>
+}
+else
+{
+    <div class="row text-center">
+        <div class="col-xs-12">
+            <strong>No claim schedules found for ECS.</strong>
+        </div>
+    </div>
+}
+

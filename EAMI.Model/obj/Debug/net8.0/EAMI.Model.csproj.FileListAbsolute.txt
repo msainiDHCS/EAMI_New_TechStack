@@ -1,0 +1,11 @@
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\bin\Debug\net8.0\EAMI.Model.deps.json
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\bin\Debug\net8.0\EAMI.Model.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\bin\Debug\net8.0\EAMI.Model.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\EAMI.Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\EAMI.Model.AssemblyInfoInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\EAMI.Model.AssemblyInfo.cs
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\EAMI.Model.csproj.CoreCompileInputs.cache
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\EAMI.Model.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\refint\EAMI.Model.dll
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\EAMI.Model.pdb
+C:\Projects\TestProjects\EAMI_WebAPI\EAMI.Model\obj\Debug\net8.0\ref\EAMI.Model.dll

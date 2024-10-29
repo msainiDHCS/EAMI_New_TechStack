@@ -1,0 +1,1841 @@
+﻿@model IEnumerable<OHC.EAMI.WebUI.ViewModels.AssignPaymentRecordsViewModel>
+
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "AssignPaymentRecords";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/numeral/numeral.min.js"></script>
+<link type="text/css" href="~/Scripts/select/1.2.3/css/select.dataTables.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/select/1.2.3/js/dataTables.select.min.js"></script>
+<link type="text/css" href="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/css/dataTables.checkboxes.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/jquery-datatables-checkboxes-1.2.9/jquery-datatables-checkboxes-1.2.9/js/dataTables.checkboxes.min.js"></script>
+@*-----Boiler Plate--------------------------------------------------------------------------------------------*@
+@*<link type="text/css" href="~/Scripts/EAMI_Boilerplate/css/eami.css" rel="stylesheet" />
+<link type="text/css" href="~/Scripts/EAMI_Boilerplate/css/bootstrap.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/EAMI_Boilerplate/js/eami.js"></script>*@
+@*-------------------------------------------------------------------------------------------------------------*@
+
+<link rel="stylesheet" href="~/Content/bootstrap-select.min.css">
+<script src="~/Scripts/bootstrap-select.min.js"></script>
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+@*<script src="~/Scripts/bootstrap-select-1.12.4/js/i18n/defaults-*.min.js"></script>*@
+
+<script type="text/javascript" src="~/Scripts/DataTablePlugins/moment.js"></script>
+
+<link type="text/css" href="~/Scripts/App/EAMI_Common.css" rel="stylesheet" />
+
+<form id="formSearchMenu">
+    <div class="collapse" id="searchMenu">
+        <div class="panel panel-dhcs-primary" style="margin-bottom:0;border-radius:0 0 4px 0;border-right:none;border-bottom:none;border-left:none;">
+            <div class="panel-heading" style="border-radius:0 0 4px 0;overflow:no-display;">
+                <input type="hidden" id="hdn_ProgramChoiceId" value="@Session["ProgramChoiceId"]" />
+                <div class="form-inline">
+                    <div class="form-group">
+                        <select id="ddlSystem" class="form-control selectpicker" data-width="8em">
+                            @foreach (var refCode in ViewBag.SystemsRefCodeList)
+                            {
+                                <option value='@Html.Raw(refCode.ID)'>@Html.Raw(refCode.Code)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlPaymentRecordStatus" class="form-control selectpicker" data-live-search="true" data-width="9em" title="Status">
+                            <option value="0">UnAssigned</option>
+                            <option value="1">Assigned</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlPaymentExchangeEntity" class="form-control selectpicker" data-live-search="true" data-width="25.7em"
+                                multiple title="Payee" data-selected-text-format="count>1" data-actions-box="true">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlPaymentType" class="form-control selectpicker" data-live-search="true" data-width="17em"
+                                multiple title="Payment Type" data-selected-text-format="count>1" data-actions-box="true">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="ddlContractNumber" class="form-control selectpicker" data-live-search="true" data-live-search-style="startsWith" data-width="13em"
+                                multiple title="Contract #" data-selected-text-format="count>1" data-actions-box="true">
+                        </select>
+                    </div>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnSearch">
+                        <span class="glyphicon glyphicon-search"></span> Search
+                    </button>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnReset">
+                        <span class="glyphicon glyphicon-refresh"></span> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="form-inline">
+    <div class="form-group">
+        <button id="btnSearchMenu" style="border-radius:0 0 4px 4px;" class="btn btn-dhcs-secondary inactive" type="button" data-toggle="collapse" data-target="#searchMenu" aria-expanded="false" aria-controls="searchMenu">
+            Search Options
+        </button>
+    </div>
+    @*<div class="form-group pull-right">
+        <img class="pull-right" src="~/images/dhcs-logo-1.png">
+    </div>*@
+</div>
+
+@*<br /><br /><br />*@
+
+<!-- Modal for Assign Pay Date -->
+<div class="modal fade" id="modalWrapperForAssignPayDate" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForAssignPayDate" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForAssignPayDate"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForAssignPayDate">
+            </div>
+            <div class="modal-footer">
+                <div class="form-group pull-left">
+                    <label style="min-height:10px;padding:2px;font-weight:normal">Draw Date:</label> <label style="min-width:20px;min-height:10px;background-color:red;">&nbsp;</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label style="min-height:10px;padding:2px;font-weight:normal">Pay Date:</label> <label style="min-width:20px;min-height:10px;background-color:greenyellow;">&nbsp;</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label style="min-height:10px;padding:2px;font-weight:normal">Both on Same Day:</label> <label style="min-width:20px;min-height:10px;background-image: linear-gradient(45deg, red 50%, greenyellow 50%) !important;">&nbsp;</label>
+                </div>
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForAssignPayDate_CancelBtn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Assign -->
+<div class="modal fade" id="modalWrapperForAssign" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForAssign" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForAssign"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForAssign">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForAssign_AssignBtn" data-assign-type="assign">Assign</button>
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForAssign_CancelBtn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for UnAssign -->
+@*<div class="modal fade" id="modalWrapperForUnAssign" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForUnAssign" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForUnAssign"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForUnAssign">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForUnAssign_UnAssignBtn">UnAssign</button>
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForUnAssign_CancelBtn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<!-- Modal for Hold -->
+<div class="modal fade" id="modalWrapperForHold" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForHold" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForHold"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForHold">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForHold_HoldBtn">Hold</button>
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForHold_CancelBtn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for UnHold -->
+@*<div class="modal fade" id="modalWrapperForUnHold" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForUnHold" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForUnHold"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForUnHold">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForUnHold_UnHoldBtn">UnHold</button>
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForUnHold_CancelBtn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<!-- Modal for Return -->
+<div class="modal fade" id="modalWrapperForReturn" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForReturn" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForReturn"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForReturn">
+            </div>
+            @*<div class="col-xs-2">&nbsp;</div>
+            <div class="col-xs-3">&nbsp;</div>*@
+            @*<div class="col-xs-6">
+                <input class="form-check-input" type="checkbox" value="1" name="chkAcknowledge" id="chkAcknowledge" required>
+                <br />
+                <div class="text-left">
+                    <label class="form-check-label" for="chkAcknowledge" style="color: #ff0000;">
+                        By clicking this you acknowledge that the payment(s) will be sent back to System of Record and will no longer be in EAMI.
+                    </label>
+                </div>
+            </div>*@
+            @*<div class="col-xs-3">&nbsp;</div>*@
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForReturn_ReturnBtn">Return</button>
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForReturn_CancelBtn" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Mixed Payment Records Selected -->
+<div class="modal fade" id="modalWrapperForMixedPaymentRecordsSelected" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForMixedPaymentRecordsSelected" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForMixedPaymentRecordsSelected"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForMixedPaymentRecordsSelected">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForMixedPaymentRecordsSelected_CloseBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Payment Sets Has One Or More Pay Dates Not Set -->
+<div class="modal fade" id="modalWrapperForPaymentRecordSetsHasOneOrMorePayDatesNotSet" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForPaymentRecordSetsHasOneOrMorePayDatesNotSet" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForPaymentRecordSetsHasOneOrMorePayDatesNotSet"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForPaymentRecordSetsHasOneOrMorePayDatesNotSet">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForPaymentRecordSetsHasOneOrMorePayDatesNotSet_CloseBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Payment Sets Has Already Been Assigned -->
+<div class="modal fade" id="modalWrapperForPaymentRecordSetsHasAlreadyBeenAssigned" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForPaymentRecordSetsHasAlreadyBeenAssigned" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForPaymentRecordSetsHasAlreadyBeenAssigned"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForPaymentRecordSetsHasAlreadyBeenAssigned">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForPaymentRecordSetsHasAlreadyBeenAssigned_CloseBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Selected Payment Groups Exceed Limit -->
+<div class="modal fade" id="modalWrapperForSelectedPaymentGroupsExceedLimit" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForSelectedPaymentGroupsExceedLimit" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForSelectedPaymentGroupsExceedLimit"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForSelectedPaymentGroupsExceedLimit">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForSelectedPaymentGroupsExceedLimit_CloseBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Default Error -->
+<div class="modal fade" id="modalWrapperForDefaultError" tabindex="-1" role="dialog" aria-labelledby="modalHeaderForDefaultError" data-backdrop="true" style="margin-top:100px;">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalHeaderForDefaultError"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyForDefaultError">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" id="modalFooterForDefaultError_CloseBtn" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-lg-offset-0 col-lg-12" id="dvMainArea" style="margin-top:25px;">
+    <div class="panel panel-default">
+        <div class="panel-heading" style="background-color: #17315a; color: white; padding-top: 8.5px; padding-bottom: 8.5px;">
+            <img src="~/images/assignment_white_24x24.png" style="height:1.4em;vertical-align:top;">
+            <h3 class="panel-title" style="display:inline-block;">Payment Assignment</h3>
+        </div>
+        <div class="panel-body">
+            <!-- Buttons for AssignPayDate, Assign, UnAssign, Hold/UnHold, Return -->
+            <div class="form-inline">
+                <div class="form-group pull-right">
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnAssignPayDate">
+                        <span class="glyphicon glyphicon-calendar"></span>&nbsp;Assign Pay Date
+                    </button>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnAssign">
+                        <span class="glyphicon glyphicon-user"></span>&nbsp;Assign
+                    </button>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnUnAssign" style="display: none;">
+                        <span class="glyphicon glyphicon-user"></span>&nbsp;UnAssign
+                    </button>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnHold">
+                        <span class="glyphicon glyphicon-pause"></span>&nbsp;Hold/UnHold
+                    </button>
+                    <button class="btn btn-dhcs-secondary" type="button" id="btnReturn">
+                        <span class="glyphicon glyphicon-share-alt"></span>&nbsp;Return
+                    </button>
+                </div>
+            </div>
+
+            <br /><br />
+            <div class="panel panel-dhcs-primary">
+                <div class="panel-heading">
+                    <div class="container-fluid">
+                        <div class="row" style="font-weight: bold;">
+                            <div class="col-md-6" style="cursor:default;">Search Results</div>
+                            <div class="col-md-6 text-right">
+                                <span class="wrapperDefinitions" title='<span class="fa fa-book EAMI_Text_White"></span> Definitions'
+                                      data-toggle="popover" data-placement="bottom" data-trigger="hover"
+                                      data-content='<p><span class="glyphicon glyphicon-ban-circle"></span>&nbsp;&nbsp;indicates when Payee-PaymentType groupings include Payment Sets with any of the following operational statuses:</p>
+                                        <p><ul>
+                                            <li><span class="holdText">HOLD</span> - indicates when Payment Set is On Hold.&nbsp;&nbsp;Hovering over this flag shows details of the last time this Payment Set was put on hold.</li>
+                                           </ul>
+                                        </p>
+                                        <p><i class="fa fa-exclamation fa-lg" style="color: #333 !important;"></i>&nbsp;&nbsp;indicates when Payee-PaymentType groupings include Payment Sets with any of the following exclusive payment types:</p>
+                                        <p>
+                                            <ul>
+                                                @foreach (var refCode in ViewBag.ExclusivePaymentTypesRefCodeList)
+                                                {
+                                                    <li><span class="EAMI_Text_AlertWarning">@Html.Raw(refCode.Code)</span> - @Html.Raw(refCode.Description)</li>
+                                                }
+                                            </ul>
+                                        </p>
+                                        @if (ViewBag.ProcessWarrants == true)
+                                        {
+					                    <p>Additional features:</p>
+                                        <p>         
+                                            <ul>
+                                                @* <li><img src="../images/MCEFT_Warrant_Indicator_24.png"> - indicates Warrant Payment</li>*@
+                                                <li><img src="~/images/MCEFT_Warrant_Indicator_24.png" style="height:1.6em;vertical-align:top;"> - indicates Warrant Payment</li>
+                                            </ul>
+                                        </p>} ' data-html="true">
+                                        <span class="fa fa-book EAMI_Text_White"></span> <span class="EAMI_Text_White">Definitions <span style="font-weight:normal;">(hover over to display)</span></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="divLoadingAnimation" class="panel">
+                    <div id="divLoadingAnimation_Inner">
+                    </div>
+                </div>
+                <div class="panel-body" id="divContainerForTblPayeePaymentType">
+                    <table id="tblPayeePaymentType" class="table table-hover" cellspacing="0" width="100%">
+                        <thead style="display:none;">
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() == 0)
+                            {
+                                <tr class="EAMI_BgColor_White noModel">
+                                    <td></td>
+                                    <td style="width:100%;text-align:center;"><br />Please Select Search Criteria And Then Press Search.</td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Funding Details -- Same as in IPClaimSchedulePaymentSetDetails.cshtml -->
+@*<div class="modal fade" id="dvFundingDetailModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="true" style="margin-top:20px;">
+    <div class="modal-dialog modal-customSize" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="lblModalFunding"></h4>
+            </div>
+            <div class="modal-body" id="modalBodyFundingDetail" style="margin-top:20px;max-height:650px;overflow-y:scroll;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dhcs-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@*<div id="dialog" title="Basic dialog">
+    <p>This is the default dialog which is useful for displaying information. The dialog window can be moved, resized and closed with the 'x' icon.</p>
+</div>*@
+@*<div class="alert alert-success" role="alert">
+    <strong>Well done!</strong> You successfully read this important alert message.
+</div>*@
+
+
+<script type="text/javascript" src="~/Scripts/App/EAMI_Common.js"></script>
+<script type="text/javascript" src="~/Scripts/App/PaymentRecord/Assign_Common.js"></script>
+<script type="text/javascript">
+    var selectedPaymentGroupsLimit = '@System.Configuration.ConfigurationManager.AppSettings["SelectedPaymentGroupsLimit"]';
+
+    // Start Loading... Animation
+    $('#divLoadingAnimation').css("display", "block");
+    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+    var prgId = document.getElementById('hdn_ProgramChoiceId').value;
+
+    $(function () {
+        eami.antiForgeryToken = '@Html.AntiForgeryTokenAjax()' + ':' + prgId;
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('ProgramChoiceId', prgId);
+                xhr.setRequestHeader('X-CSRF-Token', eami.antiForgeryToken);
+            }
+        });
+    });
+
+    $(document).ready(function () {
+        //var slideUpThenDown = false;
+        var outterMostTableId = "tblPayeePaymentType";
+        var datatablePaymentSuperGroup;
+        var maxLengthOfCommentsTextArea = 200;
+
+        // Search Button Section Begin *************************************************************************************************************************************************
+        // Search Button Event Listeners Subsection (Calls AJAX Functions) ---------------------------------------------------------------------------------------------------
+        $('#btnSearch').on('click', function () {
+            ajaxGetAssignPaymentRecords_Search($("#ddlSystem option:selected").text(),
+                                                $("#ddlPaymentRecordStatus option:selected").val(),
+                                                GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                                GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                                GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+        });
+        // Search Button AJAX Functions Subsection (populates outtermost table) ----------------------------------------------------------------------------------------------
+        function ajaxGetAssignPaymentRecords_Search(strSystem, strPaymentRecordStatusId,
+            arrayPayeeName, arrayPaymentTypeName, arrayContractNumber) {
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("AssignPaymentRecords_Search")",
+                data: {
+                    'system': strSystem, 'paymentRecordStatusId': strPaymentRecordStatusId,
+                    'arrayPayeeName': arrayPayeeName, 'arrayPaymentTypeName': arrayPaymentTypeName, 'arrayContractNumber': arrayContractNumber
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (response) {
+                    if (response.match("noModel") && response.match("Please Select Search Criteria And Then Press Search."))
+                    {
+                        var strPaymentRecordStatusName = strPaymentRecordStatusId == "0" ? "UnAssigned" : strPaymentRecordStatusId == "1" ? "Assigned" : "";
+                        getWarning_NoPaymentRecordsReturned("There are currently no " + strPaymentRecordStatusName + " records in the " + strSystem + " System.");
+                    }
+                    else
+                    {
+                        ajaxGetAssignPaymentRecords_Search_SuccessCallBack(response, strPaymentRecordStatusId);
+                    }
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+        }
+        function ajaxGetAssignPaymentRecords_Search_SuccessCallBack(returnPayeePaymentTypeTable, strPaymentRecordStatusId) {
+            if (strPaymentRecordStatusId === '1') {    //Assigned
+                $("#btnAssign").html('<span class="glyphicon glyphicon-user"></span>&nbsp;ReAssign');
+                $("#modalFooterForAssign_AssignBtn").data('assign-type', 'reassign');
+                $("#modalFooterForAssign_AssignBtn").html('ReAssign');
+                $("#btnUnAssign").show();
+                $("#btnReturn").prop("disabled", true);
+            } else {
+                $("#btnAssign").html('<span class="glyphicon glyphicon-user"></span>&nbsp;Assign');
+                $("#modalFooterForAssign_AssignBtn").data('assign-type', 'assign');
+                $("#modalFooterForAssign_AssignBtn").html('Assign');
+                $("#btnUnAssign").hide();
+                $("#btnReturn").prop("disabled", false);
+            }
+
+            // Reload outtermost table
+            $('#divContainerForTblPayeePaymentType').html(returnPayeePaymentTypeTable);
+
+            // Rebind outtermost datatable
+            datatablePaymentSuperGroup = rebindDtPaymentSuperGroup(outterMostTableId);
+            // Appropriately position sort icons ------------------------------------------------------------------------------------------------------------------
+            datatablePaymentSuperGroup.columns().iterator('column', function (ctx, idx) {
+                var currentTh = $(datatablePaymentSuperGroup.column(idx).header());
+
+                if ([3, 4, 5, 6].indexOf(idx) >= 0) {
+                    currentTh.append('&nbsp;&nbsp;').append('<span class="sort-icon"/>');
+                }
+                else if ([1].indexOf(idx) >= 0) {
+                    currentTh.append('&nbsp;').append('<span class="sort-icon"/>');
+                }
+                else if ([0].indexOf(idx) >= 0) {
+                    currentTh.append('&nbsp;').append('<span class="sort-icon"/>');
+                }
+            });
+            // ----------------------------------------------------------------------------------------------------------------------------------------------------
+
+            // Remove previous binding of onclick event to +/- button from previous jaxGetAssignPaymentRecords_Search_SuccessCallBack function call.
+            // This prevents additional onclick events from being generated each time, ensuring only one onclick gets call per click below.
+            $('#' + outterMostTableId + ' > tbody tr td > button.btnInTdPayeePaymentType').prop("onclick", null);
+            // Add event listener for opening and closing details (+/- button) ********************************************
+            $('#' + outterMostTableId + ' > tbody tr td').on('click', 'button.btnInTdPayeePaymentType', function () {
+                $(this).find("span").toggleClass('glyphicon-plus');
+                $(this).find("span").toggleClass('glyphicon-minus');
+                var tdPayeePaymentType_id = $(this).parent().attr('id');
+                var trPayeePaymentType_id = tdPayeePaymentType_id.replace("tdPayeePaymentType_", "trPayeePaymentType_");
+                var paymentSuperGroup_UniqueKey = tdPayeePaymentType_id.replace("tdPayeePaymentType_", "");
+                var divChildOfTrPayeePaymentType_id = trPayeePaymentType_id.replace("trPayeePaymentType_", "divChildOfTrPayeePaymentType_");
+                var trPSG = $(this).closest('#' + trPayeePaymentType_id);
+                var rowPSG = datatablePaymentSuperGroup.row(trPSG);
+                if (trPSG.hasClass('shown')) {
+                    //The delay(0) forces child table to fully load and initialize complete before sliding up.
+                    $('#' + divChildOfTrPayeePaymentType_id, rowPSG.child()).delay(0).slideUp(250);
+                    trPSG.removeClass('shown');
+                }
+                else {
+                    var strPayeeFullCode = trPSG.find('span[id="PayeeFullCode"]').html();
+                    var strPaymentTypeName = trPSG.find('span[id="PaymentTypeName"]').html();
+                    var strContractNumber = trPSG.find('span[id="ContractNumber"]').html();
+                    var strSFY = trPSG.find('span[id="SFY"]').html();
+                    // Open this row
+                    ajaxGetPaymentGroups(rowPSG, rowPSG.data(), trPSG, divChildOfTrPayeePaymentType_id, paymentSuperGroup_UniqueKey,
+                        strPayeeFullCode, strPaymentTypeName, strContractNumber, strSFY);
+                }
+            });
+        }
+        // Search Button Section End ***************************************************************************************************************************************************
+
+        // Outtermost (+/-) Button Section Begin ***************************************************************************************************************************************
+        // Outtermost (+/-) Button AJAX Functions Subsection (populates 2nd Level -- PaymentGroups Level) --------------------------------------------------------------------
+        function ajaxGetPaymentGroups(rowPSG, rowPSGData, trPSG, divChildOfTrPayeePaymentType_id, paymentSuperGroup_UniqueKey,
+                     strPayeeFullCode, strPaymentTypeName, strContractNumber, strSFY) {
+            var jsonObject = {
+                "PaymentSuperGroup_UniqueKey": paymentSuperGroup_UniqueKey,
+                "PayeeFullCode": strPayeeFullCode,
+                "PaymentTypeName": strPaymentTypeName,
+                "ContractNumber": strContractNumber,
+                "SFY": strSFY
+            };
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AssignPaymentRecords_GetPaymentGroups")",
+                data: JSON.stringify(jsonObject),
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                // sync required for slideup then slidedown combo.  If async not set to false, simultaneous slideup/slidedown combos collide causing some pg datatables not to be active.
+                // Setting async to false means that the statement you are calling has to complete before the next statement in your function can be called.
+                // If you set async: true then that statement will begin it's execution and the next statement will be called regardless of whether the async statement has completed yet.
+                async: false,
+                success: function (response) {
+                    ajaxGetPaymentGroups_SuccessCallBack(response);
+                }
+            });
+            function ajaxGetPaymentGroups_SuccessCallBack(returnPaymentGroups) {
+                // Open this row
+                var retHtmlPaymentGroups = '' +
+                    '<div class="collapse no-padding" id="' + divChildOfTrPayeePaymentType_id + '">' +
+                            returnPaymentGroups +
+                    '</div>';
+                rowPSG.child(retHtmlPaymentGroups, 'no-padding level2').show();
+
+                //The delay(0) forces child table to fully load and initialize complete before sliding down.
+                //SlideDown use to be 250 but experienced issues with some checkboxes on bottom of list not selectable.  That is,
+                //if slide down not complete before user begins to scroll down, then interferes with some checkboxes being hoverable
+                //so sped up to 0 to fix -- ensures slide down complete before user has chance to scroll down.
+                $('#' + divChildOfTrPayeePaymentType_id, rowPSG.child()).delay(0).slideDown(0);
+
+                trPSG.addClass('shown');
+            }
+        }
+        // Outtermost (+/-) Button Section End *****************************************************************************************************************************************
+
+        // User Actions Buttons Section Begin ******************************************************************************************************************************************
+        // User Actions Buttons Event Listeners Subsection (Assign Pay Date) -------------------------------------------------------------------------------------------------
+        $('#btnAssignPayDate').on('click', function () {
+            //$('#modalWrapperForAssignPayDate .modal-footer > .pull-left').show();
+            //$('#modalWrapperForAssignPayDate > .modal-dialog').removeClass('modal-lg');
+            //$('#modalWrapperForAssignPayDate > .modal-dialog').addClass('modal-md');
+
+            var $SelectedPaymentGroups = $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected');
+            if ($SelectedPaymentGroups.length > selectedPaymentGroupsLimit) {
+                getWarning_SelectedPaymentGroupsExceedLimit($SelectedPaymentGroups.length, selectedPaymentGroupsLimit);
+            }
+            else if ($('#' + outterMostTableId + ' > tbody > tr').hasClass('noModel')) {
+                getWarning_PayeePaymentTypesNoModel();
+            }
+            else if (!$('#' + outterMostTableId + ' > tbody > tr').hasClass('shown') ||
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').length === 0) {
+                getWarning_PayeePaymentTypesRowNotExpanded();
+            }
+            else {
+                var retHtmlHeaderString = $("#btnAssignPayDate").html();
+                var retHtmlString = '' +
+                '<div class="container-fluid">' +
+                    '<div class="form-group" style="padding-top:15px;">' +
+                        '<div id="calendar" align="center"></div>' +
+                    '</div>' +
+                '</div>';
+                $("#modalHeaderForAssignPayDate").html(retHtmlHeaderString);
+                $("#modalBodyForAssignPayDate").html(retHtmlString);
+                ajaxGetAssignPaymentRecords_GetPayDatesCalendar();
+            }
+        });
+
+        function ajaxGetAssignPaymentRecords_GetPayDatesCalendar() {
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("AssignPaymentRecords_GetPayDates")",
+                //data: {},
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (data) {
+                    var eventDates_PayDate = {};
+
+                    $.each(data, function (i, SingleElement) {
+                        var strDisplayOption = SingleElement;
+                        eventDates_PayDate[new Date(strDisplayOption.replace("-", "/"))] = new Date(strDisplayOption.replace("-", "/"));
+                    });
+
+                    $.ajax({
+                        type: "GET",
+                        url: "@Url.Action("AssignPaymentRecords_GetDrawDates")",
+                        //data: {},
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        traditional: true,  //This is required when passing array.
+                        success: function (data) {
+                            var eventDates_DrawDate = {};
+                            $.each(data, function (i, SingleElement) {
+                                var strDisplayOption = SingleElement;
+                                eventDates_DrawDate[new Date(strDisplayOption.replace("-", "/"))] = new Date(strDisplayOption.replace("-", "/"));
+                            });
+                            jQuery('#calendar').datepicker({
+                                beforeShowDay: function (date) {
+                                    var highlight = eventDates_PayDate[date];
+                                    var highlight2 = eventDates_DrawDate[date];
+                                    var currentDateTime = new Date();
+                                    var returnBool = moment(date).isSame(currentDateTime, 'day') || moment(date).isAfter(currentDateTime, 'day');
+                                    if (highlight && highlight2) {
+                                        return [returnBool, "calendarEventPayAndDrawDate", ''];
+                                    } else {
+                                        if (highlight) {
+                                            return [returnBool, "calendarEventPayDate", ''];
+                                        } else {
+                                            if (highlight2) {
+                                                return [false, "calendarEventDrawDate", ''];
+                                            } else {
+                                                return [false, '', ''];
+                                            }
+                                        }
+                                    }
+                                },
+                                onSelect: function (date) {
+                                    $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.PayDate').html(date);
+                                    $('#modalWrapperForAssignPayDate').modal('hide');
+                                }
+                            });
+                            jQuery('#calendar').datepicker("option", "prevText", "");
+                            jQuery('#calendar').datepicker("option", "nextText", "");
+                            $('#modalWrapperForAssignPayDate').modal('show');
+                        }
+                    });
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+        }
+
+        //function ajaxGetAssignPaymentRecords_GetPayDatesCalendar_ErrorCallBack(data) {
+        //    var retHtmlString = '' +
+        //    '<div class="container-fluid">';
+        //    retHtmlString = retHtmlString +
+        //            '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+        //            data +
+        //            '</div>' +
+        //        '</div>';
+        //    $("#modalBodyForAssignPayDate").html(retHtmlString);
+        //    $('#modalWrapperForAssignPayDate .modal-footer > .pull-left').hide();
+        //    $('#modalWrapperForAssignPayDate > .modal-dialog').removeClass('modal-md');
+        //    $('#modalWrapperForAssignPayDate > .modal-dialog').addClass('modal-lg');
+        //    $('#modalWrapperForAssignPayDate').modal('show');
+        //}
+
+        // User Actions Buttons Event Listeners Subsection (Assign) ----------------------------------------------------------------------------------------------------------
+        $('#btnAssign').on('click', function () {
+            var oneOrMorePayDatesNotSet = false;
+            $('#' + outterMostTableId + ' > tbody tr tr:has(td)').has('input[type=checkbox]:checked').each(function () {
+                if ($(this).find('.PayDate').html() == '--------------------') {
+                    oneOrMorePayDatesNotSet = true;
+                    return false;
+                };
+            });
+
+            var $SelectedPaymentGroups = $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected');
+            if ($SelectedPaymentGroups.length > selectedPaymentGroupsLimit) {
+                getWarning_SelectedPaymentGroupsExceedLimit($SelectedPaymentGroups.length, selectedPaymentGroupsLimit);
+            }
+            else if ($('#' + outterMostTableId + ' > tbody > tr').hasClass('noModel')) {
+                getWarning_PayeePaymentTypesNoModel();
+            }
+            else if (!$('#' + outterMostTableId + ' > tbody > tr').hasClass('shown') ||
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').length === 0) {
+                getWarning_PayeePaymentTypesRowNotExpanded();
+            }
+            else if (oneOrMorePayDatesNotSet) {
+                getWarning_PaymentRecordSetsHasOneOrMorePayDatesNotSet();
+            }
+            else {
+                // Start Loading... Animation
+                $('#divLoadingAnimation').css("display", "block");
+                EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("AssignPaymentRecords_GetAssignees")",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    //beforeSend: function (response) {
+                    //    $('#divLoadingAnimation').css("display", "block");
+                    //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                    //},
+                    success: function (data) {
+                        ajaxGetAssignees_SuccessCallBack(data);
+                    },
+                    complete: function (response) {
+                        $('#divLoadingAnimation_Inner').empty();
+                        $('#divLoadingAnimation').css("display", "none");
+                    }
+                });
+            }
+        });
+        //function ajaxGetAssignees_ErrorCallBack(data) {
+        //    var retHtmlHeaderString = $("#btnAssign").html() + ' Payment - ' + $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').length + ' Payment Sets';
+        //    var retHtmlString = '' +
+        //    '<div class="container-fluid">';
+        //    retHtmlString = retHtmlString +
+        //            '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+        //            data +
+        //            '</div>' +
+        //        '</div>';
+        //    $("#modalHeaderForAssign").html(retHtmlHeaderString);
+        //    $("#modalBodyForAssign").html(retHtmlString);
+        //    $('#modalFooterForAssign_AssignBtn').hide();
+        //    $('#modalWrapperForAssign').modal('show');
+        //}
+        function ajaxGetAssignees_SuccessCallBack(data) {
+            var retHtmlHeaderString = $("#btnAssign").html() + ' Payment - ' + $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').length + ' Payment Sets';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="row EAMI_BgColor_BlueSteel EAMI_Text_White" style="padding-top:15px;padding-bottom:5px;">' +
+                  '<div class="col-md-1 selectorWidth"></div>' +
+                  '<div class="col-md-4"><strong>Name</strong></div>' +
+                  '<div class="col-md-5"><strong>User</strong></div>' +
+                  '<div class="col-md-2"><strong>Assigned Payments</strong></div>' +
+                '</div>' +
+                '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                '</div>';
+            $.each(data, function (i, SingleElement) {
+                retHtmlString = retHtmlString +
+                '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                  '<div class="col-md-1 selectorWidth"><input type="radio" name="radioUser" value="' + SingleElement.Item1.User_ID + '" style="margin-top: 0.22em;"></div>' +
+                  '<div class="col-md-4" data-user="' + SingleElement.Item1.Display_Name + '">' + SingleElement.Item1.Display_Name + '</div>' +
+                  '<div class="col-md-5">' + SingleElement.Item1.DelimitedRoleNames + '</div>' +
+                  '<div class="col-md-2">' + SingleElement.Item2 + '</div>' +
+                '</div>';
+            });
+            retHtmlString = retHtmlString +
+                    '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+                    '</div>' +
+                '</div>';
+            $("#modalHeaderForAssign").html(retHtmlHeaderString);
+            $("#modalBodyForAssign").html(retHtmlString);
+            $('#modalFooterForAssign_AssignBtn').show();
+            $('#modalWrapperForAssign').modal('show');
+            $('input:radio[name=radioUser]').change(function () {
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.AssignedTo').find('input[type="hidden"]').val($('input[name=radioUser]:checked').val());
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.AssignedTo').find('span').html($('input[name=radioUser]:checked').parent().parent().find('[data-user]').html());
+            });
+        }
+
+        $('#modalWrapperForAssign').on('hide.bs.modal', function (e) {
+            if (!$('#modalFooterForAssign_AssignBtn').data('clicked')) {
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.AssignedTo').find('span').html('--------------------');
+            }
+            $('#modalFooterForAssign_AssignBtn').data('clicked', false);
+        });
+
+        $('#modalFooterForAssign_AssignBtn').on('click', function () {
+            $(this).data('clicked', true);
+            ajaxAssignPaymentGroups(false);
+        });
+        // User Actions Buttons Event Listeners Subsection (UnAssign) --------------------------------------------------------------------------------------------------------
+        $('#btnUnAssign').on('click', function () {
+                var $SelectedPaymentGroups = $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected');
+                if ($SelectedPaymentGroups.length > selectedPaymentGroupsLimit) {
+                    getWarning_SelectedPaymentGroupsExceedLimit($SelectedPaymentGroups.length, selectedPaymentGroupsLimit);
+                }
+                else if ($('#' + outterMostTableId + ' > tbody > tr').hasClass('noModel')) {
+                    getWarning_PayeePaymentTypesNoModel();
+                }
+                else if (!$('#' + outterMostTableId + ' > tbody > tr').hasClass('shown') ||
+                    $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').length === 0) {
+                    getWarning_PayeePaymentTypesRowNotExpanded();
+                }
+                else {
+                        ajaxAssignPaymentGroups(true);
+                }
+        });
+        // User Actions Buttons AJAX Functions Subsection (called by Assign, ReAssign, and Unassign) -------------------------------------------------------------------------
+        function ajaxAssignPaymentGroups(isUnAssign) {
+            var jsonArrayOfPaymentGroups = new Array();
+            var $SelectedPaymentGroups = $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected');
+            $SelectedPaymentGroups.each(function (i) {
+                var parentTbody = $(this).parent('tbody');
+                var tblPG_Id = parentTbody.parent('table').attr('id');
+                var paymentSuperGroup_UniqueKey = tblPG_Id.replace('tblPG_', '');
+                jsonArrayOfPaymentGroups.push(
+                {
+                    "PaymentSuperGroupKey": paymentSuperGroup_UniqueKey,
+                    "UniqueNumber": $(this).find('.PaymentGroup_UniqueNumber').find('.PRSNumber').html(),
+                    "PayDate": { "Code": $.datepicker.formatDate("yy-mm-dd", new Date($(this).find('.PayDate').html())) },
+                    "AssignedUser": { "User_ID": $(this).find('.AssignedTo').find('input[type="hidden"]').val(), "User_Name": $(this).find('.AssignedTo').find('span').val()}
+                });
+            });
+
+            $('#modalWrapperForAssign').modal('hide');
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AssignPaymentRecords_AssignPaymentGroups")",
+                data: "{ " +
+                        "pgList: " + JSON.stringify(jsonArrayOfPaymentGroups) + "," +
+                        "isUnAssign: " + JSON.stringify(isUnAssign) +
+                      " }",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (jSONReturnStatus) {
+                    ajaxAssignPaymentGroups_SuccessCallBack(jSONReturnStatus, isUnAssign, false);
+                    // end Loading... animation ---------------------------------------------------
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                    //
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+            //function ajaxAssignPaymentGroups_ErrorCallBack(data) {
+            //    ajaxGetAssignees_ErrorCallBack(data)
+            //}
+            function ajaxAssignPaymentGroups_SuccessCallBack(jSONReturnStatus, isUnAssign, isReturn) {
+                updatePage(jSONReturnStatus, isUnAssign, isReturn);
+            }
+        }
+
+        // User Actions Buttons AJAX Functions Subsection (called by Return) -------------------------------------------------------------------------------------------------
+        function ajaxReturnPaymentGroupsToSystemOfRecord(strNote) {
+            var jsonArrayOfPaymentGroups = new Array();
+            $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').each(function (i) {
+                var parentTbody = $(this).parent('tbody');
+                var tblPG_Id = parentTbody.parent('table').attr('id');
+                var paymentSuperGroup_UniqueKey = tblPG_Id.replace('tblPG_', '');
+                jsonArrayOfPaymentGroups.push(
+                {
+                    "PaymentSuperGroupKey": paymentSuperGroup_UniqueKey,
+                    "UniqueNumber": $(this).find('.PaymentGroup_UniqueNumber').find('.PRSNumber').html(),
+                    "PayDate": { "Code": $.datepicker.formatDate("yy-mm-dd", new Date($(this).find('.PayDate').html())) },
+                    "AssignedUser": { "User_ID": $(this).find('.AssignedTo').find('input[type="hidden"]').val() }
+                });
+            });
+
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AssignPaymentRecords_ReturnPaymentGroupsToSystemOfRecord")",
+                data: "{ " +
+                        "note: " + JSON.stringify(strNote) + "," +
+                        "pgList: " + JSON.stringify(jsonArrayOfPaymentGroups) +
+                      " }",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (jSONReturnStatus) {
+                    $('#modalWrapperForReturn').modal('hide');
+                    ajaxReturnPaymentGroupsToSystemOfRecord_SuccessCallBack(jSONReturnStatus, false, true);
+                    // end Loading... animation ---------------------------------------------------
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                    //
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+            function ajaxReturnPaymentGroupsToSystemOfRecord_SuccessCallBack(jSONReturnStatus, isUnAssign, isReturn) {
+                updatePage(jSONReturnStatus, isUnAssign, isReturn);
+            }
+        }
+        //function ajaxReturnPaymentGroupsToSystemOfRecord_ErrorCallBack(data) {
+        //    var retHtmlString = '' +
+        //    '<div class="container-fluid">';
+        //    retHtmlString = retHtmlString +
+        //            '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+        //            data +
+        //            '</div>' +
+        //        '</div>';
+        //    $("#modalBodyForReturn").html(retHtmlString);
+        //    $('#modalFooterForReturn_ReturnBtn').hide();
+        //    $('#modalWrapperForReturn > .modal-dialog').removeClass('modal-md');
+        //    $('#modalWrapperForReturn > .modal-dialog').addClass('modal-lg');
+        //}
+
+        // User Actions Buttons Helper Funtions for AJAX Functions Subsection (called by ajaxAssignPaymentGroups and ajaxReturnPaymentGroupsToSystemOfRecord) ----------------
+        var strFlaggedHtml_NoFlagged_SuperGroup = '<span class="noFlaggedSuperGroup">&nbsp;</span>'    //The inner &nbsp; needed to differentiate from flagged span below for sorting purposes.
+        function updatePage(jSONReturnStatus, isUnAssign, isReturn) {
+            //$('#modalWrapperForAssign').modal('hide');
+            if (jSONReturnStatus.status) {
+                var pgRowCount_Total = new Map();
+                $('#' + outterMostTableId + ' > tbody > tr.level2').each(function (i) {
+                    pgRowCount_Total.set($(this).find('table').attr('id'), $(this).find('tbody').find("[type=checkbox]").length);   //init
+                });
+
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').each(function (i) {
+                    var parentTbody = $(this).closest('tbody');
+                    var parentTr = parentTbody.closest('tr.level2').prev('tr.shown');
+                    var tblPG_Id = parentTbody.parent('table').attr('id');
+                    var paymentSuperGroup_UniqueKey = tblPG_Id.replace('tblPG_', '');
+
+                    if ($("#modalFooterForAssign_AssignBtn").data('assign-type') === 'reassign' && !isUnAssign && !isReturn)   // is ReAssign
+                    {
+                        //$(this).find('.flagIcon').html(strFlagIconHtml_Hold);
+                        //$(this).find('.flagIcon > span.wrapperOnHold').popover({ content: strNote }); // Reactivate Popover for this flag with new note.
+                        parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide up
+                        parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide down
+                    }
+                    else  // is Assign or UnAssign or Return
+                    {
+                        var pgRowCount_Selected = parentTbody.find('tr.selected').length;
+                        //alert('pgRowCount_Selected before decrement:  ' + pgRowCount_Selected);
+                        $(this).removeClass("selected");
+                        $(this).find('td.flagIcon > span').removeClass("wrapperOnHold");
+                        $(this).find('td.IHSSIcon > span').removeClass("wrapperIHSS");
+                        $(this).find('td.SCHIPIcon > span').removeClass("wrapperSCHIP");
+                        $(this).find('td.HQAFIcon > span').removeClass("wrapperHQAF");
+                        pgRowCount_Selected = parentTbody.find('tr.selected').length;
+                        pgRowCount_Total.set($(this).closest('table').attr('id'), pgRowCount_Total.get($(this).closest('table').attr('id')) - 1);
+                        if (pgRowCount_Selected === 0) {
+                            if (pgRowCount_Selected === pgRowCount_Total.get($(this).closest('table').attr('id'))) {
+                                // Contract Number Dropdown Removal ----------------------------------------------------------------------------------------------------------------
+                                var currentContractNumber = parentTr.find('span.ContractNumber').text();
+                                var correspondingContractNumberOption = $("#ddlContractNumber option").filter(function () { return $(this).text() === currentContractNumber; });
+                                var currentContractNumberOccurences = 0;
+                                $('#' + outterMostTableId + ' > tbody > tr:not(.level2)').each(function (i) {
+                                    if ($(this).find('span.ContractNumber').text() === currentContractNumber) {
+                                        currentContractNumberOccurences++;
+                                    }
+                                });
+                                if (currentContractNumberOccurences === 1) {
+                                    var liContractNumber = $("#ddlContractNumber").parent("div").find("div.dropdown-menu > ul.dropdown-menu li span").filter(
+                                                                function () { return $(this).text() === currentContractNumber; }).closest('li');
+                                    if (liContractNumber.hasClass('selected')) {
+                                        liContractNumber.removeClass('selected');
+                                    }
+                                    correspondingContractNumberOption.remove();
+                                    $("#ddlContractNumber").selectpicker('refresh');
+                                }
+                                // -------------------------------------------------------------------------------------------------------------------------------------------------
+                                // Payment Type Dropdown Removal -------------------------------------------------------------------------------------------------------------------
+                                var currentPaymentType = parentTr.find('span.PaymentTypeName').text();
+                                var correspondingPaymentTypeOption = $("#ddlPaymentType option").filter(function () { return $(this).text() === currentPaymentType; });
+                                var currentPaymentTypeOccurences = 0;
+                                $('#' + outterMostTableId + ' > tbody > tr:not(.level2)').each(function (i) {
+                                    if ($(this).find('span.PaymentTypeName').text() === currentPaymentType) {
+                                        currentPaymentTypeOccurences++;
+                                    }
+                                });
+                                if (currentPaymentTypeOccurences === 1) {
+                                    var liPaymentType = $("#ddlPaymentType").parent("div").find("div.dropdown-menu > ul.dropdown-menu li span").filter(
+                                                                function () { return $(this).text() === currentPaymentType; }).closest('li');
+                                    if (liPaymentType.hasClass('selected')) {
+                                        liPaymentType.removeClass('selected');
+                                    }
+                                    correspondingPaymentTypeOption.remove();
+                                    $("#ddlPaymentType").selectpicker('refresh');
+                                }
+                                // -------------------------------------------------------------------------------------------------------------------------------------------------
+                                // Payee Dropdown Removal --------------------------------------------------------------------------------------------------------------------------
+                                var currentPayee = parentTr.find('span.PayeeName').text();
+                                var correspondingPayeeOption = $("#ddlPaymentExchangeEntity option[value='" + currentPayee + "']");
+                                var abbrevPayeeName = correspondingPayeeOption.text();
+
+                                var currentPayeeOccurences = 0;
+                                $('#' + outterMostTableId + ' > tbody > tr:not(.level2)').each(function (i) {
+                                    if ($(this).find('span.PayeeName').text() === currentPayee) {
+                                        currentPayeeOccurences++;
+                                    }
+                                });
+                                if (currentPayeeOccurences === 1) {
+                                    var liPayee = $("#ddlPaymentExchangeEntity").parent("div").find("div.dropdown-menu > ul.dropdown-menu li span").filter(
+                                                        function () { return $(this).text() === abbrevPayeeName; }).closest('li');
+                                    if (liPayee.hasClass('selected')) {
+                                        liPayee.removeClass('selected');
+                                    }
+                                    correspondingPayeeOption.remove();
+                                    $("#ddlPaymentExchangeEntity").selectpicker('refresh');
+                                }
+                                // -------------------------------------------------------------------------------------------------------------------------------------------------
+                                parentTr.remove();                              // remove 1st level Payment Super Group
+                                parentTbody.parents('tr.level2').remove();      // remove 2nd level Payment Group -- this also removes all child rows (3rd level Payment Records).
+                            }
+                            else {
+                                parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide up
+                                parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide down
+
+                                //Removed "ban" outtermost flag if no siblings has "hold".
+                                if (!$(this).siblings('tr').find('.flagIcon span').hasClass('wrapperOnHold')) {    // No Payment Groups under this Payment Super Group have On Hold status.
+                                    parentTr.find('.onHoldIconSuperGroup').html(strFlagIconHtml_NoFlag_SuperGroup);
+                                }
+                                //Removed "bang" outtermost flag if no siblings has an exclusive payement type.
+                                if (!$(this).siblings('tr').find('.PGIcon span').hasClass('wrapperIconColumnRect')) {    // No Payment Groups under this Payment Super Group have Icons status.
+                                    parentTr.find('.flaggedIconSuperGroup').html(strFlaggedHtml_NoFlagged_SuperGroup);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                getError_PaymentRecordSetsHasAlreadyBeenAssignedOrReturned(jSONReturnStatus.returnedData);
+            }
+        }
+
+        // User Actions Buttons Event Listeners Subsection (Hold/UnHold) -----------------------------------------------------------------------------------------------------
+        var jsonArrayOfPaymentGroupsForHoldUnHold = null;
+        var retHtmlHeaderString = null;
+        var retHtmlFooterForHold_HoldBtnString = null;
+        var strHoldStatusToSet = null;
+        $('#btnHold').on('click', function () {
+            $('#modalFooterForHold_HoldBtn').show();
+            //$('#modalFooterForHold_HoldBtn').show();
+            //$('#modalWrapperForHold > .modal-dialog').removeClass('modal-lg');
+            //$('#modalWrapperForHold > .modal-dialog').addClass('modal-md');
+
+            var $SelectedPaymentGroups = $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected');
+            if ($SelectedPaymentGroups.length > selectedPaymentGroupsLimit) {
+                getWarning_SelectedPaymentGroupsExceedLimit($SelectedPaymentGroups.length, selectedPaymentGroupsLimit);
+            }
+            else if ($('#' + outterMostTableId + ' > tbody > tr').hasClass('noModel')) {
+                getWarning_PayeePaymentTypesNoModel();
+            }
+            else if (!$('#' + outterMostTableId + ' > tbody > tr').hasClass('shown') ||
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').length === 0) {
+                getWarning_PayeePaymentTypesRowNotExpanded();
+            }
+            else if ($('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.noFlag').length > 0 &&
+                     $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.wrapperOnHold').length > 0) {
+                getWarning_MixedPaymentRecordsSelected();
+            }
+            else  //Hold or UnHold Case
+            {
+                jsonArrayOfPaymentGroupsForHoldUnHold = new Array();
+                retHtmlHeaderString = '';
+                retHtmlFooterForHold_HoldBtnString = '';
+                strHoldStatusToSet = null;
+
+                if ($('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.noFlag').length === 0 &&
+                     $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').find('.wrapperOnHold').length > 0) //UnHold
+                {
+                    // prepare json object ************************************************************************************
+                    $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').each(function (i) {
+                        if ($(this).children('td').children('.wrapperOnHold').length > 0) //ensures only Held payment groups considered
+                        {
+                            var parentTbody = $(this).parent('tbody');
+                            var tblPG_Id = parentTbody.parent('table').attr('id');
+                            var paymentSuperGroup_UniqueKey = tblPG_Id.replace('tblPG_', '');
+                            jsonArrayOfPaymentGroupsForHoldUnHold.push(
+                            {
+                                "PaymentSuperGroupKey": paymentSuperGroup_UniqueKey,
+                                "UniqueNumber": $(this).find('.PaymentGroup_UniqueNumber').find('.PRSNumber').html(),
+                            });
+                        }
+                    });
+                    // ********************************************************************************************************
+                    strHoldStatusToSet = "false";
+                    retHtmlHeaderString = '<span class="glyphicon glyphicon-pause"></span>' + ' UnHold Payment';
+                    retHtmlFooterForHold_HoldBtnString = 'UnHold';
+
+                    var retHtmlString = '' +
+                        '<div class="container-fluid">' +
+                        '<div class="form-group" style="padding-top:15px;">' +
+                        '<label for="txtareaHoldComment">Comment:</label>' +
+                        '<textarea class="form-control" id="txtareaHoldComment" rows="10"></textarea>' +
+                        '</div>' +
+                        '<div class="alert alert-danger" style="display: none; margin-top: 10px;" id="danger_alert"></div>' +
+                        '</div>';
+
+                }
+                else  //Hold
+                {
+                    // prepare json object ************************************************************************************
+                    $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').each(function (i) {
+                        if ($(this).children('td').children('.noFlag').length > 0) //ensures only non-flagged payment groups considered
+                        {
+                            var parentTbody = $(this).parent('tbody');
+                            var tblPG_Id = parentTbody.parent('table').attr('id');
+                            var paymentSuperGroup_UniqueKey = tblPG_Id.replace('tblPG_', '');
+                            jsonArrayOfPaymentGroupsForHoldUnHold.push(
+                            {
+                                "PaymentSuperGroupKey": paymentSuperGroup_UniqueKey,
+                                "UniqueNumber": $(this).find('.PaymentGroup_UniqueNumber').find('.PRSNumber').html(),
+                            });
+                        }
+                    });
+                    // ********************************************************************************************************
+                    strHoldStatusToSet = "true";
+                    retHtmlHeaderString = '<span class="glyphicon glyphicon-pause"></span>' + ' Hold Payment';
+                    retHtmlFooterForHold_HoldBtnString = 'Hold';
+
+                    var retHtmlString = '' +
+                        '<div class="container-fluid">' +
+                        '<div class="form-group" style="padding-top:15px;">' +
+                        '<label for="txtareaHoldComment">Comment:</label>' +
+                        '<textarea class="form-control" id="txtareaHoldComment" placeholder="Comment Required" rows="10"></textarea>' +
+                        '</div>' +
+                        '<div class="alert alert-danger" style="display: none; margin-top: 10px;" id="danger_alert"></div>' +
+                        '</div>';
+
+                }
+                //var retHtmlString = '' +
+                //'<div class="container-fluid">' +
+                //    '<div class="form-group" style="padding-top:15px;">' +
+                //        '<label for="txtareaHoldComment">Comment:</label>' +
+                //        '<textarea class="form-control" id="txtareaHoldComment" placeholder="Comment Required" rows="10"></textarea>' +
+                //    '</div>' +
+                //    '<div class="alert alert-danger" style="display: none; margin-top: 10px;" id="danger_alert"></div>' +
+                //'</div>';
+
+                $("#modalHeaderForHold").html(retHtmlHeaderString);
+                $("#modalBodyForHold").html(retHtmlString);
+                $("#modalFooterForHold_HoldBtn").html(retHtmlFooterForHold_HoldBtnString);
+                $('#modalWrapperForHold').modal('show');
+            }
+
+            // Remove previous binding of on("change keyup paste") event to #txtareaHoldComment from previous $('#btnHold').on('click') function call.
+            // This prevents additional on("change keyup paste") events from being generated each time, ensuring only one on("change keyup paste") gets called.
+            $("#txtareaHoldComment").prop("onchange", null);
+            $("#txtareaHoldComment").prop("onkeyup", null);
+            $("#txtareaHoldComment").prop("onpaste", null);
+            $("#txtareaHoldComment").on("change keyup paste", function () {
+                var maxLength = maxLengthOfCommentsTextArea;
+                var currentVal = $(this).val();
+                var currentLength = $(this).val().length;
+                if (currentLength > maxLength) {
+                    $("#modalWrapperForHold #danger_alert").html("Your entry of <span style='color:blue;'>" + currentLength + "</span> " +
+                        "characters exceeds the maximum <span style='color:blue;'>" + maxLength + "</span> characters allowed." +
+                        "<br />Please reduce the number of characters entered.");
+                    $("#modalWrapperForHold #danger_alert").slideDown();
+                    $('#modalFooterForHold_HoldBtn').prop("disabled", true);
+                }
+                else {
+                    $('#modalFooterForHold_HoldBtn').prop("disabled", false);
+                    $("#modalWrapperForHold #danger_alert").slideUp();
+                }
+            });
+        });
+        $("#modalFooterForHold_HoldBtn").on("click", function () {
+            var strNote = $("#txtareaHoldComment").val();
+            if (strNote == '' && retHtmlFooterForHold_HoldBtnString != 'UnHold')
+            {
+                $("#modalWrapperForHold #danger_alert").html("Comment is required.  Please enter a comment.");
+                $("#modalWrapperForHold #danger_alert").slideDown();
+            }
+            else
+            {
+                ajaxAssignPaymentRecords_HoldUnholdPaymentGroups(strHoldStatusToSet, strNote, jsonArrayOfPaymentGroupsForHoldUnHold);
+            }
+        });
+        $('#modalWrapperForHold').on('hidden.bs.modal', function (e) {
+            $('#modalFooterForHold_HoldBtn').prop("disabled", false);
+        })
+        // User Actions Buttons AJAX Functions Subsection (called by Hold and UnHold) ----------------------------------------------------------------------------------------
+        function ajaxAssignPaymentRecords_HoldUnholdPaymentGroups(strHoldStatusToSet, strNote, jsonArrayOfPaymentGroupsForHoldUnHold) {
+            // start Loading... animation ---------------------------------------------------
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            // ------------------------------------------------------------------------------
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AssignPaymentRecords_HoldUnholdPaymentGroups")",
+                data: "{ " +
+                        "holdStatusToSet: " + JSON.stringify(strHoldStatusToSet) + "," +
+                        "note: " + JSON.stringify(strNote) + "," +
+                        "pgList: " + JSON.stringify(jsonArrayOfPaymentGroupsForHoldUnHold) +
+                      " }",
+                contentType: "application/json; charset=utf-8",
+                dataType: "html",
+                traditional: true,  //This is required when passing array.
+                success: function (response) {
+                    if (response.includes('An error occured while processing your request')) {
+                        //$('#modalWrapperForHold').modal('show');
+                        //$('#divLoadingAnimation_Inner').empty();
+                        //$('#divLoadingAnimation').css("display", "none");
+                        //ajax_ErrorCallBack();
+                        $("#LayoutBody > #container > #header .EAMI_Text_White").html("");
+                        $("#LayoutBody > #container > #header .EAMI_BgColor_BlueSteel").html("");
+                        showErrorOnWholePage(response);
+                    }
+                    else {
+                        $('#modalWrapperForHold').modal('hide');
+                        ajaxHoldUnholdPaymentGroups_SuccessCallBack(response, strHoldStatusToSet, strNote);
+                    }
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+        }
+        //function ajaxHoldUnholdPaymentGroups_ErrorCallBack(data) {
+        //    var retHtmlString = '' +
+        //    '<div class="container-fluid">';
+        //    retHtmlString = retHtmlString +
+        //            '<div class="row" style="padding-top:5px;padding-bottom:5px;">' +
+        //            data +
+        //            '</div>' +
+        //        '</div>';
+        //    $("#modalBodyForHold").html(retHtmlString);
+        //    $('#modalFooterForHold_HoldBtn').hide();
+        //    $('#modalWrapperForHold > .modal-dialog').removeClass('modal-md');
+        //    $('#modalWrapperForHold > .modal-dialog').addClass('modal-lg');
+        //}
+
+        var strFlagIconHtml_Hold_SuperGroup = '<span class="glyphicon glyphicon-ban-circle wrapperOnHold outtermostFlag"></span>'
+        var strFlagIconHtml_NoFlag_SuperGroup = '<span class="noOnHoldSuperGroup">&nbsp;</span>'    //The inner &nbsp; needed to differentiate from flagged span below for sorting purposes.
+        function ajaxHoldUnholdPaymentGroups_SuccessCallBack(returnCommonStatus, strHoldStatusToSet, strNote) {
+            if (JSON.parse(returnCommonStatus).Status)
+            {
+                var parentTbody = null;
+                var parentTr = null;
+                //var paymentSuperGroup_UniqueKey = null;
+                if (JSON.parse(strHoldStatusToSet)) //Hold just completed
+                {
+                    var i = 0;
+                    $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').each(function () {
+                        i++;
+                        parentTbody = $(this).parent('tbody');
+                        parentTr = parentTbody.closest('tr.level2').prev('tr.shown');
+                        var origNumberSelectRowsWithNoFlag = Number(parentTbody.find('tr.selected > td.flagIcon > span.noFlag').length);
+                        var totalNumberOfRows = Number(parentTbody.children('tr:not(.level3)').length);
+
+                        if (i === origNumberSelectRowsWithNoFlag) {
+                            i = 0;  //reset index when number of selected rows within a psg has been reached.
+                            parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide up
+                            parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide down
+                            parentTr.find('.onHoldIconSuperGroup').html(strFlagIconHtml_Hold_SuperGroup);
+                        }
+                    });
+                }
+                else //UnHold just completed
+                {
+                    var i = 0;
+                    $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').each(function () {
+                        i++;
+                        parentTbody = $(this).parent('tbody');
+                        parentTr = parentTbody.closest('tr.level2').prev('tr.shown');
+                        var origNumberNonSelectRowsWithNoFlag = Number(parentTbody.find('tr:not(.selected) > td.flagIcon > span.noFlag').length);
+                        var origNumberSelectRowsWithOnHoldFlag = Number(parentTbody.find('tr.selected > td.flagIcon > span.wrapperOnHold').length);
+                        var totalNumberOfRows = Number(parentTbody.children('tr:not(.level3)').length);
+                        if (i === origNumberSelectRowsWithOnHoldFlag)
+                        {
+                            i = 0;  //reset index when number of selected rows within a psg has been reached.
+                            parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide up
+                            parentTr.find('button.btnInTdPayeePaymentType').trigger('click');   // slide down
+
+                            var newNumberNonSelectRowsWithNoFlag = origNumberNonSelectRowsWithNoFlag + origNumberSelectRowsWithOnHoldFlag;
+                            if (newNumberNonSelectRowsWithNoFlag === totalNumberOfRows)     // No Payment Groups under this Payment Super Group have On Hold status.
+                            {
+                                parentTr.find('.onHoldIconSuperGroup').html(strFlagIconHtml_NoFlag_SuperGroup);
+                            }
+                        }
+
+                    });
+                }
+            }
+        }
+
+        // User Actions Buttons Event Listeners Subsection (Return) ----------------------------------------------------------------------------------------------------------
+        $('#btnReturn').on('click', function () {
+            //$('#modalFooterForReturn_ReturnBtn').show();
+            //$('#modalWrapperForReturn > .modal-dialog').removeClass('modal-lg');
+            //$('#modalWrapperForReturn > .modal-dialog').addClass('modal-md');
+
+            var $SelectedPaymentGroups = $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected');
+            if ($SelectedPaymentGroups.length > selectedPaymentGroupsLimit) {
+                getWarning_SelectedPaymentGroupsExceedLimit($SelectedPaymentGroups.length, selectedPaymentGroupsLimit);
+            }
+            else if ($('#' + outterMostTableId + ' > tbody > tr').hasClass('noModel')) {
+                getWarning_PayeePaymentTypesNoModel();
+            }
+            else if (!$('#' + outterMostTableId + ' > tbody > tr').hasClass('shown') ||
+                $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').length === 0) {
+                getWarning_PayeePaymentTypesRowNotExpanded();
+            }
+            else {
+                returnPaymentGroups();
+            }
+        });
+
+        function returnPaymentGroups() {
+            var selectedPaymentRecSetsArray = [];
+            $('#' + outterMostTableId + ' > tbody > tr.level2').find('tr.selected').each(function (i) {
+                selectedPaymentRecSetsArray[i] = '<div class="col-md-3" style="text-align:center;">' + $(this).find('.PaymentGroup_UniqueNumber').find('.PRSNumber').html() + '</div>';
+            });
+
+            var retHtmlHeaderString = $("#btnReturn").html() + ' Payment';
+            var retHtmlString = '' +
+            '<form id="frmPRApprove">' +
+                '<div class="container-fluid">' +
+                    '<div class="form-group" style="padding-top:15px;" id="myContainer">' +
+                        '<label>Return the following Payment Set(s) to System of Record?</label>' +
+                        '<label>' + selectedPaymentRecSetsArray.sort().join('') + '</label>' +
+                        '<label for="txtareaReturnComment">Comment:</label>' +
+                        '<textarea class="form-control" id="txtareaReturnComment" placeholder="Comment Required" rows="10"></textarea>' +
+                    '</div>' +
+                '<div class="row">' +
+                    '<div class="col-md-1" style="padding-right:0px; width:35px;"><input class="form-check-input" type="checkbox" value="1" name="chkAcknowledge" id="chkAcknowledge" required></div>' +
+                        '<div class="col-md-11" style="padding-left:5px;"><label style="color: #ff0000;display:inline;">By clicking this you acknowledge that the payment(s) will be sent back to System of Record and will no longer be in EAMI.</div></label>' +
+                '</div>' +
+                '<div style="padding-top:15px;">' +
+                '</div>' +
+                    '<div class="alert alert-danger" style="display: none;" id="danger_alert"></div>' +
+                '</div>' +
+            '</form>';
+
+            $("#modalHeaderForReturn").html(retHtmlHeaderString);
+            $("#modalBodyForReturn").html(retHtmlString);
+            $('#modalWrapperForReturn').modal('show');
+
+            // Remove previous binding of on("change keyup paste") event to #txtareaReturnComment from previous $('#btnReturn').on('click') function call.
+            // This prevents additional on("change keyup paste") events from being generated each time, ensuring only one on("change keyup paste") gets called.
+            $("#txtareaReturnComment").prop("onchange", null);
+            $("#txtareaReturnComment").prop("onkeyup", null);
+            $("#txtareaReturnComment").prop("onpaste", null);
+            $("#txtareaReturnComment").on("change keyup paste", function () {
+                var maxLength = maxLengthOfCommentsTextArea;
+                var currentVal = $(this).val();
+                var currentLength = $(this).val().length;
+                if (currentLength > maxLength) {
+                    $("#modalWrapperForReturn #danger_alert").html("Your entry of <span style='color:blue;'>" + currentLength + "</span> " +
+                        "characters exceeds the maximum <span style='color:blue;'>" + maxLength + "</span> characters allowed." +
+                        "<br />Please reduce the number of characters entered.");
+                    $("#modalWrapperForReturn #danger_alert").slideDown();
+                    $('#modalFooterForReturn_ReturnBtn').prop("disabled", true);
+                }
+                else {
+                    $('#modalFooterForReturn_ReturnBtn').prop("disabled", false);
+                    $("#modalWrapperForReturn #danger_alert").slideUp();
+                }
+            });
+        }
+        $("#modalFooterForReturn_ReturnBtn").on("click", function () {
+
+            var $formPRApprove = $("#frmPRApprove");
+            $formPRApprove.validate({
+                errorElement: 'span',
+                ignore: "",
+                rules: {
+                    //txtareaReturnComment: {
+                    //    required: true,
+                    //    normalizer: function (value) {
+                    //        return $.trim(value);
+                    //    }
+                    //},
+                    chkAcknowledge: {
+                        required: true,
+                    },
+                },
+                messages: {
+                    //txtareaReturnComment: {
+                    //    required: 'Please enter a comment',
+                    //},
+                    chkAcknowledge: {
+                        required: '*',
+                    },
+                },
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element);
+                },
+                success: function (label, element) {
+                    label.parent().removeClass('error');
+                    label.remove();
+                },
+            });
+
+            var strNote = $("#txtareaReturnComment").val();
+            if (strNote == '') {
+                $("#modalWrapperForReturn #danger_alert").html("Comment is required.  Please enter a comment.");
+                $("#modalWrapperForReturn #danger_alert").slideDown();
+            }
+            else {
+                if ($formPRApprove.valid()) {
+                    ajaxReturnPaymentGroupsToSystemOfRecord(strNote);
+                }
+            }
+        });
+        $('#modalWrapperForReturn').on('hidden.bs.modal', function (e) {
+            $('#modalFooterForReturn_ReturnBtn').prop("disabled", false);
+        })
+        // User Actions Buttons Section End ********************************************************************************************************************************************
+        // *****************************************************************************************************************************************************************************
+
+        // Search Options Menu Section Begin *******************************************************************************************************************************************
+        // Search Options Menu Event Listeners Subsection (Calls AJAX Functions) ---------------------------------------------------------------------------------------------
+        $("#ddlSystem").change(function () {
+            // Reinitialize dropdowns to the right before proceeding.
+            $('#ddlPaymentExchangeEntity').val('');
+            $("#ddlPaymentExchangeEntity").prop("selected", false);
+            $('#ddlPaymentType').val('');
+            $("#ddlPaymentType").prop("selected", false);
+            $('#ddlContractNumber').val('');
+            $("#ddlContractNumber").prop("selected", false);
+            $("#ddlPaymentExchangeEntity").selectpicker('refresh');
+            $("#ddlPaymentType").selectpicker('refresh');
+            $("#ddlContractNumber").selectpicker('refresh');
+            ajaxGetAssignPaymentRecords_GetSearchCriteriaPayees($("#ddlSystem option:selected").text(),
+                                            $("#ddlPaymentRecordStatus option:selected").val(),
+                                            GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                            GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                            GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+            ajaxGetAssignPaymentRecords_GetSearchCriteriaContracts($("#ddlSystem option:selected").text(),
+                                            $("#ddlPaymentRecordStatus option:selected").val(),
+                                            GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                            GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                            GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+        });
+        $("#ddlPaymentRecordStatus").change(function () {
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("AssignPaymentRecords_ForceCacheRefresh")",
+                data: {
+                    'system': $("#ddlSystem option:selected").text(),
+                    'paymentRecordStatusId': $("#ddlPaymentRecordStatus option:selected").val(),
+                    'forceGetFromService': true
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (data) {
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+
+            // Reinitialize dropdowns to the right before proceeding.
+            $('#ddlPaymentExchangeEntity').val('');
+            $("#ddlPaymentExchangeEntity").prop("selected", false);
+            $('#ddlPaymentType').val('');
+            $("#ddlPaymentType").prop("selected", false);
+            $('#ddlContractNumber').val('');
+            $("#ddlContractNumber").prop("selected", false);
+            $("#ddlPaymentExchangeEntity").selectpicker('refresh');
+            $("#ddlPaymentType").selectpicker('refresh');
+            $("#ddlContractNumber").selectpicker('refresh');
+            $("#btnSearch").prop("disabled", false);
+            ajaxGetAssignPaymentRecords_GetSearchCriteriaPayees($("#ddlSystem option:selected").text(),
+                                            $("#ddlPaymentRecordStatus option:selected").val(),
+                                            GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                            GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                            GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+            ajaxGetAssignPaymentRecords_GetSearchCriteriaContracts($("#ddlSystem option:selected").text(),
+                                            $("#ddlPaymentRecordStatus option:selected").val(),
+                                            GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                            GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                            GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+        });
+        $("#ddlPaymentExchangeEntity").change(function () {
+            // Reinitialize dropdowns to the right before proceeding.
+            $('#ddlPaymentType').val('');
+            $("#ddlPaymentType").prop("selected", false);
+            $('#ddlContractNumber').val('');
+            $("#ddlContractNumber").prop("selected", false);
+            $("#ddlPaymentType").selectpicker('refresh');
+            $("#ddlContractNumber").selectpicker('refresh');
+            ajaxGetAssignPaymentRecords_GetSearchCriteriaPaymentTypes($("#ddlSystem option:selected").text(),
+                                            $("#ddlPaymentRecordStatus option:selected").val(),
+                                            GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                            GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                            GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+            ajaxGetAssignPaymentRecords_GetSearchCriteriaContracts($("#ddlSystem option:selected").text(),
+                                            $("#ddlPaymentRecordStatus option:selected").val(),
+                                            GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                            GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                            GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+        });
+        $("#ddlPaymentType").change(function () {
+            // Reinitialize dropdowns to the right before proceeding.
+            $('#ddlContractNumber').val('');
+            $("#ddlContractNumber").prop("selected", false);
+            $("#ddlContractNumber").selectpicker('refresh');
+            ajaxGetAssignPaymentRecords_GetSearchCriteriaContracts($("#ddlSystem option:selected").text(),
+                                            $("#ddlPaymentRecordStatus option:selected").val(),
+                                            GetSelectedOptionsAsArray("ddlPaymentExchangeEntity", true, false),
+                                            GetSelectedOptionsAsArray("ddlPaymentType", false, true),
+                                            GetSelectedOptionsAsArray("ddlContractNumber", false, true));
+        });
+        $("#btnReset").click(function () {
+            $('#ddlSystem').val('0');
+            $("#ddlSystem").prop("disabled", false);
+            $('#ddlPaymentRecordStatus').val('');
+            $("#ddlPaymentRecordStatus").prop("disabled", false);
+            $('#ddlPaymentExchangeEntity').val('');
+            $("#ddlPaymentExchangeEntity").prop("disabled", true);
+            $('#ddlPaymentType').val('');
+            $("#ddlPaymentType").prop("disabled", true);
+            $('#ddlContractNumber').val('');
+            $("#ddlContractNumber").prop("disabled", true);
+            $("#btnSearch").prop("disabled", true);
+
+            $("#ddlSystem").selectpicker('refresh');
+            $("#ddlPaymentRecordStatus").selectpicker('refresh');
+            $("#ddlPaymentExchangeEntity").selectpicker('refresh');
+            $("#ddlPaymentType").selectpicker('refresh');
+            $("#ddlContractNumber").selectpicker('refresh');
+        });
+        $("#btnSearchMenu").click(function () {
+            $(this).toggleClass("btn-dhcs-secondary");
+            $(this).toggleClass("btn-dhcs-primary");
+        });
+        $("#btnReset").trigger('click');    // Initialize Search Menu default settings on page load.
+        // Search Options Menu AJAX Functions Subsection (dynamically populates Search Options Menu DropDowns) ---------------------------------------------------------------
+        function ajaxGetAssignPaymentRecords_GetSearchCriteriaPayees(strSystem, strPaymentRecordStatusId,
+                arrayPayeeName, arrayPaymentTypeName, arrayContractNumber) {
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("AssignPaymentRecords_GetSearchCriteriaPayees")",
+                data: {
+                    'system': strSystem, 'paymentRecordStatusId': strPaymentRecordStatusId,
+                    'arrayPayeeName': arrayPayeeName, 'arrayPaymentTypeName': arrayPaymentTypeName, 'arrayContractNumber': arrayContractNumber
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (data) {
+                    Result = data; //Use this data for further creation of your elements.
+                    var items = "";
+                    //items += "<option value=''>Payee</option>";
+                    $.each(data, function (i, SingleElement) {
+                        var strDisplayOption = SingleElement.Description;
+                        items += "<option value='" + SingleElement.Description + "'>" + strDisplayOption + "</option>";
+                    });
+
+                    if ($("#ddlSystem").val() != "") {
+                        $("#ddlPaymentExchangeEntity").html(items);
+                        $("#ddlPaymentExchangeEntity").prop("disabled", false);
+                        //$("#ddlPaymentType").html("<option value=''>Payment Type</option>");
+                        $("#ddlPaymentType").val('');
+                        $("#ddlPaymentType").prop("disabled", true);
+                    } else {
+                        $("#ddlPaymentExchangeEntity").val('');
+                        $("#ddlPaymentExchangeEntity").prop("disabled", true);
+                        $("#ddlPaymentType").val('');
+                        $("#ddlPaymentType").prop("disabled", true);
+                    }
+
+                    $("#ddlPaymentExchangeEntity").selectpicker('refresh');
+                    $("#ddlPaymentType").selectpicker('refresh');
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+        }
+        function ajaxGetAssignPaymentRecords_GetSearchCriteriaPaymentTypes(strSystem, strPaymentRecordStatusId,
+                    arrayPayeeName, arrayPaymentTypeName, arrayContractNumber) {
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "GET",
+                //type: "POST",
+                url: "@Url.Action("AssignPaymentRecords_GetSearchCriteriaPaymentTypes")",
+                data: {
+                    'system': strSystem, 'paymentRecordStatusId': strPaymentRecordStatusId,
+                    'arrayPayeeName': arrayPayeeName, 'arrayPaymentTypeName': arrayPaymentTypeName, 'arrayContractNumber': arrayContractNumber
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (data) {
+                    Result = data; //Use this data for further creation of your elements.
+                    var items = "";
+                    //items += "<option value=''>Model Type</option>";
+                    $.each(data, function (i, SingleElement) {
+                        var strDisplayOption = SingleElement;
+                        items += "<option value='" + i + "'>" + strDisplayOption + "</option>";
+                    });
+
+                    if ($("#ddlPaymentExchangeEntity").val() != "") {
+                        $("#ddlPaymentType").html(items);
+                        $("#ddlPaymentType").prop("disabled", false);
+                    } else {
+                        $("#ddlPaymentType").val('');
+                        $("#ddlPaymentType").prop("disabled", true);
+                    }
+
+                    $("#ddlPaymentType").selectpicker('refresh');
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+        }
+        function ajaxGetAssignPaymentRecords_GetSearchCriteriaContracts(strSystem, strPaymentRecordStatusId,
+                arrayPayeeName, arrayPaymentTypeName, arrayContractNumber) {
+            // Start Loading... Animation
+            $('#divLoadingAnimation').css("display", "block");
+            EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("AssignPaymentRecords_GetSearchCriteriaContracts")",
+                data: {
+                    'system': strSystem, 'paymentRecordStatusId': strPaymentRecordStatusId,
+                    'arrayPayeeName': arrayPayeeName, 'arrayPaymentTypeName': arrayPaymentTypeName, 'arrayContractNumber': arrayContractNumber
+                },
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                traditional: true,  //This is required when passing array.
+                //beforeSend: function (response) {
+                //    $('#divLoadingAnimation').css("display", "block");
+                //    EAMIShowAjaxLoadingContent('divLoadingAnimation_Inner');
+                //},
+                success: function (data) {
+                    Result = data; //Use this data for further creation of your elements.
+                    var items = "";
+                    //items += "<option value=''>Payee</option>";
+                    $.each(data, function (i, SingleElement) {
+                        var strDisplayOption = SingleElement;
+                        items += "<option value='" + i + "'>" + strDisplayOption + "</option>";
+                    });
+
+                    if ($("#ddlSystem").val() != "") {
+                        $("#ddlContractNumber").html(items);
+                        $("#ddlContractNumber").prop("disabled", false);
+                    } else {
+                        $("#ddlContractNumber").val('');
+                        $("#ddlContractNumber").prop("disabled", true);
+                    }
+
+                    $("#ddlContractNumber").selectpicker('refresh');
+                },
+                complete: function (response) {
+                    $('#divLoadingAnimation_Inner').empty();
+                    $('#divLoadingAnimation').css("display", "none");
+                }
+            });
+        }
+        // Search Options Menu Section End *********************************************************************************************************************************************
+
+        // Warning/Error Popup Modal Functions Section Begin ***************************************************************************************************************************
+        function getWarning_PayeePaymentTypesNoModel() {
+            var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="alert alert-warning" style="display: none; margin-top: 10px;" id="warning_alert"></div>' +
+            '</div>';
+            $("#modalHeaderForMixedPaymentRecordsSelected").html(retHtmlHeaderString);
+            $("#modalBodyForMixedPaymentRecordsSelected").html(retHtmlString);
+            $('#modalWrapperForMixedPaymentRecordsSelected').modal('show');
+            $("#modalWrapperForMixedPaymentRecordsSelected #warning_alert").html("Search Criteria must be selected before proceeding.");
+            $("#modalWrapperForMixedPaymentRecordsSelected #warning_alert").show();
+        }
+        function getWarning_PayeePaymentTypesRowNotExpanded() {
+            var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="alert alert-warning" style="display: none; margin-top: 10px;" id="warning_alert"></div>' +
+            '</div>';
+            $("#modalHeaderForMixedPaymentRecordsSelected").html(retHtmlHeaderString);
+            $("#modalBodyForMixedPaymentRecordsSelected").html(retHtmlString);
+            $('#modalWrapperForMixedPaymentRecordsSelected').modal('show');
+            $("#modalWrapperForMixedPaymentRecordsSelected #warning_alert").html("Payee-PaymentType row must " +
+                "be expanded and Payment Sets checked before proceeding.");
+            $("#modalWrapperForMixedPaymentRecordsSelected #warning_alert").show();
+        }
+        function getWarning_MixedPaymentRecordsSelected() {
+            var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="alert alert-warning" style="display: none; margin-top: 10px;" id="warning_alert"></div>' +
+            '</div>';
+            $("#modalHeaderForMixedPaymentRecordsSelected").html(retHtmlHeaderString);
+            $("#modalBodyForMixedPaymentRecordsSelected").html(retHtmlString);
+            $('#modalWrapperForMixedPaymentRecordsSelected').modal('show');
+            $("#modalWrapperForMixedPaymentRecordsSelected #warning_alert").html(
+                "<p>To Hold, please ensure that ONLY " +
+                "Payment Records NOT flagged as <span class='holdText'>HOLD</span> are checked.</p>" +
+                "<p>To UnHold, please ensure that ONLY " +
+                "Payment Records flagged as <span class='holdText'>HOLD</span> are checked.</p>"
+                );
+            $("#modalWrapperForMixedPaymentRecordsSelected #warning_alert").show();
+        }
+        function getWarning_PaymentRecordSetsHasOneOrMorePayDatesNotSet() {
+            var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="alert alert-warning" style="display: none; margin-top: 10px;" id="warning_alert"></div>' +
+            '</div>';
+            $("#modalHeaderForPaymentRecordSetsHasOneOrMorePayDatesNotSet").html(retHtmlHeaderString);
+            $("#modalBodyForPaymentRecordSetsHasOneOrMorePayDatesNotSet").html(retHtmlString);
+            $('#modalWrapperForPaymentRecordSetsHasOneOrMorePayDatesNotSet').modal('show');
+            $("#modalWrapperForPaymentRecordSetsHasOneOrMorePayDatesNotSet #warning_alert").html("One or more Pay Dates have not been assigned " +
+                "in the selected Payment Sets.  Please ensure that ALL selected Payment Sets have assigned Pay Dates before proceeding.");
+            $("#modalWrapperForPaymentRecordSetsHasOneOrMorePayDatesNotSet #warning_alert").show();
+        }
+        function getWarning_NoPaymentRecordsReturned(jSONReturnStatus_returnedData) {
+            var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="alert alert-warning" style="display: none; margin-top: 10px;" id="warning_alert"></div>' +
+            '</div>';
+            $("#modalHeaderForPaymentRecordSetsHasOneOrMorePayDatesNotSet").html(retHtmlHeaderString);
+            $("#modalBodyForPaymentRecordSetsHasOneOrMorePayDatesNotSet").html(retHtmlString);
+            $('#modalWrapperForPaymentRecordSetsHasOneOrMorePayDatesNotSet').modal('show');
+            $("#modalWrapperForPaymentRecordSetsHasOneOrMorePayDatesNotSet #warning_alert").html(jSONReturnStatus_returnedData);
+            $("#modalWrapperForPaymentRecordSetsHasOneOrMorePayDatesNotSet #warning_alert").show();
+        }
+        function getError_PaymentRecordSetsHasAlreadyBeenAssignedOrReturned(jSONReturnStatus_returnedData) {
+            var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Danger"></span> Error';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="alert alert-danger" style="display: none; margin-top: 10px;" id="danger_alert"></div>' +
+            '</div>';
+            $("#modalHeaderForPaymentRecordSetsHasAlreadyBeenAssigned").html(retHtmlHeaderString);
+            $("#modalBodyForPaymentRecordSetsHasAlreadyBeenAssigned").html(retHtmlString);
+            $('#modalWrapperForPaymentRecordSetsHasAlreadyBeenAssigned').modal('show');
+            $("#modalWrapperForPaymentRecordSetsHasAlreadyBeenAssigned #danger_alert").html(jSONReturnStatus_returnedData);
+            $("#modalWrapperForPaymentRecordSetsHasAlreadyBeenAssigned #danger_alert").show();
+        }
+        function getWarning_SelectedPaymentGroupsExceedLimit(numberOfSelectedPaymentGroups, selectedPaymentGroupsLimit) {
+            var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Warning"></span> Warning';
+            var retHtmlString = '' +
+            '<div class="container-fluid">' +
+                '<div class="alert alert-warning" style="display: none; margin-top: 10px;" id="warning_alert"></div>' +
+            '</div>';
+            $("#modalHeaderForSelectedPaymentGroupsExceedLimit").html(retHtmlHeaderString);
+            $("#modalBodyForSelectedPaymentGroupsExceedLimit").html(retHtmlString);
+            $('#modalWrapperForSelectedPaymentGroupsExceedLimit').modal('show');
+            $("#modalWrapperForSelectedPaymentGroupsExceedLimit #warning_alert").html("Your selection of <span style='color:blue;'>" + numberOfSelectedPaymentGroups +
+                "</span> Payment Sets exceeds the allowable limit of <span style='color:blue;'>" + selectedPaymentGroupsLimit + "</span> Selected Payment Sets.  " +
+                "Please select less than <span style='color:blue;'>" + selectedPaymentGroupsLimit + "</span> Payment Sets before proceeding.");
+            $("#modalWrapperForSelectedPaymentGroupsExceedLimit #warning_alert").show();
+        }
+        //function getError_DefaultError(strMessage) {
+        //    var retHtmlHeaderString = '<span class="glyphicon glyphicon-warning-sign EAMI_Text_Danger"></span> Error';
+        //    var retHtmlString = '' +
+        //    '<div class="container-fluid">' +
+        //        '<div class="alert alert-danger" style="display: none; margin-top: 10px;" id="danger_alert"></div>' +
+        //    '</div>';
+        //    $("#modalHeaderForDefaultError").html(retHtmlHeaderString);
+        //    $("#modalBodyForDefaultError").html(retHtmlString);
+        //    $('#modalWrapperForDefaultError').modal('show');
+        //    $("#modalWrapperForDefaultError #danger_alert").html(strMessage);
+        //    $("#modalWrapperForDefaultError #danger_alert").show();
+        //}
+        // Warning/Error Popup Modal Functions Section End *****************************************************************************************************************************
+
+        // Initialize Popovers Section Begin *******************************************************************************************************************************************
+        $('[data-toggle="popover"]').popover();
+        // Initialize Popovers Section End *********************************************************************************************************************************************
+
+        // End Loading... Animation
+        $('#divLoadingAnimation_Inner').empty();
+        $('#divLoadingAnimation').css("display", "none");
+    });
+
+
+
+</script>

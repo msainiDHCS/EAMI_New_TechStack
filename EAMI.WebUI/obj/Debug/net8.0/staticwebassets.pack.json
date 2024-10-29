@@ -1,0 +1,557 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\EAMI.WebUI.bundle.scp.css",
+      "PackagePath": "staticwebassets\\EAMI.WebUI.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap-select.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap-select.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\alerts.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\alerts.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\badges.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\badges.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\bootstrap.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\breadcrumbs.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\breadcrumbs.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\button-groups.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\button-groups.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\buttons.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\buttons.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\carousel.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\carousel.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\close.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\close.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\code.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\code.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\component-animations.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\component-animations.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\dropdowns.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\dropdowns.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\forms.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\forms.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\glyphicons.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\glyphicons.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\grid.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\grid.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\input-groups.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\input-groups.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\jumbotron.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\jumbotron.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\labels.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\labels.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\list-group.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\list-group.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\media.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\media.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\alerts.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\alerts.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\background-variant.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\background-variant.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\border-radius.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\border-radius.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\buttons.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\buttons.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\center-block.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\center-block.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\clearfix.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\clearfix.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\forms.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\forms.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\gradients.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\gradients.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\grid-framework.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\grid-framework.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\grid.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\grid.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\hide-text.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\hide-text.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\image.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\image.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\labels.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\labels.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\list-group.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\list-group.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\nav-divider.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\nav-divider.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\nav-vertical-align.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\nav-vertical-align.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\opacity.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\opacity.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\pagination.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\pagination.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\panels.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\panels.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\progress-bar.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\progress-bar.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\reset-filter.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\reset-filter.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\reset-text.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\reset-text.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\resize.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\resize.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\responsive-visibility.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\responsive-visibility.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\size.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\size.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\tab-focus.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\tab-focus.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\table-row.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\table-row.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\text-emphasis.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\text-emphasis.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\text-overflow.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\text-overflow.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\mixins\\vendor-prefixes.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\mixins\\vendor-prefixes.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\modals.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\modals.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\navbar.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\navbar.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\navs.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\navs.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\normalize.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\normalize.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\pager.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\pager.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\pagination.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\pagination.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\panels.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\panels.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\popovers.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\popovers.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\print.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\print.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\progress-bars.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\progress-bars.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\responsive-embed.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\responsive-embed.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\responsive-utilities.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\responsive-utilities.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\scaffolding.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\scaffolding.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\tables.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\tables.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\theme.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\theme.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\thumbnails.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\thumbnails.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\tooltip.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\tooltip.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\type.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\type.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\utilities.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\utilities.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\variables.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\variables.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\bootstrap\\wells.less",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\wells.less"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\reports.css",
+      "PackagePath": "staticwebassets\\css\\reports.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\css\\site.css",
+      "PackagePath": "staticwebassets\\css\\site.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\js\\site.js",
+      "PackagePath": "staticwebassets\\js\\site.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "PackagePath": "staticwebassets\\lib\\bootstrap"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
+    },
+    {
+      "Id": "C:\\Projects\\TestProjects\\EAMI_WebAPI\\EAMI.WebUI\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.EAMI.WebUI.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.EAMI.WebUI.props",
+      "PackagePath": "build\\EAMI.WebUI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.EAMI.WebUI.props",
+      "PackagePath": "buildMultiTargeting\\EAMI.WebUI.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.EAMI.WebUI.props",
+      "PackagePath": "buildTransitive\\EAMI.WebUI.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

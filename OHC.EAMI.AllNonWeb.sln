@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.CalStar", "OHC.EAMI.CalStar\OHC.EAMI.CalStar.csproj", "{23BD411F-B62E-49C6-8A80-4594A500F184}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.Common", "OHC.EAMI.Common\OHC.EAMI.Common.csproj", "{EB529390-B76E-4A27-9C7C-CA0915C7CFB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.DataAccess", "OHC.EAMI.DataAccess\OHC.EAMI.DataAccess.csproj", "{E90C7DF9-F1A9-460D-A6AA-331B404F90CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.SCO", "OHC.EAMI.SCO\OHC.EAMI.SCO.csproj", "{2B08BCEE-BE86-4391-A5AC-0323F313832F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.Service", "OHC.EAMI.Service\OHC.EAMI.Service.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.ServiceManager", "OHC.EAMI.ServiceManager\OHC.EAMI.ServiceManager.csproj", "{CD37FB6B-F6A3-472C-836E-6AF7305322FC}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "OHC.EAMI.SqlDatabase", "OHC.EAMI.SqlDatabase\OHC.EAMI.SqlDatabase.sqlproj", "{BF763E36-BE55-4981-B7E0-FF5E0C80399D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OHC.EAMI.Util", "OHC.EAMI.Util\OHC.EAMI.Util.csproj", "{0596207F-42DA-40B4-993D-5F86DC31A3AA}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 9
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfs.intra.dhcs.ca.gov:8080/tfs/tfsprojects
+		SccProjectUniqueName0 = OHC.EAMI.CalStar\\OHC.EAMI.CalStar.csproj
+		SccProjectName0 = OHC.EAMI.CalStar
+		SccLocalPath0 = OHC.EAMI.CalStar
+		SccProjectUniqueName1 = OHC.EAMI.Common\\OHC.EAMI.Common.csproj
+		SccProjectName1 = OHC.EAMI.Common
+		SccLocalPath1 = OHC.EAMI.Common
+		SccProjectUniqueName2 = OHC.EAMI.DataAccess\\OHC.EAMI.DataAccess.csproj
+		SccProjectName2 = OHC.EAMI.DataAccess
+		SccLocalPath2 = OHC.EAMI.DataAccess
+		SccProjectUniqueName3 = OHC.EAMI.SCO\\OHC.EAMI.SCO.csproj
+		SccProjectName3 = OHC.EAMI.SCO
+		SccLocalPath3 = OHC.EAMI.SCO
+		SccProjectUniqueName4 = OHC.EAMI.Service\\OHC.EAMI.Service.csproj
+		SccProjectName4 = OHC.EAMI.Service
+		SccLocalPath4 = OHC.EAMI.Service
+		SccProjectUniqueName5 = OHC.EAMI.ServiceManager\\OHC.EAMI.ServiceManager.csproj
+		SccProjectName5 = OHC.EAMI.ServiceManager
+		SccLocalPath5 = OHC.EAMI.ServiceManager
+		SccProjectUniqueName6 = OHC.EAMI.SqlDatabase\\OHC.EAMI.SqlDatabase.sqlproj
+		SccProjectName6 = OHC.EAMI.SqlDatabase
+		SccLocalPath6 = OHC.EAMI.SqlDatabase
+		SccProjectUniqueName7 = OHC.EAMI.Util\\OHC.EAMI.Util.csproj
+		SccProjectName7 = OHC.EAMI.Util
+		SccLocalPath7 = OHC.EAMI.Util
+		SccLocalPath8 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23BD411F-B62E-49C6-8A80-4594A500F184}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23BD411F-B62E-49C6-8A80-4594A500F184}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23BD411F-B62E-49C6-8A80-4594A500F184}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23BD411F-B62E-49C6-8A80-4594A500F184}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB529390-B76E-4A27-9C7C-CA0915C7CFB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB529390-B76E-4A27-9C7C-CA0915C7CFB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB529390-B76E-4A27-9C7C-CA0915C7CFB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB529390-B76E-4A27-9C7C-CA0915C7CFB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E90C7DF9-F1A9-460D-A6AA-331B404F90CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E90C7DF9-F1A9-460D-A6AA-331B404F90CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E90C7DF9-F1A9-460D-A6AA-331B404F90CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E90C7DF9-F1A9-460D-A6AA-331B404F90CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B08BCEE-BE86-4391-A5AC-0323F313832F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B08BCEE-BE86-4391-A5AC-0323F313832F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B08BCEE-BE86-4391-A5AC-0323F313832F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B08BCEE-BE86-4391-A5AC-0323F313832F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD37FB6B-F6A3-472C-836E-6AF7305322FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF763E36-BE55-4981-B7E0-FF5E0C80399D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF763E36-BE55-4981-B7E0-FF5E0C80399D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF763E36-BE55-4981-B7E0-FF5E0C80399D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BF763E36-BE55-4981-B7E0-FF5E0C80399D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF763E36-BE55-4981-B7E0-FF5E0C80399D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF763E36-BE55-4981-B7E0-FF5E0C80399D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0596207F-42DA-40B4-993D-5F86DC31A3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0596207F-42DA-40B4-993D-5F86DC31A3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0596207F-42DA-40B4-993D-5F86DC31A3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0596207F-42DA-40B4-993D-5F86DC31A3AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

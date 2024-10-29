@@ -1,0 +1,1081 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.ViewModels
+@model FSReportDetails
+
+@using OHC.EAMI.WebUI.Helpers
+@{
+    ViewBag.Title = "Face Sheet";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@*Local box uses relative path but Server needs Absolute path, so perform check to see if request coming from
+    localhost.  Then use the appropriate link below.*@
+@if (HttpContext.Current.Request.IsLocal)
+{
+    <link type="text/css" rel="stylesheet" href="~/Scripts/App/Reports/facesheet.css" />
+}
+else
+{
+    if (ViewBag.ExportFaceSheetPdfActionTriggered == true)
+    {
+        <link type="text/css" href='@Server.MapPath("~/Scripts/App/Reports/facesheet.css")' rel="stylesheet" />
+    }
+    else
+    {
+        <link type="text/css" rel="stylesheet" href="~/Scripts/App/Reports/facesheet.css" />
+    }
+}
+
+
+@*Implemenatation for EAMI-80*@
+@{
+
+
+
+
+    bool isDraftWaterMark = false;
+
+
+    bool isProduction = Convert.ToBoolean(System.Configuration.ConfigurationManager.AppSettings["IsProductionEnvironment"]);
+    
+    if (Model.Current_ECS_Status_Type_ID == 1 || Model.Current_ECS_Status_Type_ID == 2)
+    {
+        isDraftWaterMark = true;
+    }
+    
+
+}
+
+@if (Model.Payment_Method_Type_ID == 2)
+{
+    <table id="tbl_Outter_FaceSheet" cellspacing="0" align="center" style="width:98%;" class="@((isProduction == true && Model.Payment_Method_Type_ID  == 2) ? (isDraftWaterMark == true ? "DraftWatermark" : "") : (isDraftWaterMark == true ? "DraftWatermark" : "TestWatermark"))">
+        <thead style="display:none;">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="14">
+                    <table id="tbl1_FaceSheet" cellspacing="0" style="width:100%;">
+                        <thead style="display:none;">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" class="XLargeHeaderText NoBorderBottom NoBorderRight" style="height:20px;">
+                                    CLAIM SCHEDULE
+                                </td>
+                                <td rowspan="2" colspan="5" class="LargeHeaderText DoubleLineBottomBorder CenterText" style="font-style: italic;">
+                                    USE THIS CLAIM SCHEDULE TO SUBMIT<br />DATA ON ELECTRONIC TAPE ONLY
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="SmallHeaderText DoubleLineBottomBorder NoLeftPadding NoBorderRight" style="height:20px;">
+                                    STD. 218ET (REV. 03/2014)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="MediumHeaderText CenterText" style="width:11.5% !important;vertical-align:middle;">
+                                    PAYABLE<br />FROM
+                                </td>
+                                <td class="DashedBorderRight" style="width:8% !important;">
+                                    <span class="SmallHeaderText">FUND</span>
+                                    <br />
+                                    <span class="InputText">@Model.Fund_Number</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;width:8% !important;">
+                                    <span class="SmallHeaderText">SUB</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                                <td colspan="5" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">FUND NAME</span>
+                                    <br />
+                                    <span class="InputText">@Model.Fund_Name</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">AGENCY NUMBER</span>
+                                    <br />
+                                    <span class="InputText">@Model.Agency_Number</span>
+                                </td>
+                                <td colspan="5" style="border-right:1px solid #808080;  ">
+                                    <span class="SmallHeaderText">AGENCY NAME</span>
+                                    <br />
+                                    <span class="InputText">@Model.Department_Name</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="MediumHeaderText CenterText" style="vertical-align:middle;">
+                                    APPROPRIA-TION
+                                </td>
+                                <td>
+                                    <span class="SmallHeaderText">STAT. YR.</span>
+                                    <br />
+                                    <span class="InputText">@Model.Stat_Year</span>
+                                </td>
+                                <td class="GrayBg" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">METH</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                                <td class="GrayBg" style="border-right:1px solid #808080;width:18% !important;">
+                                    <span class="SmallHeaderText">REFERENCE / ITEM</span>
+                                    <br />
+                                    <span class="InputText">@Model.Reference_Item</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;width:6% !important;">
+                                    <span class="SmallHeaderText">SEQ.</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                                <td style="border-right:1px solid #808080;width:5% !important;">
+                                    <span class="SmallHeaderText">FFY</span>
+                                    <br />
+                                    <span class="InputText">@Model.FFY</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;width:12% !important;">
+                                    <span class="SmallHeaderText">CHAPTER</span>
+                                    <br />
+                                    <span class="InputText">@Model.Chapter</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">STATUTES</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">PURPOSE</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td colspan="2" class="XSmallHeaderText NoBorder RightMostPanel" style="font-style:italic; vertical-align:top;">
+                    (Do not write in this space)<br /><span class="InputText"></span>
+                </td>
+            </tr>
+            <tr class="XSmallHeaderText CenterText SlimHeader NoBorderBottom">
+                <td>
+                    FED. CATALOG
+                </td>
+                <td>
+                    SCO
+                </td>
+                <td colspan="2"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    GENERAL
+                </td>
+                <td colspan="2" class="BottomBorder">
+                    RECEIPT
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="2" class="NoBorder"></td>
+            </tr>
+            <tr class="XSmallHeaderText CenterText SlimHeader">
+                <td>
+                    NUMBER
+                </td>
+                <td>
+                    PROJ.
+                </td>
+                <td colspan="2">
+                    CATEGORY
+                </td>
+                <td>
+                    PGM
+                </td>
+                <td>
+                    ELE.
+                </td>
+                <td>
+                    COMP
+                </td>
+                <td>
+                    TASK
+                </td>
+                <td>
+                    LEDGER
+                </td>
+                <td class="GrayBg DashedBorderRight">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>
+                    OBJECT
+                </td>
+                <td>
+                    F/S
+                </td>
+                <td>
+                    AMOUNT
+                </td>
+                <td>
+                    DESCRIPTION
+                </td>
+                <td colspan="2" class="NoBorderTop NoBorderLeft NoBorderRight"></td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText InputText">@Model.Amount</td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="XSmallHeaderText GrayBg RightMostPanel BottomBorder">
+                    SCHEDULE NUMBER
+                    <br />
+                    <span class="InputText">@Model.ECS_Number</span>
+                </td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel BottomBorder">AUDIT CODE<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText GrayBg HalfOfRightMostPanel NoBorderRight BottomBorder">SCH. TYPE<br /><span class="InputText"></span></td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel BottomBorder">PRINT WARRANT DATE<br /><span class="InputText"></span></td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel BottomBorder">ISSUE WARRANT DATE (REQUEST)<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel">BEGINNING WARRANT NUMBER<br /><span class="InputText"></span></td>
+            </tr>
+            <tr class="MediumText">
+                <td colspan="8">REEL NUMBER</td>
+                <td colspan="4" class="LeftPaddingStandard NoBorderRight">TOTAL OF<br />SCHEDULE</td>
+                <td class="InputText NoBorderRight CenterText">@Model.Amount</td>
+                <td class="NoBorderLeft NoBorderBottom"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel">END WARRANT NUMBER<br /><span class="InputText"></span></td>
+            </tr>
+            <tr class="MediumText">
+                <td colspan="8">TAPE DENSITY</td>
+                <td colspan="4" class="LeftPaddingStandard NoBorderRight">NUMBER OF<br />WARRANTS</td>
+                <td class="InputText NoBorderRight CenterText">@Model.Warrant_Count</td>
+                <td class="NoBorderLeft NoBorderBottom"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel">ISSUES<br /><span class="InputText"></span></td>
+            </tr>
+            <tr class="MediumText">
+                <td colspan="8">DATA SET<br />NAME (Optional)</td>
+                <td colspan="4" class="LeftPaddingStandard NoBorderRight">RECORD<br />COUNT</td>
+                <td class="InputText NoBorderRight CenterText">@Model.Record_Count</td>
+                <td class="NoBorderLeft"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel NoBorderBottom">VOIDS<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td colspan="14" class="XSmallHeaderText CenterText BoldText" style="height:20px;">INTERNAL AGENCY USE</td>
+                <td colspan="2" class="NoBorderRight NoBorderBottom" style="height:20px;"></td>
+            </tr>
+            <tr>
+                <td rowspan="3" colspan="14" class="InputText" style="height:400px;">@Model.ECS_File_Name</td>
+                <td colspan="2" class="NoBorderRight" style="height:320px;"></td>
+            </tr>
+            <tr>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">SIGN.<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">CALC.<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">PURCH.<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">CONTR.<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td rowspan="4" colspan="14" class="Small-MediumText RightPaddingStandard" style="vertical-align:middle;">
+                    <p class="BoldText">
+                        I hereby certify under penalty of perjury as follows:
+                    </p>
+                    <p>
+                        That I am a duly appointed, qualified, and acting officer of the herein named state agency.
+                        That the respective amounts and payees included in this claim have been recorded on that certain electronic tape identified in the within schedule.
+                        That a written reproduction, listing each payee and the amount of payment, was prepared from said tape and will be retained as a part of the
+                        official records of said state agency, or the information so provided will be retained on electronic tape.
+                        That the respective amounts, payees, and totals are true and correct as set forth on said electronic tape and in said written reproduction,
+                        or retained on electronic tape.  The original claim documents, or reproductions thereof, have been retained and are maintained in a manner
+                        that will enable verification of the propriety of the amounts claimed.  That payments are properly payable to each and all of the claimants
+                        as contained therein, and that such payments are authorized in the amounts, for the period, and to the respective payees as indicated therein
+                        under all governing laws and regulations.  That I have not violated any of the provisions of Section 1090 to 1096, inclusive, Government Code.
+                    </p>
+                </td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel">CORRECTIONS ENTERED<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">AUDITED<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">APPR. PAY.<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">F/A BAL. OK<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">WARR. OK<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel DashedBorderBottom" style="height:60px !important;">
+                    REPORTABLE PAYMENTS PER
+                    <div style="line-height:10px;">S.A.M. 8422.190</div>
+                    <br />
+                    NUMBER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="InputText" style="float:right;">@Model.RPI_Count</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="DoubleLineBottomBorder" colspan="14">
+
+                    <table id="tbl2_FaceSheet" cellspacing="0" style="width:100%;">
+                        <thead style="display:none;">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="XSmallHeaderText" style="height:40px !important;">
+                                    SIGNED<br />
+                                    <img src="~/images/lefthandsignature.png">
+                                </td>
+                                <td class="XSmallHeaderText LeftPaddingStandard">
+                                    TITLE<br /><br />
+                                </td>
+                                <td class="XSmallHeaderText LeftPaddingStandard">
+                                    DATE SIGNED<br /><br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="XSmallHeaderText NoBorderBottom" style="height:40px !important;">
+                                    APPROVED <span style="font-style:italic;">(if required)</span><br />
+                                    <img src="~/images/lefthandsignature.png">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+
+                <td class="NoBorderRight DoubleLineBottomBorder" colspan="2">
+                    <table class="NoBorder" cellspacing="0" style="width:100%;">
+                        <tr>
+                            <td class="XSmallHeaderText RightMostPanel">
+                                AMOUNT
+                                <br />
+                                <span class="InputText" style="float:right;">@(Model.RPI_Amount == "" ? "0" : Model.RPI_Amount)</span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="XSmallHeaderText RightMostPanel NoBorderBottom">
+                                TOTAL SUBJECT TO USE TAX
+                                <br />
+                                <span class="InputText"></span>
+                            </td>
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+
+@if (Model.Payment_Method_Type_ID == 1)
+{
+
+    <table id="tbl_Outter_FaceSheet" cellspacing="0" align="center" style="width:98%;" class="@((isProduction == true && Model.Payment_Method_Type_ID == 1) ? (isDraftWaterMark == true ? "DraftWatermark" : "") : (isDraftWaterMark == true ? "DraftWatermark" : "TestWatermark"))">
+        <thead style="display:none;">
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="14">
+                    <table id="tbl1_FaceSheet" cellspacing="0" style="width:100%;">
+                        <thead style="display:none;">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" class="XLargeHeaderText NoBorderBottom NoBorderRight" style="height:20px;">
+                                    CLAIM SCHEDULE
+                                </td>
+                                <td rowspan="2" colspan="5" class="LargeHeaderText DoubleLineBottomBorder CenterText" style="font-style: italic;">
+                                    USE THIS CLAIM SCHEDULE TO SUBMIT<br />EFT TRANSACTIONS ONLY
+                                </td>
+                            </tr>
+                            <tr>
+                                @{
+                                    int paymentId = 0;
+                                    decimal totalAmount = 0;
+                                    decimal totalAmountOriginal = 0;
+                                    decimal limit = 99000000;
+                                    string payee = string.Empty;
+                                    int lineNo = 1;
+                                    int lineNoOriginal = 1;
+
+                                    foreach (var CS_Row in Model.CS_Table)
+                                    {
+                                        decimal amount = decimal.Parse(CS_Row[2], System.Globalization.NumberStyles.Currency);
+                                        totalAmount += amount;
+                                        payee = @CS_Row[1];
+                                        totalAmountOriginal = totalAmount;
+                                    }
+
+                                    while (totalAmountOriginal > limit)
+                                    {
+                                        totalAmountOriginal -= limit;
+                                        lineNoOriginal += 1;
+                                    }
+                                }
+
+                                @if (Model.Payment_Method_Type_ID == 1)
+                                {
+
+                                    <td colspan="3" class="SmallHeaderText DoubleLineBottomBorder NoLeftPadding NoBorderRight" style="height:20px;">
+                                        <script>
+                                            /*alert(Model.Payment_Method_Type_ID);*/
+                                        </script>
+                                        STD. 218DD (REV. 03/2014)
+                                    </td>
+                                }
+                                @*else
+                                    {
+                                        <td colspan="3" class="SmallHeaderText DoubleLineBottomBorder NoLeftPadding NoBorderRight" style="height:20px;">
+                                            <script>alert(Model.Payment_Method_Type_ID);</script>
+                                            STD. 218ET (REV. 03/2014)
+                                        </td>
+                                    }*@
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="MediumHeaderText CenterText" style="width:11.5% !important;vertical-align:middle;">
+                                    PAYABLE<br />FROM
+                                </td>
+                                <td class="DashedBorderRight" style="width:8% !important;">
+                                    <span class="SmallHeaderText">FUND</span>
+                                    <br />
+                                    <span class="InputText">@Model.Fund_Number</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;width:8% !important;">
+                                    <span class="SmallHeaderText">SUB</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                                <td colspan="5" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">FUND NAME</span>
+                                    <br />
+                                    <span class="InputText">@Model.Fund_Name</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">AGENCY NUMBER</span>
+                                    <br />
+                                    <span class="InputText">@Model.Agency_Number</span>
+                                </td>
+                                <td colspan="5" style="border-right:1px solid #808080;  ">
+                                    <span class="SmallHeaderText">AGENCY NAME</span>
+                                    <br />
+                                    <span class="InputText">@Model.Department_Name</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2" class="MediumHeaderText CenterText" style="vertical-align:middle;">
+                                    APPROPRIA-TION
+                                </td>
+                                <td>
+                                    <span class="SmallHeaderText">STAT. YR.</span>
+                                    <br />
+                                    <span class="InputText">@Model.Stat_Year</span>
+                                </td>
+                                <td class="GrayBg" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">METH</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                                <td class="GrayBg" style="border-right:1px solid #808080;width:18% !important;">
+                                    <span class="SmallHeaderText">REFERENCE / ITEM</span>
+                                    <br />
+                                    <span class="InputText">@Model.Reference_Item</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;width:6% !important;">
+                                    <span class="SmallHeaderText">SEQ.</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                                <td style="border-right:1px solid #808080;width:5% !important;">
+                                    <span class="SmallHeaderText">FFY</span>
+                                    <br />
+                                    <span class="InputText">@Model.FFY</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;width:12% !important;">
+                                    <span class="SmallHeaderText">CHAPTER</span>
+                                    <br />
+                                    <span class="InputText">@Model.Chapter</span>
+                                </td>
+                                <td style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">STATUTES</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="7" style="border-right:1px solid #808080;">
+                                    <span class="SmallHeaderText">PURPOSE</span>
+                                    <br />
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td colspan="2" class="XSmallHeaderText NoBorder RightMostPanel" style="font-style:italic; vertical-align:top;">
+                    (Do not write in this space)<br /><span class="InputText"></span>
+                </td>
+            </tr>
+            <tr class="XSmallHeaderText CenterText SlimHeader NoBorderBottom">
+                <td>
+                    FED. CATALOG
+                </td>
+                <td>
+                    SCO
+                </td>
+                <td colspan="2"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    GENERAL
+                </td>
+                <td colspan="2" class="BottomBorder">
+                    RECEIPT
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="2" class="NoBorder"></td>
+            </tr>
+            <tr class="XSmallHeaderText CenterText SlimHeader">
+                <td>
+                    NUMBER
+                </td>
+                <td>
+                    PROJ.
+                </td>
+                <td colspan="2">
+                    CATEGORY
+                </td>
+                <td>
+                    PGM
+                </td>
+                <td>
+                    ELE.
+                </td>
+                <td>
+                    COMP
+                </td>
+                <td>
+                    TASK
+                </td>
+                <td>
+                    LEDGER
+                </td>
+                <td class="GrayBg DashedBorderRight">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </td>
+                <td>
+                    OBJECT
+                </td>
+                <td>
+                    F/S
+                </td>
+                <td>
+                    AMOUNT
+                </td>
+                <td>
+                    DESCRIPTION
+                </td>
+                <td colspan="2" class="NoBorderTop NoBorderLeft NoBorderRight"></td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg CenterText InputText">@Model.Program</td>
+                <td class="GrayBg CenterText InputText">@Model.Element</td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText InputText">@Model.Amount</td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="XSmallHeaderText GrayBg RightMostPanel BottomBorder">
+                    SCHEDULE NUMBER
+                    <br />
+                    <span class="InputText">@Model.ECS_Number</span>
+                </td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel BottomBorder">AUDIT CODE<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText GrayBg HalfOfRightMostPanel NoBorderRight BottomBorder">SCH. TYPE<br /><span class="InputText"></span></td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel BottomBorder">PRINT WARRANT DATE<br /><span class="InputText"></span></td>
+            </tr>
+            <tr class="NoBorderBottom">
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel BottomBorder">SETTLEMENT DATE (YYMMDD)<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td class="GrayBg"></td>
+                <td></td>
+                <td class="DashedBorderRight"></td>
+                <td></td>
+                <td class="GrayBg"></td>
+                <td class="CenterText"></td>
+                <td class="GrayBg"></td>
+                <td colspan="2" class="NoBorderRight NoBorderBottom"></td>
+            </tr>
+            <tr class="MediumText">
+                <td colspan="8" class="NoBorderBottom"></td>
+                <td colspan="4" class="LeftPaddingStandard NoBorderRight">TOTAL OF<br />SCHEDULE</td>
+                <td class="InputText NoBorderRight CenterText">@Model.Amount</td>
+                <td class="NoBorderLeft"></td>
+                <td class="NoBorderBottom NoBorderRight" style="font-size:small;text-align:center;position:absolute;top:455px;-webkit-transform:rotate(90deg);-ms-transform:rotate(90deg);transform: rotate(90deg);">
+                    <br />
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONTROLLER'S WARRANT NUMBERS<br />DATE ISSUED (ACTUAL)
+                </td>
+            </tr>
+            <tr class="MediumText">
+                <td colspan="8"></td>
+                <td colspan="4" class="LeftPaddingStandard NoBorderRight">NUMBER OF<br />PAYMENTS</td>
+                <td class="InputText NoBorderRight CenterText">@Model.Warrant_Count</td>
+                <td class="NoBorderLeft"></td>
+            </tr>
+            <tr class="MediumText">
+                <td colspan="8" class="NoBorderBottom">DATA SET NAME</td>
+                <td colspan="4" class="LeftPaddingStandard NoBorderRight">RECORD<br />COUNT</td>
+                <td class="InputText NoBorderRight CenterText">@Model.Record_Count</td>
+                <td class="NoBorderLeft"></td>
+            </tr>
+            <tr class="MediumText">
+                <td colspan="8" class="InputText" style="width:200px !important;">@Model.ECS_File_Name</td>
+                <td colspan="4" class="LeftPaddingStandard NoBorderRight">STATEMENT<br />SUPPRESSION COUNT</td>
+                <td class="InputText NoBorderRight CenterText">0</td>
+                <td class="NoBorderLeft"></td>
+                <td colspan="2" class="NoBorderRight NoBorderBottom"></td>
+            </tr>
+            <tr>
+
+
+                <td colspan="14" style="height:300px;vertical-align:top;">
+                    <table>
+                        <tr>
+                            <td class="XSmallHeaderText CenterText BoldText" style="height:20px;width:200px;">LINE NO.</td>
+                            <td class="XSmallHeaderText CenterText BoldText" style="height:20px;width:500px;">PAYEE (SCO CONTRACTED BANK ONLY)</td>
+                            <td class="XSmallHeaderText CenterText BoldText NoBorderRight" style="height:20px;width:300px;">AMOUNT</td>
+                        </tr>
+                        @{
+                            if (lineNoOriginal <= 8 && Model.Payment_Method_Type_ID == 1)
+                            {
+                                paymentId = 1; // line Count less than 9 and EFT
+                            }
+                            else if ((lineNoOriginal > 8 && Model.Payment_Method_Type_ID == 1))
+                            {
+                                <tr style=" align-content :center">
+                                    <td colspan="4" class="InputText CenterText NoBorderRight" style="height: 30px; width: 200px;   border-bottom-color: white; text-align :center"><br /><br /><br /><br /><br />See Attachment</td>
+                                </tr>
+                            }
+
+                            @*else if (Model.Payment_Method_Type_ID == 2)
+                                {
+
+                                    paymentId = 2; //Warrent
+
+                                    <tr style=" align-content :center">
+                                        <td colspan="4" class="InputText CenterText NoBorderRight" style="height: 30px; width: 200px;   border-bottom-color: white; text-align :center"><br /><br /><br /><br /><br />@Model.ECS_File_Name</td>
+                                    </tr>
+
+
+                                }*@
+                        if (paymentId == 1)
+                        {
+                            while (totalAmount > limit)
+                            {
+                                    <tr>
+                                        <td class="InputText CenterText NoBorderRight" style="height: 30px; width: 200px;   border-bottom-color: white;">@lineNo.ToString()</td>
+                                        <td class="InputText CenterText NoBorderRight" style="height: 30px; width: 500px;   border-bottom-color: white;">@payee</td>
+                                        <td class="InputText RightText NoBorderRight" style="height: 30px; width: 300px;   border-bottom-color: white; padding-right: 80px;">@limit.ToString("C")</td>
+                                    </tr>
+                                totalAmount -= limit;
+                                lineNo += 1;
+                            }
+                                <tr>
+                                    <td class="InputText CenterText NoBorderRight" style="height: 30px; width: 200px;   border-bottom-color: white;">@lineNo.ToString()</td>
+                                    <td class="InputText CenterText NoBorderRight" style="height: 30px; width: 500px;  border-bottom-color: white;">@payee</td>
+                                    <td class="InputText RightText NoBorderRight" style="height: 30px; width: 300px;   border-bottom-color: white; padding-right: 80px;">@totalAmount.ToString("C")</td>
+                                </tr>
+
+                        }
+                        }
+
+
+                    </table>
+                </td>
+
+
+            </tr>
+
+            <tr>
+                <td colspan="14" class="InputText"></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">SIGN.<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">CALC.<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td colspan="14" class="InputText"></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">PURCH.<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">CONTR.<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td rowspan="4" colspan="14" class="Small-MediumText RightPaddingStandard" style="vertical-align:middle;">
+                    <p class="BoldText">
+                        I hereby certify under penalty of perjury as follows:
+                    </p>
+                    <p>
+                        That I am a duly appointed, qualified, and acting officer of the herein named state agency.
+                        That the respective amounts and payees included in this claim have been recorded on that certain electronic file identified in the within schedule.
+                        That a written reproduction, listing each payee and the amount of payment, was prepared from said file and will be retained as a part of the
+                        official records of said state agency, or the information so provided will be retained electronically.
+                        That the respective amounts, payees, and totals are true and correct as set forth on said electronic file and in said written reproduction,
+                        or retained on electronic file.  The original claim documents, or reproductions thereof, have been retained and are maintained in a manner
+                        that will enable verification of the propriety of the amounts claimed.  That payments are properly payable to each and all of the claimants
+                        as contained therein, and that such payments are authorized in the amounts, for the period, and to the respective payees as indicated therein
+                        under all governing laws and regulations.  That I have not violated any of the provisions of Section 1090 to 1096, inclusive, Government Code.
+                    </p>
+                </td>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel">CORRECTIONS ENTERED<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">AUDITED<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">APPR. PAY.<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td class="XSmallHeaderText HalfOfRightMostPanel">F/A BAL. OK<br /><span class="InputText"></span></td>
+                <td class="XSmallHeaderText HalfOfRightMostPanel NoBorderRight">WARR. OK<br /><span class="InputText"></span></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="XSmallHeaderText RightMostPanel DashedBorderBottom" style="height:60px !important;">
+                    REPORTABLE PAYMENTS PER
+                    <div style="line-height:10px;">S.A.M. 8422.190</div>
+                    <br />
+                    NUMBER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="InputText" style="float:right;"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="DoubleLineBottomBorder" colspan="16">
+
+                    <table id="tbl2_FaceSheet" cellspacing="0" style="width:100%;">
+                        <thead style="display:none;">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="XSmallHeaderText" style="height:40px !important;">
+                                    SIGNED<br />
+                                    <img src="~/images/lefthandsignature.png">
+                                </td>
+                                <td class="XSmallHeaderText LeftPaddingStandard">
+                                    TITLE<br /><br />
+                                </td>
+                                <td class="XSmallHeaderText LeftPaddingStandard">
+                                    DATE SIGNED<br /><br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="XSmallHeaderText NoBorderBottom" style="height:40px !important;">
+                                    APPROVED <span style="font-style:italic;">(if required)</span><br />
+                                    <img src="~/images/lefthandsignature.png">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+
+                <td class="NoBorderRight DoubleLineBottomBorder" colspan="2">
+                    <table class="NoBorder" cellspacing="0" style="width:100%;">
+                        <tr>
+                            <td class="XSmallHeaderText RightMostPanel">
+                                AMOUNT
+                                <br />
+                                <span class="InputText" style="float:right;"></span>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td class="XSmallHeaderText RightMostPanel NoBorderBottom">
+                                TOTAL SUBJECT TO USE TAX
+                                <br />
+                                <span class="InputText"></span>
+                            </td>
+
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+
+    @*Added for Gap analysis EAMI_6.0, EAMI_6.1*@
+
+
+    if ((lineNoOriginal > 8 && Model.Payment_Method_Type_ID == 1))
+    {
+        <p style="page-break-after: always"> &nbsp;</p>
+        <table id="tbl_Outter_FaceSheet1" cellspacing="0" align="center" style="width: 98%;" class="@(isProduction == true ? (isDraftWaterMark == true ? "DraftWatermark" : "") : (isDraftWaterMark == true ? "DraftWatermark" : "TestWatermark"))">
+            <thead style="display:none;">
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="height: 360px; vertical-align: top; border-top: solid; border-top-width: 1px; ">
+                        <table>
+                            <tr style="border-top: solid; border-top-width: 1px;">
+                                <td class="XSmallHeaderText CenterText BoldText" style="height:20px;width:200px;">LINE NO.</td>
+                                <td class="XSmallHeaderText CenterText BoldText" style="height:20px;width:500px;">PAYEE (SCO CONTRACTED BANK ONLY)</td>
+                                <td class="XSmallHeaderText CenterText BoldText NoBorderRight" style="height:20px;width:300px;">AMOUNT</td>
+                            </tr>
+
+                            @{
+                                decimal totalAmount1 = 0;
+                                decimal limit1 = 99000000;
+                                string payee1 = string.Empty;
+                                int lineNo1 = 1;
+                                int count1 = 0;
+                                foreach (var CS_Row in Model.CS_Table)
+                                {
+                                    decimal amount = decimal.Parse(CS_Row[2], System.Globalization.NumberStyles.Currency);
+                                    totalAmount1 += amount;
+                                    payee1 = @CS_Row[1];
+                                    count1 = count1 + 1;
+                                }
+
+                                while (totalAmount1 > limit1)
+                                {
+                                    <tr>
+                                        <td class="InputText CenterText NoBorderRight" style="height:30px;width:200px; border-bottom-color:white;">@lineNo1.ToString()</td>
+                                        <td class="InputText CenterText NoBorderRight" style="height:30px;width:500px; border-bottom-color:white;">@payee1</td>
+                                        <td class="InputText RightText NoBorderRight" style="height:30px;width:300px; border-bottom-color:white;padding-right:80px;">@limit1.ToString("C")</td>
+                                    </tr>
+                                    totalAmount1 -= limit1;
+                                    lineNo1 += 1;
+                                }
+                                <tr>
+                                    <td class="InputText CenterText NoBorderRight" style="height:30px;width:200px; border-bottom-color:white;">@lineNo1.ToString()</td>
+                                    <td class="InputText CenterText NoBorderRight" style="height:30px;width:500px; border-bottom-color:white;">@payee1</td>
+                                    <td class="InputText RightText NoBorderRight" style="height:30px;width:300px; border-bottom-color:white;padding-right:80px;">@totalAmount1.ToString("C")</td>
+                                </tr>
+                            }
+
+
+                        </table>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+
+                                }
+
+                                }    

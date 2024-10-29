@@ -1,0 +1,93 @@
+﻿@using System.Web.Optimization;
+@using OHC.EAMI.WebUI.Models
+@model List<ChildGridExampleSecond>
+
+
+<script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/DataTables/dataTables.bootstrap4.min.js"></script>
+<link href="~/Content/DataTables/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+<link href="~/Content/DataTables/css/buttons.bootstrap4.min.css" rel="stylesheet" />
+<script src="~/Scripts/DataTablePlugins/moment.js"></script>
+<script src="~/Scripts/DataTablePlugins/datetime-moment.js"></script>
+
+<style type="text/css">
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+        /*display: table-header-group;*/
+    }
+
+    tr.group,
+    tr.group:hover {
+        background-color: #ddd !important;
+    }
+</style>
+
+@{ 
+
+    string grdName = ViewBag.ID + "_grdExampleSecond";
+}
+
+<table id="@grdName" class="table table-striped table-bordered" cellspacing="0" style="width:100%;">
+    <thead>
+        <tr>
+            <th>Patent ID</th>
+            <th>Patent Name</th>
+            <th>Obtained On</th>
+            <th>Collaborators</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.PatentID)</td>
+                <td>@Html.DisplayFor(modelItem => item.PaentName)</td>
+                <td>@Html.DisplayFor(modelItem => item.ObtainDate)</td>
+                <td>@Html.DisplayFor(modelItem => item.Collaborators)</td>
+            </tr>
+        }
+    </tbody>
+    @*<tbody></tbody>
+        <tfoot>
+        </tfoot>*@
+</table>
+
+<script type="text/javascript">
+
+    var gridName = '@ViewBag.ID' + "_grdExampleSecond";
+
+    
+    $(document).ready(function () {
+
+        //set datetime format for the grid
+        $.fn.dataTable.moment('MM/DD/YYYY hh:mm A');
+
+        //fix for window resize error for datatable in IE
+        $(window).unbind("resize.DT-" + gridName);
+
+        var table = $('#' + gridName).DataTable(
+            {
+                "searching": true,
+                processing: true,
+                //sAjaxSource: getEAMIAbsoluteUrl('~/Home/ChildGridExampleSecond?id=1'),
+                    "order": [[0, "desc"]],
+                    "pagingType": "full_numbers",
+                    "language": {                    //Custom Message Setting
+                        "lengthMenu": "Display _MENU_ records per page",    //Customizing menu Text
+                        "zeroRecords": "Nothing found",             //Customizing zero record text - filtered
+                        "info": "Showing page _PAGE_ of _PAGES_",           //Customizing showing record no
+                        "infoEmpty": "No records available",                //Customizing zero record message - base
+                        "infoFiltered": "(filtered from _MAX_ total records)"   //Customizing filtered message
+                    },
+                    //"dom": '<"toolbar">frtip',
+                    "columnDefs": [
+
+                { type: 'date', targets: [3] }
+                    ],
+            });    
+
+    });
+    
+</script>
